@@ -1,3 +1,6 @@
+/**
+ * Reads a file and writes to a .gz compressed file
+ */
 import java.io.File;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -32,16 +35,22 @@ public class ZippingRuntime {
         DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         String inputFile = args[0];
         try{
+            //Creates a file
             sharedFile = new File(COMMON_FILE);
             sharedFile.createNewFile();
         }catch (IOException ioe) {
             ioe.printStackTrace();
         }
         try (
+            //For writing to the file
             FileOutputStream outputStream = new FileOutputStream(sharedFile, true);
+            //Special Output stream for zipping
             GZIPOutputStream out = new GZIPOutputStream(new
                            BufferedOutputStream(outputStream));
+            //Reader to read the file, per line
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
+
+            //Gives convinient println function, wraps zipping outputstream
             PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
                             out, Charset.forName("UTF-8").newEncoder())));
             ) {
@@ -50,6 +59,7 @@ public class ZippingRuntime {
                 System.out.println(format.format(date));
                 while((line = reader.readLine()) != null) {
                     writer.println("ONE : " + line);
+                    //Flushing is important or some data is not written
                     writer.flush();
                 }
                 date = new Date();

@@ -1,3 +1,7 @@
+/**
+ * Zipping already existing file
+ * Makes use of linux command
+ */
 import java.io.IOException;
 
 import java.text.DateFormat;
@@ -16,7 +20,9 @@ public class ZippingAfter {
 
             date = new Date();
             System.out.println(format.format(date));
+            // -k to keep original file intact
             Process zipper = Runtime.getRuntime().exec("gzip -k " + inputFile);
+            //Makes the main thread wait till the process finishes
             zipper.waitFor();
             zipper.destroy();
             date = new Date();
