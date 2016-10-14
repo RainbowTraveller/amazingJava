@@ -14,7 +14,10 @@ import java.nio.charset.Charset;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.io.IOException;
-
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -83,6 +86,10 @@ public class FileAccessorOne {
                         System.out.println("ONE : Up and running......");
                     }
                 }
+                System.out.println("File Size : " + sharedFile.length());
+                Path from = sharedFile.toPath();
+                Path to = Paths.get("./data");
+                Files.move(from, to.resolve(from.getFileName()), StandardCopyOption.ATOMIC_MOVE);
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             } catch (InterruptedException ie) {
