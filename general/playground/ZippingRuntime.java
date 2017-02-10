@@ -43,10 +43,10 @@ public class ZippingRuntime {
         }
         try (
             //For writing to the file
-            FileOutputStream outputStream = new FileOutputStream(sharedFile, true);
+            FileOutputStream out = new FileOutputStream(sharedFile, true);
             //Special Output stream for zipping
-            GZIPOutputStream out = new GZIPOutputStream(new
-                           BufferedOutputStream(outputStream));
+            //GZIPOutputStream out = new GZIPOutputStream(new
+            //               BufferedOutputStream(outputStream));
             //Reader to read the file, per line
             BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 
