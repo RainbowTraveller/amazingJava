@@ -23,7 +23,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FileAccessorOne {
+public class TempTest {
 
     public static void main(String[] args) {
         //File Path
@@ -40,13 +40,13 @@ public class FileAccessorOne {
         }catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        try (
+        PrintWriter writer = null;
+        try {
             FileOutputStream outputStream = new FileOutputStream(sharedFile, true);
             BufferedReader reader = new BufferedReader(new FileReader("logdata"));
-            PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
+            writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
                             outputStream, Charset.forName("UTF-8").newEncoder())));
             FileChannel channel = outputStream.getChannel();
-            ) {
                 String line;
                 int count = 0;
                 int lockCount = 0;
@@ -89,8 +89,8 @@ public class FileAccessorOne {
                 System.out.println("File Size : " + sharedFile.length());
                 Path from = sharedFile.toPath();
                 Path to = Paths.get("./data");
-                System.out.println(from.getFileName().toString());
                 Files.move(from, to.resolve(from.getFileName()), StandardCopyOption.ATOMIC_MOVE);
+                writer.close();
             } catch(IOException ioe) {
                 ioe.printStackTrace();
             } catch (InterruptedException ie) {
@@ -105,6 +105,17 @@ public class FileAccessorOne {
                     }
                 }
             }
+            writer.flush();
+            writer.flush();
+            writer.flush();
+            writer.flush();
+            writer.flush();
+            writer.close();
+            writer.close();
+            writer.close();
+            writer.close();
+            writer.close();
+            writer.close();
         //Lock and Write some stuff
         //Wait for 5 seconds
         //Lock and Read from file and print on console
