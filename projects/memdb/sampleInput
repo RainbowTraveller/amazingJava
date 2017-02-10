@@ -1,5 +1,0 @@
-SET A 20
-SET B 30
-GET A
-GET B
-END
