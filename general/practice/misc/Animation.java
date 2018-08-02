@@ -96,11 +96,11 @@ public class Animation {
     public static void main(String[] args) {
         Animation anm = new Animation();
         //String [] progress = anm.animate(2, "..R....");
-        //String [] progress = anm.animate(3, "RR..LRL");
+        String [] progress = anm.animate(3, "RR..LRL");
         //String [] progress = anm.animate(2, "LRLR.LRLR");
         //String [] progress = anm.animate(10, "RLRLRLRLRL");
         //String [] progress = anm.animate(1, "...");
-        String [] progress = anm.animate(1, "LRRL.LR.LRR.R.LRRL.");
+        //String [] progress = anm.animate(1, "LRRL.LR.LRR.R.LRRL.");
         for(String s : progress) {
             System.out.println(s);
         }

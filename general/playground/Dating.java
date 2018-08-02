@@ -23,8 +23,11 @@ public class Dating {
         String seconds = String.valueOf(date.getTime()/1000L);
         long numSeconds = Long.parseLong(seconds);
         System.out.println("String seconds : " + seconds + " Num seconds: " + numSeconds);
-        Date d = new Date(numSeconds * 1000);
-        DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        Date d = new Date();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MMM-yyyy HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
         System.out.println("RESULT DATE : " + dateFormat.format(d));
+        DateFormat geoDateFormat = new SimpleDateFormat("Y-M-d HH:mm:ss");
+        System.out.println("RESULT DATE : " + geoDateFormat.format(d));
     }
 }

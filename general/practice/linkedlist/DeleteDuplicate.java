@@ -55,7 +55,7 @@ public class DeleteDuplicate {
 
             while(current != null) {
                 next = current.next;
-                sortedInsert(current, result);
+                result = sortedInsert(result, current);
                 current = next;
             }
         }
