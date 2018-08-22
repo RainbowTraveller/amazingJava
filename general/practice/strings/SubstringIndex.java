@@ -1,87 +1,112 @@
-import java.io.*;
-import java.util.*;
-import java.text.*;
-import java.math.*;
-import java.util.regex.*;
+import java.util.Scanner;
 
-public class SubstringIndex {
+public class SubStringIndex {
+
+	public static void main( String args[] ) {
+		Scanner scan = new Scanner( System.in );
+		String destination = scan.nextLine();
+		String candidate = scan.nextLine();
+		SubStringIndex ssi = new SubStringIndex();
+		System.out.println( ssi.getSubStringIndex( destination, candidate ) );
+		System.out.println( ssi.kmp( destination, candidate ) );
+	}
+
 	/*
-	 * finds and returns index of list2 in list1
-	 * if not found returns -1
-	 * */
-    public ArrayList<Integer> list1 = null;
-    public ArrayList<Integer> list2 = null;
-
-    public static void main(String args[] ) throws Exception {
-		SubstringIndex soln = new SubstringIndex();
-		soln.init();
-		soln.printLists();
-		System.out.println("Index : " + soln.find());
-    }
-
-
-	public SubstringIndex() {
-		list1 = new ArrayList<Integer>();
-		list2 = new ArrayList<Integer>();
-	}
-
-	public void init() {
-        try {
-            Scanner in = new Scanner(System.in);
-            System.out.println("Please Enter a len 1: ");
-            int len1 = in.nextInt();
-            System.out.println("Please Enter a elements: ");
-            for(int i = 0; i < len1; ++i) {
-                list1.add(in.nextInt());
-            }
-            System.out.println("Please Enter a len 2: ");
-            int len2 = in.nextInt();
-            System.out.println("Please Enter a elements: ");
-            for(int i = 0; i < len2; ++i) {
-                list2.add(in.nextInt());
-            }
-        } catch (InputMismatchException ims) {
-
-        }
-    }
-
-	public void printLists(){
-		for(int i : list1) {
-			System.out.println(i);
-		}
-		System.out.println("-------");
-		for(int i : list2) {
-			System.out.println(i);
-		}
-	}
-
-    public int find() {
-		if(list1.size() > 0 && list2.size() > 0) {
-			for(int i = 0; i < list1.size(); ++i) {
-				if(list1.get(i) == list2.get(0)) {
-					if(findHelper(i + 1)) {
-						return i;
+	 * Naive approach
+	 * Start comparing from start of the 2 lists, if mismatch occurs then candidate
+	 * is scanned from beginning and destination index is reset to one more than the previous
+	 * iteration
+	 *
+	 */
+	public int getSubStringIndex( String destination, String candidate ) {
+		int lendestination = destination.length();
+		int lenCandidate = candidate.length();
+		int tracker = 0;
+		while( lendestination - tracker >= lenCandidate ){
+			int current = tracker;
+			int ctracker = 0;
+			while(current < lendestination  && ctracker < lenCandidate ) {
+				if(destination.charAt( current ) == candidate.charAt( ctracker ) ) {
+					current++;
+					ctracker++;
+					if( ctracker == lenCandidate ) {
+						return tracker;
 					}
+				} else {
+					break;
 				}
+			}
+			tracker++;
+		}
+		return -1;
+	}
+	/**
+	 * Compare strings character by character starting at 0 index
+	 * at the mismatch following conditions need to be checked
+	 *			if j > 0 : meaning we have found some part of the string so far so look for similar occurrence
+	 *
+	 *			otherwise no match found so far keep on looking with next character in the input pattern string
+	 *
+	 */
+	public int kmp( String destination, String candidate ) {
+		int lendestination = destination.length();
+		int lenCandidate = candidate.length();
+
+		int [] prefix = prefixTable( candidate );
+		int i = 0, j = 0;
+		while( i < lendestination) {
+			if( destination.charAt(i) == candidate.charAt( j )) {
+				if( j == lenCandidate - 1 ) {
+					return i - lenCandidate + 1;
+				} else {
+					i++;
+					j++;
+				}
+			} else if( j > 0 ) {
+				j = prefix[ j - 1 ];
+			} else {
+				i++;
 			}
 		}
 		return -1;
-    }
-
-	private boolean findHelper(int startIndex) {
-		int list2Tracker = 1;
-		boolean result = false;
-		while(startIndex < list1.size() && list2Tracker < list2.size()) {
-			if(list1.get(startIndex) != list2.get(list2Tracker)) {
-				break;
-			}
-			startIndex++;
-			list2Tracker++;
-		}
-		if(list2Tracker == list2.size()) {
-			result = true;
-		}
-		return result;
 	}
 
+	/**
+	 * Creating prefix table
+	 *
+	 * a a a a b a a c d
+	 * 0 1 2 3 0 1 2 0 0
+	 *
+	 * a b c d a b e a b f
+	 * 0 0 0 0 1 2 0 1 2 0
+	 *
+	 * Track first repeated occurance of the first character
+	 * continue increasing the prefix values if the subsequent characters match
+	 * at the mismatch following conditions need to be checked
+	 *			if j > 0 : meaning we have found at least one repeated character then start from its previous occurance
+	 *
+	 *			otherwise no match found so far keep on looking with next character in the input pattern string
+	 */
+	private int [] prefixTable( String candidate ) {
+		 int[] prefix = new int[candidate.length()];
+		 int i = 1, j = 0;
+		 prefix[0] = 0;
+		 while( i < candidate.length() ) {
+			 if( candidate.charAt( i ) == candidate.charAt( j ) ) {
+				prefix[ i ] = j + 1;
+				i++;
+				j++;
+			 } else if ( j > 0 ) {
+				 j = prefix[ j - 1 ];
+			 } else {
+				  prefix[ i ] = 0;
+				  i++;
+			 }
+		 }
+		 for( int c : prefix ) {
+			  System.out.print( c  + " ");
+		 }
+		 System.out.println();
+		 return prefix;
+	}
 }
