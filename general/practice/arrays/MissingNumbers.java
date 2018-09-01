@@ -1,6 +1,14 @@
 import java.util.List;
 import java.util.ArrayList;
 
+/*
+ * Here a set of n numbers is given
+ * These range between 1 to n
+ * Some of the numbers in the range are missing, which also means
+ * that few of these numbers occur multiple times
+ * there are no negative numbers
+ * Goal : Find all the missing numbers
+ */
 public class MissingNumbers {
 	public static void main(String[] args) {
 		int [] input = {4,3,2,7,8,2,3,1};

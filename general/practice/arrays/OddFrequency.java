@@ -12,8 +12,9 @@ public class OddFrequency {
         }
 
         public static void main(String [] args) {
-            int [] arr = {1,4,5,4,5,6,2,8,7,3,9,2,5,1,6,7,8,3,9};
+            //int [] arr = {1,4,5,4,5,6,2,8,7,3,9,2,5,1,6,7,8,3,9};
             //int [] arr = {1,3,5,7,1,3,7,5,7};
+            int [] arr = {1,3,5,7,1,1, 3, 2};
             OddFrequency of = new OddFrequency();
             System.out.println(of.findNoWithOddFrequency(arr));
         }
