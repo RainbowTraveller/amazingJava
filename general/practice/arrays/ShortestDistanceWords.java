@@ -1,4 +1,16 @@
-public class Solution {
+public class ShortestDistanceWords {
+	public static void main( String [] args ) {
+
+
+		//String[] words = { "a", "b","c", "d",  "a", "b","c", "d",  "a", "b","c", "d",  "a", "b","c", "d",  "a", "b","c", "d",  "a", "b","c", "d","a", "k", "d" };
+		String[] words = { "a", "b","c", "d"};
+		ShortestDistanceWords sdw = new ShortestDistanceWords();
+		String word1 = "a";
+		String word2 = "d";
+		int minDistance = sdw.shortestDistance( words, word1, word2 );
+		System.out.println( "Min Distance : " + minDistance);
+	}
+
     public int shortestDistance(String[] words, String word1, String word2) {
         int index1 = -1;
         int index2 = -1;
@@ -16,7 +28,6 @@ public class Solution {
                 if(index1 >= 0 && index2 >= 0 ) {
                     if(distance == 0 || distance > Math.abs(index1 - index2)) {
                         distance = Math.abs(index1 - index2);
-                        System.out.println(distance);
                     }
                 }
             }
