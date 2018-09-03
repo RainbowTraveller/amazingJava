@@ -5,46 +5,43 @@ public class KthLargestNumber {
 
     public static int kthLargest (int [] arr, int low, int high, int index) {
         int number = 0;
-        if(low <= high) {
-            int pivot = partition(arr, low, high);
+        if(low < high) {
+			int pivot =arr[ (low + high) / 2 ];
+            int pivotIndex = partition(arr, low, high, pivot);
 
             /*System.out.println("PIVOT INDEX: " + pivot);
             System.out.println("HIGH : " + high);
             System.out.println("LOW : " + low);
             System.out.println("INDEX: " + index);*/
-            if(pivot == index) {
+            if(pivotIndex == index) {
                 number = arr[index];
             }
-            else if(pivot < index) {
-                number = kthLargest(arr, pivot + 1, high, index);
+            else if(pivotIndex < index) {
+                number = kthLargest(arr, pivotIndex + 1, high, index);
             } else {
-                number = kthLargest(arr, low, pivot - 1, index);
+                number = kthLargest(arr, low, pivotIndex - 1, index);
             }
         }
         return number;
     }
 
-    public static int partition(int [] arr, int low, int high) {
-        int i = low;
-        int pivotIndex = (int)(low + Math.random() * (high - low + 1));
-        int pivot = arr[pivotIndex];
-        //Swap pivot with the last element in the given range
-        int temp = arr[high];
-        arr[high] = pivot;
-        arr[pivotIndex] = temp;
-        for(int j = low; j <= high; ++j) {
-            if(arr[j] < pivot) {// Why not for <=
-                temp = arr[i];
-                arr[i] = arr[j];
-                arr[j] = temp;
-                ++i;
-            }
-        }
-        temp = arr[i];
-        arr[i] = pivot;
-        arr[high] = temp;
-       // System.out.println(Arrays.toString(arr));
-        return i;
+    public static int partition(int [] arr, int low, int high, int pivot) {
+		while( low < high ) {
+			while ( arr[ low ] < pivot ) {
+				low++;
+			}
+			while( arr[ high ] > pivot ) {
+				high--;
+			}
+
+			System.out.println("Low : " + low + " High : " + high);
+			if( low <= high ) {
+				int temp = arr[ low ];
+				arr[ low ] = arr[ high ];
+				arr[ high ] = temp;
+			}
+		}
+		return low;
     }
 
     public static void main(String [] args) {
