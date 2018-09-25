@@ -7,10 +7,6 @@ import java.util.HashMap;
 
 public class CombinationsWithRepeatedChars {
     public static void combinations(char[] inputArr, StringBuffer output, int[] allowed, int starting) {
-        /*if(output.length() == inputArr.length) {
-            //System.out.println(output.toString());
-			return;
-        }*/
         for(int i = starting; i < allowed.length; ++i) {
             if(allowed[i] != 0) {
                 allowed[i]--;
@@ -39,9 +35,12 @@ public class CombinationsWithRepeatedChars {
            }
        }
        int[] allowed = new int[unique.size()];
+       inputArr = new char[unique.size()];
        int i = 0;
        for(Character c : unique.keySet()) {
-            allowed[i++] = unique.get(c);
+            allowed[i] = unique.get(c);
+			inputArr[i] = c;
+			i++;
        }
        combinations(inputArr, output, allowed, 0);
     }
