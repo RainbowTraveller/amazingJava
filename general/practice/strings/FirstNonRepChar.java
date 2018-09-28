@@ -13,12 +13,12 @@ public class FirstNonRepChar {
         if(s != null) {
             LinkedHashMap<Character, Integer> chmap = new LinkedHashMap<Character, Integer>();
             for(int i = 0; i < s.length(); ++i) {
-                Integer count = chmap.get(s.charAt(i));
-                if(count == null) {
-                    chmap.put(s.charAt(i), 1);
-                } else {
-                    chmap.put(s.charAt(i), ++count);
-                }
+				int count = 0;
+				char current = s.charAt(i);
+				if(chmap.containsKey(current)) {
+					count = chmap.get(current);
+				}
+				chmap.put(current, ++count);
             }
 
             for(char c : chmap.keySet()) {//Linkedhashmap guaranties keyset is returned in proper insertion order
