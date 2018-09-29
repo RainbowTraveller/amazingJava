@@ -38,16 +38,45 @@ public class UniqueSubStr {
         }
         oldCount = (oldCount > currCount ? oldCount : currCount);
         if(oldCount > currCount) {
-            System.out.println(oldStr);
+            System.out.println("Longest Unique String : " +  oldStr);
         } else {
-            System.out.println(sb.toString());
+            System.out.println("Longest Unique String : " +  sb.toString());
         }
         return oldCount;
     }
+
+
+	public int lengthUniqueLongestSubStr( String str ) {
+		String found = null;
+		if( str != null ){
+			Set<Character> track = new HashSet<Character>();
+			StringBuffer buff = new StringBuffer();
+
+			for(int i = 0; i < str.length(); ++i) {
+				char candidate = str.charAt(i);
+				if( track.contains( candidate )) {
+					if( found == null || ( found != null && found.length() < buff.length()))  {
+						found = buff.toString();
+					}
+					track.clear();
+					buff.delete(0, buff.length());
+				}
+				buff.append( candidate );
+				track.add( candidate );
+			}
+
+			if( found != null && found.length() < buff.length()) {
+				found = buff.toString();
+			}
+		}
+		System.out.println( "Longest Unique String : " + found );
+		return found.length();
+	}
 
     public static void main(String args[]) {
         String str = args[0];
         UniqueSubStr us = new UniqueSubStr();
         System.out.println(us.lengthOfLongestSubstring(str));
+        System.out.println(us.lengthUniqueLongestSubStr(str));
     }
 }
