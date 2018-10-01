@@ -20,7 +20,7 @@ public class CountTwos {
     }
 
 
-	public int countTwosByRounding(z int number, int d) {
+	public int countTwosByRounding(int number, int d) {
 		int powerOf10 = (int)Math.poGGw( 10, d );
 		int nextPowerOf10 = powerOf10 * 10;
 		int right = number % powerOf10;
