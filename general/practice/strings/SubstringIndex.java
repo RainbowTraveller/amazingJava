@@ -8,6 +8,7 @@ public class SubStringIndex {
 		String candidate = scan.nextLine();
 		SubStringIndex ssi = new SubStringIndex();
 		System.out.println( ssi.getSubStringIndex( destination, candidate ) );
+		System.out.println( ssi.findPattern( destination, candidate ) );
 		System.out.println( ssi.kmp( destination, candidate ) );
 	}
 
@@ -37,6 +38,28 @@ public class SubStringIndex {
 				}
 			}
 			tracker++;
+		}
+		return -1;
+	}
+
+	/**
+	*	Simpler version avoinding ugly break
+	*/
+	public static int findPattern( String source, String pattern ) {
+		if( source != null && pattern != null ) {
+			for( int i = 0; i < source.length(); i++) {
+				if( source.charAt( i ) == pattern.charAt( 0 )) {
+					int ptrack = 1;
+					int strack = i + 1;
+					while( ptrack < pattern.length() && strack < source.length() && source.charAt( strack ) == pattern.charAt( ptrack ) ) {
+						ptrack++;
+						strack++;
+					}
+					if( ptrack == pattern.length()) {
+						return i;
+					}
+				}
+			}
 		}
 		return -1;
 	}

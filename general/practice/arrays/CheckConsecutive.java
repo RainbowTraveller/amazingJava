@@ -9,6 +9,8 @@ class CheckConsecutive {
         //System.out.println(cc.getMin(arr1));
         System.out.println(cc.areConsecutive(arr1));
         System.out.println(cc.areConsecutive(arr2));
+        System.out.println(cc.areConsecutiveOnlyMin(arr1));
+        System.out.println(cc.areConsecutiveOnlyMin(arr2));
     }
 
     int getMin(int[] arr) {
@@ -51,5 +53,17 @@ class CheckConsecutive {
             return true;
         }
         return false;
+    }
+
+    boolean  areConsecutiveOnlyMin(int[] arr) {
+        int min = getMin(arr);
+		int sum = 0;
+		for(int i = 0; i < arr.length; ++i) {
+			sum += arr[i];
+		}
+		for(int i = 0; i < arr.length; ++i) {
+			sum -= (min + i);
+		}
+        return sum == 0;
     }
 }
