@@ -11,6 +11,8 @@ class CheckConsecutive {
         System.out.println(cc.areConsecutive(arr2));
         System.out.println(cc.areConsecutiveOnlyMin(arr1));
         System.out.println(cc.areConsecutiveOnlyMin(arr2));
+        System.out.println(cc.areConsecutiveAP(arr1));
+        System.out.println(cc.areConsecutiveAP(arr2));
     }
 
     int getMin(int[] arr) {
@@ -65,5 +67,19 @@ class CheckConsecutive {
 			sum -= (min + i);
 		}
         return sum == 0;
+    }
+
+    boolean  areConsecutiveAP(int[] arr) {
+        int min = getMin(arr);
+		int n = arr.length;
+		//sum = (n * (2 * first_term + (n - 1) * 1)) / 2;
+
+		int sum = 0;
+		int sumToNTermsUsingAP =(n * (2 * min + (n - 1) * 1)) / 2;
+
+		for(int i = 0; i < arr.length; ++i) {
+			sum += arr[i];
+		}
+        return sum == sumToNTermsUsingAP;
     }
 }
