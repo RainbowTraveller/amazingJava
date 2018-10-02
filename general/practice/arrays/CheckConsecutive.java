@@ -13,6 +13,8 @@ class CheckConsecutive {
         System.out.println(cc.areConsecutiveOnlyMin(arr2));
         System.out.println(cc.areConsecutiveAP(arr1));
         System.out.println(cc.areConsecutiveAP(arr2));
+        System.out.println(cc.areConsecutiveXOR(arr1));
+        System.out.println(cc.areConsecutiveXOR(arr2));
     }
 
     int getMin(int[] arr) {
@@ -82,4 +84,25 @@ class CheckConsecutive {
 		}
         return sum == sumToNTermsUsingAP;
     }
+
+	public boolean areConsecutiveXOR( int [] arr ) {
+		if( arr != null ) {
+			int min = getMin( arr );
+			int max = getMax( arr );
+
+			int x1 = arr[ 0 ];
+			int x2 = min;
+
+			for (int i = 1; i < arr.length; ++i ) {
+				x1 = x1 ^ arr[ i ];
+			}
+
+			for(int i = 1;  i < arr.length; ++i) {
+				x2 = x2 ^ (min + i);
+			}
+
+			return (x1 ^ x2) == 0;
+		}
+		return false;
+	}
 }
