@@ -23,6 +23,10 @@ public class CalculateFactorialZeros {
         return count;
     }
 
+	/**
+	 *  n times log k to the base 5 : running time
+	 *  as for a k = 5 to n, factorsFive runs log k to the base 5 times
+	 */
     public static int factorialTrailingZeros(int num) {
         int count = 0;
         if(num >= 5) {
@@ -33,6 +37,9 @@ public class CalculateFactorialZeros {
         return count;
     }
 
+	/**
+	 * log n :
+	 */
     public static int factorialTrailingZerosPowersOf5(int num) {
         int count = 0;
         if(num >= 5) {
