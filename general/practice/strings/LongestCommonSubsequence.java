@@ -12,37 +12,11 @@ public class LongestCommonSubsequence {
 		System.out.println( LCSRecursiveMem(  "abcdaf", "acbcf" ));
 	}
 
-	public static int LCSRecursiveMem( String s1, String s2 ) {
-		if( s1 != null && s2 != null ) {
-			int len1 = s1.length();
-			int len2 = s2.length();
-			mem = new int[len1][ len2];
-			for(int i = 0; i < len1; ++i) {
-				for(int j = 0; j < len2; ++j) {
-					mem[i][j] = -1;
-				}
-			}
-			return LCSRecursiveMemHelper(0, 0, len1, len2, s1, s2);
-		}
-		return -1;
-	}
-
-	private static int LCSRecursiveMemHelper( int i, int j, int len1, int len2, String s1, String s2) {
-		if( i >= len1 || j >= len2 ) {
-			return 0;
-		}
-
-		if( mem[i][j] < 0 ) {
-			if( s1.charAt( i  ) == s2.charAt( j  ) ) {
-				mem[i][j] = 1 + LCSRecursiveMemHelper( i + 1, j + 1, len1, len2, s1, s2);
-			} else {
-				mem[i][j] =  Math.max( LCSRecursiveMemHelper( i, j + 1, len1, len2, s1, s2),
-					LCSRecursiveMemHelper( i + 1, j, len1, len2, s1, s2));
-			}
-		}
-		return mem[i][j];
-	}
-
+	/**
+	 * Recursive and expensive
+	 * At each level 2 decisions are made so 2 power n running time
+	 * Also involves repeated calculations of values
+	 */
 	public static int LCSRecursive( String s1, String s2 ) {
 		if( s1 != null && s2 != null ) {
 			int len1 = s1.length();
@@ -52,6 +26,9 @@ public class LongestCommonSubsequence {
 		return -1;
 	}
 
+	/**
+	 * Actual recursive function, pretty straight forward
+	 */
 	private static int LCSRecursiveHelper( int i, int j, int len1, int len2, String s1, String s2 ) {
 		if( i >= len1 || j >= len2 ) {
 			return 0;
@@ -66,6 +43,59 @@ public class LongestCommonSubsequence {
 		);
 	}
 
+	/**
+	 * uses Memoization to store intermediate results
+	 * this avoid recalculation of already calculated ones
+	 * Running time : m * n
+	 * where m and n are lengths of the input strings. We need to
+	 * populate only m * n values
+	 */
+	public static int LCSRecursiveMem( String s1, String s2 ) {
+		if( s1 != null && s2 != null ) {
+			int len1 = s1.length();
+			int len2 = s2.length();
+			mem = new int[len1][ len2];
+			for(int i = 0; i < len1; ++i) {
+				for(int j = 0; j < len2; ++j) {
+					mem[i][j] = -1;
+				}
+			}
+			return LCSRecursiveMemHelper(0, 0, len1, len2, s1, s2);
+		}
+		return -1;
+	}
+	/**
+	 * helper function which is actually called recursively
+	 */
+	private static int LCSRecursiveMemHelper( int i, int j, int len1, int len2, String s1, String s2) {
+		//either of the string is exhausted so return
+		if( i >= len1 || j >= len2 ) {
+			return 0;
+		}
+
+		//initialised to -1 indicating not yet calculated
+		if( mem[i][j] < 0 ) {
+			if( s1.charAt( i  ) == s2.charAt( j  ) ) {// matched increment both
+				mem[i][j] = 1 + LCSRecursiveMemHelper( i + 1, j + 1, len1, len2, s1, s2);
+			} else {
+				//Not matched so recursive call with either of the index incremented
+				mem[i][j] =  Math.max( LCSRecursiveMemHelper( i, j + 1, len1, len2, s1, s2),
+					LCSRecursiveMemHelper( i + 1, j, len1, len2, s1, s2));
+			}
+		}
+		return mem[i][j];
+	}
+
+	/**
+	 * Dynamic programming :
+	 * Maintain m + 1 * n + 1 array of integers
+	 * 0th row and 0th column are filled with zero
+	 * Start comparing row and column contents which are essentially characters of the strings
+	 *
+	 * if i, j match ---> mem[i][j] = mem[i - 1][ j - 1 ] + 1
+	 * if not matched ----> mem[i][j] = Max(  mem[i - 1][ j ], mem[ i ][ j - 1 ] )
+	 *
+	 */
 	public static int LCS( String a, String b) {
 		if( a != null && b != null) {
 			int max = 0;
