@@ -1,78 +1,74 @@
 /**
-Input is path
-output : List of Set : Set should contain the path to files which have content
-*/
+Input : path
+output : List of Lists : internal list should contain the path to files which have same content
+Following funcions are given:
 
-          root
-
-     a    c
-
-   b      d
-
-   Map<Checksum, List<FilePaths>>
-
-ArrayList<String> listDir(String rootPath);
-
+ArrayList<String> listDir(String rootPath)
 boolean isDir(String path);
+*/
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Stack;
 
+public class FindUniqueFilesInADirectory {
+	public static void main( String [] args ) {
+		String path = args[0];
+		List<List<String>> sameFilePathGroups = getSameFilePaths(path);
+	}
 
-boolean isDirPresent(String path) {
+	private static boolean isDir(String path) {
+		return true;
+	}
 
-    if(path != null) {
-      ArrayList<String> allPath = listDir(path);
-      for(String aPath : allPaths) {
-        if(isDir(aPath) {
-          return true;
-        }
-      }
-      return false;
-    }
-    return true;
+	private static ArrayList<String> listDir(String rootPath) {
+		return new ArrayList<String>();
+	}
+
+	private static String getCheckSum( String path ) {
+		return new String();
+	}
+	/**
+	 * Modification of depth first search
+	 */
+	public static List<List<String>> getSameFilePaths( String path ) {
+		if( path != null ) {
+			Stack<String> pathStack = new Stack<String>();
+			pathStack.push( path );
+			Map<String, List<String>> sameFileTracker = new HashMap<String, List<String>>();
+			while(!pathStack.isEmpty()) {
+				String currentPath = pathStack.pop();
+				if( isDir( currentPath ) ) {
+					ArrayList<String> currSubPaths = listDir( currentPath );
+					for( String eachPath : currSubPaths ) {
+						pathStack.push( eachPath );
+					}
+				} else {
+					processFile( currentPath, sameFileTracker );
+				}
+			}
+			List<List<String>> desiredList = new ArrayList<List<String>>();
+			for(String checkSum : sameFileTracker.keySet()){
+				List<String> sameFilesPath = sameFileTracker.get( checkSum );
+				desiredList.add(sameFilesPath);
+			}
+			return desiredList;
+		}
+		return null;
+	}
+
+	/**
+	 *	Calculate the checksum of the file and track against the checksum as
+	 *	as key. The value will be list of paths with same checksum
+	 */
+	private static void processFile( String filePath, Map<String, List<String>> sameFileTracker ) {
+		String currCheckSum = getCheckSum(filePath);
+		List<String> sameFilePaths = new ArrayList<String>();
+		if( sameFileTracker.containsKey(currCheckSum) ) {
+			sameFilePaths = sameFileTracker.get( currCheckSum );
+		}
+		sameFilePaths.add(filePath);
+		sameFileTracker.put(currCheckSum, sameFilePaths);
+	}
 }
-
-public List<Set<String>> findSameFiles(String path) {
-
-    if(path != null) {
-        Map<String, List<String>> sameFilesMap = new HashMap<String, List<String>>();
-        findSameFilesHelper(path, sameFilesMap);
-        //Convert map to List<<Set>>
-        List<Set<String>> sameFiles = new ArrayList<Set<String>>();
-        for(Object key : sameFilesMap) {
-          List<String> files = sameFilesMap.get(key);
-          Set<String> sameFileSet = new HashSet<String>(files);
-          sameFiles.add(sameFileSet);
-        }
-        return sameFiles;
-    }
-    return null;
-}
-
-public Map<String, List<String>> findSameFilesHelper(String path,  Map<String, List<String>> fileMap) {
-
-        ArrayList<String> allDirs = listDir(path);
-        for(String dir : allDirs) {
-          if(isDir(dir)) {
-            findSameFilesHelper(dir, fileMap);
-          } else {
-
-            processFile(dir, Map<String, List<String>> fileMap);
-
-          }
-        }
-}
-
-public void processFile(String file, Map<String, List<String>> fileMap) {
-
-    if(file != null) {
-      String checksum = getCheckSum(file);
-      if(fileMap.containsKey(checksum)) {
-        List<String> filePaths = fileMap.get(checksum);
-        filePaths.add(file);
-      } else {
-        List<String> filePaths = new ArrayList<String>();
-        filePaths.add(file);
-        fileMap.set(checksum, filePaths);
-      }
-}
-
-
