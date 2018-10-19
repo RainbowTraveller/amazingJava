@@ -19,20 +19,19 @@ public class KEqualSumSeparation {
 		}
 		//check for desired sum in the list
 		for(int i = 0; i < len; ++i) {
-			if(used[i]) {
-				continue;
-			}
-			int currNum = input.get(i);
-			int sum = subsetSumTracker[index];
-			if(sum <= perSetSum) {
-				used[i] = true;
-				subsetSumTracker[index] += currNum;
-				boolean currResult = separationHelper(input, perSetSum, subsetSumTracker, used, index, i + 1, noOfPartitions);
-				if(!currResult) {
-					used[i] = false;
-					subsetSumTracker[index] -= currNum;
-				} else {
-					return currResult;
+			if(!used[i]) {
+				int currNum = input.get(i);
+				int sum = subsetSumTracker[index];
+				if(sum <= perSetSum) {
+					used[i] = true;
+					subsetSumTracker[index] += currNum;
+					boolean currResult = separationHelper(input, perSetSum, subsetSumTracker, used, index, i + 1, noOfPartitions);
+					if(!currResult) {
+						used[i] = false;
+						subsetSumTracker[index] -= currNum;
+					} else {
+						return currResult;
+					}
 				}
 			}
 		}
