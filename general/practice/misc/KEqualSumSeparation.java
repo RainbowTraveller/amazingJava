@@ -61,7 +61,7 @@ public class KEqualSumSeparation {
 		}
 
 		int perSetSum = sum / k;
-    	int[] subsetSumTracker = new int [k];
+		int[] subsetSumTracker = new int [k];
 		boolean[] used =  new boolean[len];
 
 		for (int i = 0; i < k; i++)
@@ -70,18 +70,17 @@ public class KEqualSumSeparation {
 		for (int i = 0; i < len; i++)
 			used[i] = false;
 
-
 		return separationHelper(list, perSetSum, subsetSumTracker, used, 0, len, k);
 	}
 
 	public static void main(String[] args) {
-		 List<Integer> input = new ArrayList<Integer>();
-		 input.add(2);
-		 input.add(1);
-		 input.add(4);
-		 input.add(5);
-		 input.add(7);
-		 KEqualSumSeparation findkseparations = new KEqualSumSeparation();
-		 System.out.println(findkseparations.separate(input, 3));
+		List<Integer> input = new ArrayList<Integer>();
+		input.add(2);
+		input.add(1);
+		input.add(4);
+		input.add(5);
+		input.add(7);
+		KEqualSumSeparation findkseparations = new KEqualSumSeparation();
+		System.out.println(findkseparations.separate(input, 3));
 	}
 }
