@@ -3,6 +3,10 @@ public class ReverseWords {
     public static void main(String[] args) {
         String input = args[0];
         System.out.println(input);
+		reverseWords( input  );
+    }
+
+	public static void reverseWords( String input ) {
         if(input != null) {
             char[] arr = input.toCharArray();
             int start = 0;
@@ -24,8 +28,8 @@ public class ReverseWords {
             }
             System.out.println();
         }
-    }
 
+	}
     public static void reverse(char[] arr, int s, int e) {
         if(arr != null) {
             while(s < e) {
