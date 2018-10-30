@@ -7,9 +7,13 @@ public class LongestCommonSubsequence {
 
 	public static int mem[][];
 	public static void main( String[] args ) {
-		System.out.println( LCS(  "abcdaf", "acbcf" ));
-		System.out.println( LCSRecursive(  "abcdaf", "acbcf" ));
-		System.out.println( LCSRecursiveMem(  "abcdaf", "acbcf" ));
+		System.out.println( "LCS length : DP : " 			+  LCS(  "abcdaf", "acbcf" ));
+		System.out.println( "LCS length : Recursive : " 	+ LCSRecursive(  "abcdaf", "acbcf" ));
+		System.out.println( "LCS length : Memoization  : " 	+ LCSRecursiveMem(  "abcdaf", "acbcf" ));
+
+		System.out.println(  "LCS length : DP : " 			+ LCS("pqrstvuwx", "apbqcrsdefteqw"  ));
+		System.out.println(  "LCS length : Recursive : " 	+ LCSRecursive("pqrstvuwx", "apbqcrsdefteqw"  ));
+		System.out.println(  "LCS length : Memoization  : " + LCSRecursiveMem("pqrstvuwx", "apbqcrsdefteqw"  ));
 	}
 
 	/**
@@ -112,8 +116,36 @@ public class LongestCommonSubsequence {
 				}
 			  }
 			}
+			getString( tracker, a, b );
 		  return max;
 		}
 		return -1;
 	  }
+
+	//Find the actual subsequnce
+	private static void getString(int[][] tracker, String a, String b) {
+		int i = a.length();
+		int j = b.length();
+		StringBuffer buffer = new StringBuffer();
+		while( i > 0 && j > 0 ) {
+			//Check if all the 3 surroundings are equal to current element
+			if( tracker[ i - 1 ][ j - 1 ]  == tracker[ i ][ j ] &&  tracker[ i - 1 ][ j - 1 ]  == tracker[ i - 1 ][ j ] &&  tracker[ i - 1 ][ j - 1 ]  == tracker[ i ][ j - 1 ]    ) {
+				j--;
+			//Check all the surroudings are equal and current is 1 more than diagonally behind one meaning this is a matching one so add it to buffer
+			} else if(tracker[ i - 1 ][ j - 1 ]  == tracker[ i - 1 ][ j ] &&  tracker[ i - 1 ][ j - 1 ]  == tracker[ i ][ j - 1 ]   &&   tracker[ i - 1 ][ j - 1 ] + 1 == tracker[ i ][ j ] ) {
+				buffer.append( a.charAt( i - 1 ));
+				//System.out.println( a.charAt( i - 1 ) );
+				i--;
+				j--;
+			//or go to whoever passed the value to current element
+			//either element from previous column
+			} else if ( tracker[ i ][ j - 1 ] >= tracker[ i - 1 ][ j ] ) {
+				j--;
+			//or row
+			} else {
+				i--;
+			}
+		}
+		System.out.println("Longest Common Subsequence: " + buffer.reverse());
+	}
 }
