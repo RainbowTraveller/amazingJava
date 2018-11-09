@@ -2,6 +2,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.NoSuchElementException;
+import java.util.concurrent.CountDownLatch;
 
 public class BlockingQueue {
 	public static void main(String[] args) {
@@ -10,28 +11,37 @@ public class BlockingQueue {
 		// then start threads to produce and consume events
 		//
 		//
+		CountDownLatch startSignal = new CountDownLatch(1);
 		// Shared Queue
 		LinkedBlockingQueue<String> queue = new LinkedBlockingQueue<String>();
-		Producer eventProducer = new Producer(queue);
-		Consumer eventConsumer = new Consumer(queue);
+		Producer eventProducer = new Producer(queue, startSignal);
+		Consumer eventConsumer = new Consumer(queue, startSignal);
 
 		Thread pThread = new Thread(eventProducer);
 		pThread.start();
 		Thread cThread = new Thread(eventConsumer);
 		cThread.start();
+		startSignal.countDown();
 	}
 }
 
 class Producer implements Runnable {
-	String[] events = {"Visit", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Visit", "finish"};
+	String[] events = {"Visit", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Visit", "Jupiter","Saturn","Neptune", "Jupiter","Saturn","Neptune","finish"};
 	private final LinkedBlockingQueue<String> pqueue;
+	private final CountDownLatch startSignal;
 
-	public Producer(LinkedBlockingQueue<String> pqueue) {
+	public Producer(LinkedBlockingQueue<String> pqueue, CountDownLatch startSignal) {
 		this.pqueue = pqueue;
+		this.startSignal = startSignal;
 	}
 
 	public void run() {
-		produce();
+		try {
+			startSignal.await();
+			produce();
+		} catch( InterruptedException ie ) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private void produce() {
@@ -45,14 +55,17 @@ class Producer implements Runnable {
 class Consumer implements Runnable {
 	private final LinkedBlockingQueue<String> cqueue;
 	private Map<String, Integer> eventCountTracker;
+	private final CountDownLatch startSignal;
 
-	public Consumer(LinkedBlockingQueue<String> cqueue) {
+	public Consumer(LinkedBlockingQueue<String> cqueue, CountDownLatch startSignal) {
 		this.cqueue = cqueue;
 		this.eventCountTracker = new HashMap<String, Integer>();
+		this.startSignal = startSignal;
 	}
 
 	public void run() {
 		try {
+			startSignal.await();
 			while(cqueue.peek() != null) {
 				try{
 					String event = cqueue.take();
@@ -69,9 +82,10 @@ class Consumer implements Runnable {
 					System.out.println("Take method interrupted");
 				}
 			}
+		} catch( InterruptedException ie ) {
+			Thread.currentThread().interrupt();
 		} catch (NoSuchElementException nsee) {
 		   System.out.println("Events exhausted");
-
 		} finally {
 			  result();
 		}
