@@ -30,7 +30,7 @@ public class Boggle {
 		return refer.query(word);
 	}
 
-	public void solve(){
+	public void solve() {
 		for(int row = 0; row < grid.length; row++) {
 			for(int col = 0; col < grid[0].length; col++) {
 				System.out.println("CHAR : " + grid[row][col]);
@@ -72,7 +72,6 @@ public class Boggle {
 				}
 			}
 		}
-
 	}
 
 	private boolean isValidPosition(int row, int col) {
