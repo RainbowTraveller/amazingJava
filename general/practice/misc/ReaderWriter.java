@@ -64,7 +64,8 @@ class Reader implements Runnable {
 			try {
 				Thread.sleep(5000);
 			} catch (InterruptedException ie) {
-				System.out.println("Inturruption Occurred while Sleeping !");
+				System.out.println("Interruption Occurred while Sleeping !");
+				Thread.currentThread().interrupt();
 			}
 		}
 	}
