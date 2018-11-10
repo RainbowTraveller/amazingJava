@@ -40,16 +40,20 @@ public class IndexFromRotatedArray {
 
     public static void main(String [] args) {
 
-        int [] leftRotation =  {5, 5, 5, 7, 11, 5};
-        //int [] leftRotation =  {5, 7, 11, 12, 19, 21, 1, 4};
+        //int [] leftRotation =  {5, 5, 5, 7, 11, 5};
+        int [] leftRotation =  {5, 7, 11, 12, 19, 21, 1, 4};
         int [] rightRotation =  {19, 21, 1, 4, 5, 7, 11, 12};
         int min = 0;
         int max = leftRotation.length - 1;
+		System.out.println("--------------- : Left Rotated : ------------------- ");
         System.out.println("Index of 21 :" + findIndex(leftRotation, min, max, 21));
         System.out.println("Index of 1 :" + findIndex(leftRotation, min, max, 1));
         System.out.println("Index of 11 :" + findIndex(leftRotation, min, max, 11));
+
         min = 0;
         max = rightRotation.length - 1;
+        System.out.println();
+		System.out.println("--------------- : Right Rotated : ------------------- ");
         System.out.println("Index of 21 :" + findIndex(rightRotation, min, max, 21));
         System.out.println("Index of 1 :" + findIndex(rightRotation, min, max, 1));
         System.out.println("Index of 11 :" + findIndex(rightRotation, min, max, 11));
