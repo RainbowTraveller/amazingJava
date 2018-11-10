@@ -7,6 +7,23 @@ import java.lang.Math;
  */
 public class LongestIncreasingSequence {
 
+    public static void longestIncreasingSequnceNoDyn(int [] arr) {
+		int max = 1;
+		if( arr != null ) {
+			for( int i = 0; i < arr.length; ++i) {
+				int curr = 1;
+				int currMax = arr[i];
+				for(int j = i + 1; j < arr.length; ++j ) {
+					if( arr[j] > currMax ) {
+						curr++;
+						currMax = arr[j];
+					}
+				}
+				max = Math.max( max, curr );
+			}
+		}
+			System.out.println( "Longest increasing subsequence length : " + max );
+	}
     public static void longestIncreasingSequnce(int [] arr) {
 		if( arr != null ) {
 			int [] tracker = new int[ arr.length ];
@@ -62,6 +79,7 @@ public class LongestIncreasingSequence {
         int [] input = { 10, 22, 9, 33, 21, 50, 41, 60 };
 
         longestIncreasingSequnce(input);
+        longestIncreasingSequnceNoDyn(input);
         longestContinuousIncreasingSequnce(input);
     }
 }
