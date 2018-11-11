@@ -6,8 +6,8 @@ public class KthLargestNumber {
     public static int kthLargest (int [] arr, int low, int high, int index) {
         int number = 0;
         if(low < high) {
-			int pivot =arr[ (low + high) / 2 ];
-            int pivotIndex = partition(arr, low, high, pivot);
+			//int pivot =arr[ (low + high) / 2 ];
+            int pivotIndex = partition(arr, low, high);
 
             /*System.out.println("PIVOT INDEX: " + pivot);
             System.out.println("HIGH : " + high);
@@ -24,6 +24,22 @@ public class KthLargestNumber {
         }
         return number;
     }
+
+    public static int partition(int [] arr, int low, int high) {
+		int pivot = arr[high];
+		int partitionIndex = low;
+		for( int i = low; i < high; ++i ) {
+			if( arr[i] <= pivot) {
+				int temp = arr[i];
+				arr[ i ] = arr[ partitionIndex ];
+				arr[ partitionIndex ] = temp;
+				partitionIndex++;
+			}
+		}
+		arr[ high ] = arr[ partitionIndex ];
+		arr[ partitionIndex ] = pivot;
+		return partitionIndex;
+	}
 
     public static int partition(int [] arr, int low, int high, int pivot) {
 		while( low < high ) {
