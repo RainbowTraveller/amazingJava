@@ -39,7 +39,7 @@ public class SubStringIndex {
 			}
 			tracker++;
 		}
-		return -1;
+		return 0;
 	}
 
 	/**
