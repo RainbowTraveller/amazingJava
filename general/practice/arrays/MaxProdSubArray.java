@@ -11,7 +11,10 @@ public class MaxProdSubArray {
 			input.add(i);
 		}
 		System.out.println("Max Continuous Product : " +  maxProduct(input));
+		int[] arrz = { 0, 0, -4, 0, -20, 0, -3, 0 };
+		System.out.println("Max Continuous Product Zeros : " +  maxProductWithZero(arrz));
 	}
+
 	public static int maxProduct(List<Integer> numbers) {
 		int maxSoFar = 1;
 		int maxEndingHere = 1;
@@ -36,5 +39,36 @@ public class MaxProdSubArray {
 		}
 
 		return maxSoFar;
+	}
+
+	public static int maxProductWithZero( int[] nums ) {
+		int max_ending_here = 0;
+		int min_ending_here = 0;
+		int max_so_far = 0;
+
+		if(nums != null && nums.length > 0) {
+			for(int i = 0; i < nums.length; ++i) {
+				if(nums[i] > 0) {
+					if(max_ending_here == 0) {
+						max_ending_here = 1;
+					}
+					max_ending_here *= nums[i];
+					min_ending_here  = Math.min( min_ending_here, min_ending_here * nums[i]);
+
+				} else if (nums[i] == 0) {
+					max_ending_here = 0;
+					min_ending_here = 0;
+				} else {
+					min_ending_here = max_ending_here * nums[i];
+					if( min_ending_here == 1) {
+						max_ending_here = 1;
+					} else {
+						max_ending_here = Math.min(min_ending_here, min_ending_here * nums[i]);
+					}
+				}
+				max_so_far = Math.max(max_so_far, max_ending_here);
+			}
+		}
+		return max_so_far;
 	}
 }
