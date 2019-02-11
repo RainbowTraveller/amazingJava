@@ -1,11 +1,12 @@
 /*
  * Given a non-negative integer c, your task is to decide whether there're two integers a and b such that a2 + b2 = c.
+ * Running complexity : O(sqrt c * lg c)
  */
 class SumOfSquareNos {
     public boolean judgeSquareSum(int c) {
-        for(int a = 1; a*a < c; ++a) {
+        for(int a = 1; a*a < c; ++a) { // running till sqrt of c
             int bsqr = c - (int) a * a;
-            if( binarySearch(0, (int)(bsqr/2), bsqr) ) {
+            if( binarySearch(0, (int)(bsqr/2), bsqr) ) { //lg c
 				System.out.println("Is " + c + " sum of 2 squares : " + true);
 				System.out.println("No. 1 : " + a + "  No. 2 : " + (int) Math.sqrt(bsqr));
                 return true;
