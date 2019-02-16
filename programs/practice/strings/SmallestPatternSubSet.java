@@ -48,7 +48,7 @@ public class SmallestPatternSubSet {
         //Sliding window limits
         int left = 0, right = 0;
         //Details of the output string
-        int length = 0, starting = 0, ending = 0;
+        int length = -1, starting = 0, ending = 0;
 
         //Map for candidate characters
         Map<Character, Integer> candidateMap = new HashMap<Character, Integer>();
@@ -65,7 +65,7 @@ public class SmallestPatternSubSet {
             }
 
             while(left <= right && requiredCharCount == candidateCount) {
-                if(length == 0 || right - left + 1 < length) {
+                if(length == -1 || right - left + 1 < length) {
                     length = right - left + 1;
                     starting = left;
                     ending = right;
@@ -83,6 +83,6 @@ public class SmallestPatternSubSet {
             //Keep expanding the right side of the window
             right++;
         }
-        return candidate.substring(starting, ending + 1);
+        return length == -1 ? "" : candidate.substring(starting, ending + 1);
     }
 }
