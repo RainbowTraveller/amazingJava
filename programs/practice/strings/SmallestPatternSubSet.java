@@ -1,3 +1,16 @@
+/*
+ *  Minimum Windowing Substring problem
+ *  Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
+ *
+ *   Example:
+ *
+ *   Input: S = "ADOBECODEBANC", T = "ABC"
+ *   Output: "BANC"
+ *   Note:
+ *
+ *   If there is no such window in S that covers all characters in T, return the empty string "".
+ *   If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
+ */
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
@@ -16,49 +29,60 @@ public class SmallestPatternSubSet {
     }
 
     public static String findSmallestContainerSubString(String candidate, String pattern ) {
-        String minString = null;
-        if(candidate != null && pattern != null && pattern.length() < candidate.length() ) {
-            int index = 0;
-            while(index < candidate.length()) {
-                char candidateChar = candidate.charAt( index );
-                if(pattern.indexOf(candidateChar) >= 0) {
-                    //Call a function to get the container string length
-                    String  currString = getContainerStringLength(candidate, pattern, index);
-                    System.out.println(" Current String : " + currString);
-                    if( minString == null || ( currString != null &&  currString.length() < minString.length() ) ) {
-                        minString = currString;
-                    }
-                }
-                index++;
-            }
+        //Basic corner cases
+        if(candidate == null || pattern == null || pattern.length() > candidate.length()) {
+            return "";
         }
-        return minString;
-    }
 
-    public static String getContainerStringLength( String candidate, String pattern, int index ) {
-        Map<Character, Integer> trackerMap = new HashMap<Character, Integer>();
-        StringBuffer buff = new StringBuffer();
-        System.out.println("INDEX VALUE : " + index );
-        while(index < candidate.length()) {
-            //if chat at index is present in the pattern
-            //add it to the map and increment the occurrence count
-            //when length of the map equals pattern length, desired container string is
-            //obtained
-            char currentChar = candidate.charAt(index);
-            buff.append(currentChar);
-            if( pattern.indexOf(currentChar) >= 0 ) {
-                int frequency = 0;
-                if(trackerMap.containsKey(currentChar)) {
-                    frequency = trackerMap.get(currentChar);
-                }
-                frequency++;
-                trackerMap.put( currentChar, frequency );
-                if(trackerMap.size() == pattern.length()) {
-                    return buff.toString();
-                }
-            }
-            index++;
+        //Create map of the character and frequency from patten string
+        Map<Character, Integer> patternMap = new HashMap<Character, Integer>();
+        for(int i = 0; i < pattern.length(); ++i) {
+            char currentChar = pattern.charAt(i);
+            int frequency = patternMap.getOrDefault(currentChar, 0);
+            patternMap.put(currentChar, frequency + 1);
         }
-        return null;
+
+        //Count of required unique characters
+        int requiredCharCount = patternMap.size();
+        int candidateCount = 0;
+        //Sliding window limits
+        int left = 0, right = 0;
+        //Details of the output string
+        int length = 0, starting = 0, ending = 0;
+
+        //Map for candidate characters
+        Map<Character, Integer> candidateMap = new HashMap<Character, Integer>();
+        while(right < candidate.length()) {
+            //Start creating the map of the characters from the Candidate string
+            char currentChar = candidate.charAt(right);
+            int frequency = candidateMap.getOrDefault(currentChar, 0);
+            candidateMap.put(currentChar, frequency + 1);
+
+            //Check if a character from the candidate string is present in the pattern and
+            //the frequency matches too. Increment the count for matched candidates
+            if(patternMap.containsKey(currentChar) && candidateMap.get(currentChar) == patternMap.get(currentChar)) {
+                candidateCount++;
+            }
+
+            while(left <= right && requiredCharCount == candidateCount) {
+                if(length == 0 || right - left + 1 < length) {
+                    length = right - left + 1;
+                    starting = left;
+                    ending = right;
+                }
+                //Start decreasing the window from left side
+                char currentLeftMostChar = candidate.charAt(left);
+                //Reduce the frequency count from the candidate map for this particular character obtained
+                candidateMap.put(currentLeftMostChar, candidateMap.get(currentLeftMostChar) - 1);
+                //if this does not match with the frequency from the pattern map, then reduce candidate match count
+                if(patternMap.containsKey(currentLeftMostChar) && candidateMap.get(currentLeftMostChar) < patternMap.get(currentLeftMostChar)) {
+                    candidateCount--;
+                }
+                left++;
+            }
+            //Keep expanding the right side of the window
+            right++;
+        }
+        return candidate.substring(starting, ending + 1);
     }
 }
