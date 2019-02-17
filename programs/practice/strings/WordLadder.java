@@ -49,6 +49,7 @@ public class WordLadder {
         this.start = start;
         this.end = end;
         dictionary = new LinkedHashSet<String>();
+        /*
         dictionary.add( "conk");
         dictionary.add( "blue");
         dictionary.add( "cork");
@@ -58,6 +59,13 @@ public class WordLadder {
         dictionary.add( "blad");
         dictionary.add( "perl");
         dictionary.add( "bead");
+        */
+        dictionary.add( "hot");
+        dictionary.add( "dot");
+        dictionary.add( "dog");
+        dictionary.add( "lot");
+        dictionary.add( "log");
+        //dictionary.add( "cog");
         wordLadder = new LinkedList<LinkedList<String>>();
         //Create initial stack with only start word
         //and add that stack to the queue
@@ -110,10 +118,15 @@ public class WordLadder {
             if(!dictionary.isEmpty() && !this.end.equals(candidate)) {
                 Set<String> newDictionary = new LinkedHashSet<String>();
                 for(String word : dictionary) {
+                    System.out.println("Word : " + word);
                     if(isNextWord(candidate, word)) {
                         //Copy the original stack, then add on top if more string are found
-                        LinkedList<String> newStack = currentStackOfStrings;
+                        //Correction : need to create new object and not just a reference
+                        //LinkedList<String> newStack = currentStackOfStrings; // This will fail
+                        LinkedList<String> newStack = new LinkedList<String>(currentStackOfStrings);
                         newStack.addLast(word);
+                        System.out.println("Adding Word : " + word);
+                        System.out.println("New Stack : " + newStack);
                         wordLadder.addLast(newStack);
                     } else {
                         newDictionary.add( word );
@@ -130,6 +143,8 @@ public class WordLadder {
                         length = currentStackOfStrings.size();
                     }
                 }
+            } else {
+                length = 0;
             }
         }
         System.out.println("Shortest length : " + length);
