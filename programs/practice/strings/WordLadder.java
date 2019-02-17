@@ -29,6 +29,7 @@ public class WordLadder {
     //Queue of stack of word ladders. Each stack contains a ladder from starting
     //word to an intermediate word in the dictionary
     private Deque<LinkedList<String>>   wordLadder;
+    private Deque<String>               simpleWordLadder;
     private String                      start;
     private String                      end;
 
@@ -42,7 +43,8 @@ public class WordLadder {
         WordLadder wl = new WordLadder( start, end );
         //Get the words in the dictionary
         //wl.getInput(sc);
-        wl.findShortestLadder();
+        //wl.findShortestLadder();
+        wl.findShortestSimpleLadder();
     }
 
     public WordLadder( String start, String end ){
@@ -65,13 +67,15 @@ public class WordLadder {
         dictionary.add( "dog");
         dictionary.add( "lot");
         dictionary.add( "log");
-        //dictionary.add( "cog");
+        dictionary.add( "cog");
         wordLadder = new LinkedList<LinkedList<String>>();
+        simpleWordLadder = new LinkedList<String>();
         //Create initial stack with only start word
         //and add that stack to the queue
         LinkedList<String> startList = new LinkedList<String>();
         startList.addFirst( this.start );
         wordLadder.add(startList);
+        simpleWordLadder.add(this.start);
     }
 
     /*
@@ -148,5 +152,28 @@ public class WordLadder {
             }
         }
         System.out.println("Shortest length : " + length);
+    }
+
+    public void findShortestSimpleLadder() {
+        int level = 1;
+        while(!simpleWordLadder.isEmpty()) {
+            String candidate = simpleWordLadder.removeFirst();
+            System.out.println("Current Word : " + candidate);
+            if(candidate.equals(this.end)) {
+                System.out.println("Shortest length : " + level);
+                return;
+            }
+            Set<String> newDictionary = new LinkedHashSet<String>();
+            for(String word : dictionary) {
+                if(isNextWord(candidate, word)) {
+                    simpleWordLadder.addLast(word);
+                } else {
+                    newDictionary.add(word);
+                }
+            }
+            dictionary = newDictionary;
+            level++;
+        }
+        System.out.println("Shortest length : " + 0);
     }
 }
