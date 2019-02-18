@@ -172,7 +172,6 @@ public class WordLadder {
     }
 
     public void findShortestSimpleLadder() {
-        simpleWordLadder.add(this.start);
         int level = 1;
         while(!simpleWordLadder.isEmpty()) {
             //System.out.println("Current Ladder" + simpleWordLadder);
