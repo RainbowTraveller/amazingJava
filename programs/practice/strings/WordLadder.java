@@ -51,7 +51,6 @@ public class WordLadder {
         this.start = start;
         this.end = end;
         dictionary = new LinkedHashSet<String>();
-        /*
         dictionary.add( "conk");
         dictionary.add( "blue");
         dictionary.add( "cork");
@@ -61,13 +60,13 @@ public class WordLadder {
         dictionary.add( "blad");
         dictionary.add( "perl");
         dictionary.add( "bead");
-        */
-        dictionary.add( "hot");
+        /*dictionary.add( "hot");
         dictionary.add( "dot");
         dictionary.add( "dog");
         dictionary.add( "lot");
         dictionary.add( "log");
         dictionary.add( "cog");
+        */
         wordLadder = new LinkedList<LinkedList<String>>();
         simpleWordLadder = new LinkedList<String>();
         //Create initial stack with only start word
@@ -105,6 +104,24 @@ public class WordLadder {
         return count == 1;
     }
 
+    private List<String>  collectNextWords(String word, Set<String> dictionary, Deque<String> wordLadder) {
+        List<String> collectedNeighbours = new LinkedList<String>();
+        char[] wordArray = word.toCharArray();
+        for(int i = 0; i < wordArray.length; ++i) {
+            for(char j = 'a'; j < 'z'; ++j) {
+                if(j != wordArray[i]) {
+                    char original = wordArray[i];
+                    wordArray[i] = j;
+                    String newWord = new String(wordArray);
+                    wordArray[i] = original;
+                    if(dictionary.remove(newWord)){
+                        collectedNeighbours.add(newWord);
+                    }
+                }
+            }
+        }
+        return collectedNeighbours;
+    }
 
     public void setDictionary( Set<String> modifiedDictionary ){
         this.dictionary = modifiedDictionary;
@@ -155,23 +172,25 @@ public class WordLadder {
     }
 
     public void findShortestSimpleLadder() {
+        simpleWordLadder.add(this.start);
         int level = 1;
         while(!simpleWordLadder.isEmpty()) {
-            String candidate = simpleWordLadder.removeFirst();
-            System.out.println("Current Word : " + candidate);
-            if(candidate.equals(this.end)) {
-                System.out.println("Shortest length : " + level);
-                return;
-            }
-            Set<String> newDictionary = new LinkedHashSet<String>();
-            for(String word : dictionary) {
-                if(isNextWord(candidate, word)) {
-                    simpleWordLadder.addLast(word);
-                } else {
-                    newDictionary.add(word);
+            //System.out.println("Current Ladder" + simpleWordLadder);
+            int size = simpleWordLadder.size();
+            for(int i = 0; i < size ; ++i) {
+                String candidate = simpleWordLadder.removeFirst();
+                //System.out.println("Current Word : " + candidate);
+                if(candidate.equals(this.end)) {
+                    //System.out.println("Shortest length : " + level);
+                    System.out.println("Shortest length : " + level);
+                    return;
+                }
+                List<String> neighbours = collectNextWords(candidate, dictionary, simpleWordLadder);
+                //System.out.println("Current dict" + newDictionary);
+                for(String neighbour : neighbours) {
+                    simpleWordLadder.add(neighbour);
                 }
             }
-            dictionary = newDictionary;
             level++;
         }
         System.out.println("Shortest length : " + 0);
