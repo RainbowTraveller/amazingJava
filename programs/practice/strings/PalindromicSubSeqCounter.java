@@ -12,7 +12,8 @@
  */
 public class PalindromicSubSeqCounter {
     public static void main(String [] args) {
-        String str = "aab";
+        String str = "aaab";
+        //String str = "aaaa";
         //String str = "abcb";
         System.out.println("Total palindromic "+
                             "subsequence are : "
@@ -39,9 +40,10 @@ public class PalindromicSubSeqCounter {
                     int index = i + j - 1;
                     if(index < length) {
                         if(input.charAt(j) == input.charAt(index) ) {
-                            System.out.println("Matched!" );
+                            System.out.println("Matched : " + input.charAt(j) + " and " + input.charAt(index));
                             tracker[j][index] =  1 + tracker[j][ index - 1 ] + tracker[ j + 1 ][ index ];
                         } else {
+                            System.out.println("Not Matched : " + input.charAt(j) + " and " + input.charAt(index));
                             tracker[j][index] =  tracker[j ][ index - 1 ] + tracker[ j + 1 ][ index ] - tracker[ j + 1 ][ index - 1 ];
                         }
                     }
