@@ -3,6 +3,7 @@ package com.trees;
 import com.trees.Node;
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Deque;
 
 
 public class BinaryTree {
@@ -160,5 +161,31 @@ public class BinaryTree {
             }
         }
         System.out.println();
+    }
+
+
+    public void printPaths() {
+        Deque<Node> path = new LinkedList<Node>();
+        pathHelper(root, path);
+    }
+
+    private void pathHelper(Node root, Deque<Node> path) {
+        if(root == null ) {
+            return;
+        }  else {
+            path.add(root);
+            if( root.left != null) {
+                pathHelper(root.left, path);
+            }
+
+            if(root.right != null ) {
+                pathHelper(root.right, path);
+            }
+
+            if(root.left == null && root.right == null) {
+                System.out.println("Path :" + path);
+            }
+            path.removeLast();
+        }
     }
 }

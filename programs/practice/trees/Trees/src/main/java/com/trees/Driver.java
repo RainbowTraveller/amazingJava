@@ -20,9 +20,10 @@ public class Driver {
         /*bst.inOrder();
         bst.preOrder();
         bst.postOrder();
-        */
         bst.preOrderIterative();
         bst.inOrderIterative();
         bst.postOrderItertative();
+        */
+        bst.printPaths();
     }
 }
