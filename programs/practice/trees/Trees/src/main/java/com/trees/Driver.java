@@ -17,10 +17,12 @@ public class Driver {
         bst.insert(16);
         bst.insert(19);
         bst.insert(18);
-        bst.inOrder();
+        /*bst.inOrder();
         bst.preOrder();
         bst.postOrder();
+        */
         bst.preOrderIterative();
         bst.inOrderIterative();
+        bst.postOrderItertative();
     }
 }
