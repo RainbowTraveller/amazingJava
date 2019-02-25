@@ -188,4 +188,19 @@ public class BinaryTree {
             path.removeLast();
         }
     }
+
+
+    public boolean isSameTree(Node root) {
+        return compareHelper(this.root, root);
+    }
+
+    private boolean compareHelper(Node tree1, Node tree2) {
+        if(tree1 == null && tree2 == null ) {
+            return true;
+        } else if( tree1 != null && tree2 != null ){
+            return (tree1.data == tree2.data) && compareHelper(tree1.left, tree2.right) && compareHelper(tree1.right, tree2.right);
+        } else {
+            return false;
+        }
+    }
 }
