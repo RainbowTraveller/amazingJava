@@ -1,3 +1,8 @@
+/*
+ *
+ * Add the values of two nodes at the same level
+ *
+ */
 public class MergeBT {
 	//Definition for a binary tree node.
 	public class TreeNode {
