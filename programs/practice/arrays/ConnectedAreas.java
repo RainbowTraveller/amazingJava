@@ -1,3 +1,8 @@
+/* A land mass consisting of land and water is represented by a matrix
+ * The matrix is represented by 1 and 0 where 1 represents soil and 0 represents
+ * water.
+ * Find the greatest island contained in the given matrix
+ */
 import java.lang.Math;
 import java.util.Scanner;
 import java.io.BufferedReader;
