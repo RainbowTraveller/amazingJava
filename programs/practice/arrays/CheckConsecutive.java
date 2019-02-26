@@ -1,3 +1,7 @@
+/*
+ * In a given array of integers check if the numbers are consecutive
+ */
+
 import java.lang.NullPointerException;
 
 class CheckConsecutive {
