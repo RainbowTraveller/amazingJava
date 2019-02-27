@@ -22,7 +22,8 @@ public class IndexFromRotatedArray {
             return mid;
         }
 
-        if(arr[min] <= arr[mid]) {
+        //Important Step : Check mid and the beginning element
+        if(arr[min] <= arr[mid]) {//start to mid is sorted
             if(input >= arr[min] && input <= arr[mid] ) {
                 return findIndex(arr, min, mid - 1, input);//left
 			}
