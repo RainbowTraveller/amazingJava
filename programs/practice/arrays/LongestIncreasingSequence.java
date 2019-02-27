@@ -1,6 +1,6 @@
 import java.lang.Math;
 /*
- * Longest increasing subsequnmce ( this is not continuous )
+ * Longest increasing subsequence ( this is not continuous, hence not substring)
  *
  *
  *
@@ -8,70 +8,81 @@ import java.lang.Math;
 public class LongestIncreasingSequence {
 
     public static void longestIncreasingSequnceNoDyn(int [] arr) {
-		int max = 1;
-		if( arr != null ) {
-			for( int i = 0; i < arr.length; ++i) {
-				int curr = 1;
-				int currMax = arr[i];
-				for(int j = i + 1; j < arr.length; ++j ) {
-					if( arr[j] > currMax ) {
-						curr++;
-						currMax = arr[j];
-					}
-				}
-				max = Math.max( max, curr );
-			}
-		}
-			System.out.println( "Longest increasing subsequence length : " + max );
-	}
-    public static void longestIncreasingSequnce(int [] arr) {
-		if( arr != null ) {
-			int [] tracker = new int[ arr.length ];
-			for( int i = 0; i < arr.length; ++i ) {
-				tracker[i] = 1;
-			}
-
-			/*
-			 * starting with length 2, Calculate the length of the increasing
-			 * sequence till index i and store at T[i]
-			 */
-			for( int i = 1; i < arr.length; ++i) {
-				for(int j = 0; j < i; ++j ) {
-					if( arr[ j ] < arr[ i ] && tracker[ i ] < tracker[ j ] + 1 ) {
-						tracker[ i ] = tracker[ j ] + 1;
-					}
-				}
-			}
-
-			int max = 0;
-			for( int i = 0; i < arr.length; ++i ) {
-				//System.out.print(" " + tracker[ i ]);
-				if( max <  tracker[ i ] ) {
-					max = tracker[ i ];
-				}
-			}
-
-			System.out.println( "Longest increasing subsequence length : " + max );
-		}
+        int max = 1;
+        if( arr != null ) {
+            for( int i = 0; i < arr.length; ++i) {
+                int curr = 1;
+                int currMax = arr[i];
+                for(int j = i + 1; j < arr.length; ++j ) {
+                    if( arr[j] > currMax ) {
+                        curr++;
+                        currMax = arr[j];
+                    }
+                }
+                max = Math.max( max, curr );
+            }
+        }
+            System.out.println( "Longest increasing subsequence length : " + max );
     }
 
-	/*
-	 * This is continuous sequence length finder
-	 */
+   /*
+    * e.g.  2 1 4 0 9 5 11
+    *       1 1 2 1 3 3 4
+    *       Final result of the function is 4
+    *
+    *       2 >> 4 >> 9 >> 11 is longest increasing subsequence
+    *
+    */
+    public static void longestIncreasingSequnce(int [] arr) {
+        if( arr != null ) {
+            int [] tracker = new int[ arr.length ];
+            for( int i = 0; i < arr.length; ++i ) {
+                tracker[i] = 1;
+            }
+
+            /*
+             * starting with length 2, Calculate the length of the increasing
+             * sequence till index i and store at T[i]
+             * Longest increasing subsequence at index 0 is the char itself hence has length 1
+             *
+             */
+            for( int i = 1; i < arr.length; ++i) {
+                for(int j = 0; j < i; ++j ) {
+                    if( arr[ j ] < arr[ i ] && tracker[ i ] < tracker[ j ] + 1 ) {
+                        tracker[ i ] = tracker[ j ] + 1;
+                    }
+                }
+            }
+
+            int max = 0;
+            for( int i = 0; i < arr.length; ++i ) {
+                //System.out.print(" " + tracker[ i ]);
+                if( max <  tracker[ i ] ) {
+                    max = tracker[ i ];
+                }
+            }
+
+            System.out.println( "Longest increasing subsequence length : " + max );
+        }
+    }
+
+    /*
+     * This is continuous sequence length finder (it is substring here)
+     */
     public static void longestContinuousIncreasingSequnce( int [] arr ) {
-		if( arr != null ) {
-			int curr = 1;
-			int max = 1;
-			for(int i = 1; i < arr.length; ++i) {
-				if( arr[ i - 1 ] < arr[ i ] ) {
-					curr++;
-					max = Math.max( curr, max );
-				} else {
-					curr = 1;
-				}
-			}
-			System.out.println( "Longest increasing subsequence length : " + max );
-		}
+        if( arr != null ) {
+            int curr = 1;
+            int max = 1;
+            for(int i = 1; i < arr.length; ++i) {
+                if( arr[ i - 1 ] < arr[ i ] ) {
+                    curr++;
+                    max = Math.max( curr, max );
+                } else {
+                    curr = 1;
+                }
+            }
+            System.out.println( "Longest increasing subsequence length : " + max );
+        }
     }
 
     public static void main(String [] args) {
