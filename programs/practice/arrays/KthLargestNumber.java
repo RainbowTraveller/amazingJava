@@ -29,7 +29,7 @@ public class KthLargestNumber {
 		int pivot = arr[high];
 		int partitionIndex = low;
 		for( int i = low; i < high; ++i ) {
-			if( arr[i] <= pivot) {
+			if( arr[i] >= pivot) {
 				int temp = arr[i];
 				arr[ i ] = arr[ partitionIndex ];
 				arr[ partitionIndex ] = temp;
