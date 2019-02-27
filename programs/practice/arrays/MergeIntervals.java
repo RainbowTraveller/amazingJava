@@ -1,6 +1,14 @@
 /**
  * Definition for an interval.
-*/
+ * Merge intervals indicated by a start and an end
+ *
+ * e.g. (1, 4), (2, 6), (2, 3), (40, 45), (10, 12)
+ *
+ * First sort : (1, 4), (2, 6), (2, 3),  (10, 12), (40, 45)
+ *
+ * Final Result : (1, 6), (10, 12), (40, 45)
+ *
+ */
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
