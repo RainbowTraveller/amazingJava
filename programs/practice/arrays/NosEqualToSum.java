@@ -1,3 +1,8 @@
+/*
+ * Given an array of integers and a sum, find out all the pair in the array
+ * which add up to the given sum
+ *
+ */
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;

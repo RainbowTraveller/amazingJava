@@ -1,3 +1,8 @@
+/*
+ * Given an integer array find out a number which occurs odd no. of times
+ * in the array
+ *
+ */
 public class OddFrequency {
 
         public int findNoWithOddFrequency(int[] numbers) {
