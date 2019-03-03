@@ -71,10 +71,31 @@ public class CompressedString {
         return s;
     }
 
+    public static String getCompressedSimplified( String s) {
+        StringBuffer buff = new StringBuffer();
+        if(s != null) {
+            char token = s.charAt(0);
+            int count = 1;
+            for(int i = 1; i < s.length(); i++) {
+                if(s.charAt(i) == token) {
+                    count++;
+                } else {
+                    buff.append(token);
+                    buff.append(Integer.toString(count));
+                    token = s.charAt(i);
+                    count = 1;
+                }
+            }
+            buff.append(token);
+            buff.append(Integer.toString(count));
+        }
+        return buff.toString();
+    }
 
     public static void main(String[] args) {
         String input = args[0];
         System.out.println("Compressed String : " + getCompressed(input));
         System.out.println("Compressed String : " + getCompressedArr(input));
+        System.out.println("Compressed String : " + getCompressedSimplified(input));
     }
 }
