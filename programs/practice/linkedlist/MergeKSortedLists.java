@@ -41,7 +41,7 @@ class MergeKSortedLists {
                 if(end != 0) {
 					//above loop breaks when start > end e.g. start = 5 and end = 4
 					//here start was 4 and became 5 so last valid merged lists is stored at
-					//index start - 1 = end. So just make start = 0 again and in new interation
+					//index start - 1 = end. So just make start = 0 again and in new iteration
 					//consider lists from 0 to new end which is half the original no. of lists
                     start = 0;
                 }
