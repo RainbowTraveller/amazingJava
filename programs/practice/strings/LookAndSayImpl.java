@@ -1,3 +1,11 @@
+/*
+ * Input : 1112233455436
+ * Output : 3122231425141316
+ *
+ * Convert a number into another such that is indicates no. of consecutive appearances of a number followed by the number in the input
+ *
+ */
+
 import java.io.*;
 import java.util.*;
 import java.text.*;
