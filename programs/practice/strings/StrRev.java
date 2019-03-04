@@ -1,3 +1,7 @@
+/*
+ * Simple String reverse program
+ *
+ */
 import java.lang.String;
 import java.lang.Exception;
 import java.util.Scanner;
@@ -28,7 +32,7 @@ class StrRev {
 
     public void reverse() {
         if(this.str.isEmpty()){
-            System.out.println("EMPTY STRING"); 
+            System.out.println("EMPTY STRING");
         } else {
             int length = this.str.length();
             int begin = 0;
@@ -41,7 +45,7 @@ class StrRev {
                 begin++;
                 end--;
             }
-            this.str = String.valueOf(strArr); 
+            this.str = String.valueOf(strArr);
         }
     }
 
