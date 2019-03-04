@@ -18,6 +18,7 @@ public class LongestPalindromeSubstring {
 		System.out.println("LPS DYNAMIC ");
 
 		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaa"));
+		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("abc"));
 
 		System.out.println("LPS");
 
@@ -105,6 +106,7 @@ public class LongestPalindromeSubstring {
 				tracker[i][i] = true;
 				palindrome.add(Character.toString(s.charAt(i)));
 				count++;
+                maxLength = 1;
 			}
 
 			//All double char strings starting at each index in the string
@@ -114,6 +116,7 @@ public class LongestPalindromeSubstring {
 					tracker[i][i+1] = true;
 					palindrome.add(s.substring(i, i + 2));
 					count++;
+                    maxLength = 2;
 				}
 			}
 
