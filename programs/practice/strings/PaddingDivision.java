@@ -1,3 +1,11 @@
+/*
+ * Input : a string and a limit no.
+ *
+ * Output : collect the words from the original string append them separated by space, but limiting each
+ * section to length <= limit
+ *
+ *
+ */
 public class PaddingDivision {
 
     private String append(String output, String word) {
