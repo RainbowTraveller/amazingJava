@@ -14,6 +14,8 @@ public class LongestCommonSubsequence {
 		System.out.println(  "LCS length : DP : " 			+ LCS("pqrstvuwx", "apbqcrsdefteqw"  ));
 		System.out.println(  "LCS length : Recursive : " 	+ LCSRecursive("pqrstvuwx", "apbqcrsdefteqw"  ));
 		System.out.println(  "LCS length : Memoization  : " + LCSRecursiveMem("pqrstvuwx", "apbqcrsdefteqw"  ));
+
+		System.out.println( "LCS length : DP : " 			+  LCS(  "ab", "bca" ));
 	}
 
 	/**
