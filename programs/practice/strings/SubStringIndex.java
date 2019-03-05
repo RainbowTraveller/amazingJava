@@ -43,7 +43,7 @@ public class SubStringIndex {
 	}
 
 	/**
-	*	Simpler version avoinding ugly break
+	*	Simpler version avoiding ugly break
 	*/
 	public static int findPattern( String source, String pattern ) {
 		if( source != null && pattern != null ) {
