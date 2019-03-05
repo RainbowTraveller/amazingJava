@@ -1,7 +1,7 @@
 /**
 Input : path
 output : List of Lists : internal list should contain the path to files which have same content
-Following funcions are given:
+Following functions are given:
 
 ArrayList<String> listDir(String rootPath)
 boolean isDir(String path);
