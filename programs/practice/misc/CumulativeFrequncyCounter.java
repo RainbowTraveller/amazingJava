@@ -18,33 +18,33 @@ Expected output (in any order):
  */
 
 public class CumulativeFrequncyCounter {
-	public static void main(String[] args) {
-		String[] counts = {
-			"900,google.com",
-			"60,mail.yahoo.com",
-			"10,mobile.sports.yahoo.com",
-			"40,sports.yahoo.com",
-			"300,yahoo.com",
-			"10,stackoverflow.com",
-			"2,en.wikipedia.org",
-			"1,es.wikipedia.org" };
+    public static void main(String[] args) {
+        String[] counts = {
+            "900,google.com",
+            "60,mail.yahoo.com",
+            "10,mobile.sports.yahoo.com",
+            "40,sports.yahoo.com",
+            "300,yahoo.com",
+            "10,stackoverflow.com",
+            "2,en.wikipedia.org",
+            "1,es.wikipedia.org" };
 
-		//Separate each given domain and the count
-		Map<String, Integer> inputSeparated = separateDomainAndCount( counts );
-		//Process each domain to obtain basic domains to look for
-		Set<String> domains = getDomains( inputSeparated.keySet() );
-		//Search obtained basic domain in the input and check for presence
-		//add the frequency encountered
-		for( String uniqueDomain : domains ) {
-			int count = 0;
-			for(String key : inputSeparated.keySet()) {
-				if( key.contains( uniqueDomain ) ) {
-					count += inputSeparated.get( key );
-				}
-			}
-			System.out.println( count + "  " + uniqueDomain );
-		}
-	}
+        //Separate each given domain and the count
+        Map<String, Integer> inputSeparated = separateDomainAndCount( counts );
+        //Process each domain to obtain basic domains to look for
+        Set<String> domains = getDomains( inputSeparated.keySet() );
+        //Search obtained basic domain in the input and check for presence
+        //add the frequency encountered
+        for( String uniqueDomain : domains ) {
+            int count = 0;
+            for(String key : inputSeparated.keySet()) {
+                if( key.contains( uniqueDomain ) ) {
+                    count += inputSeparated.get( key );
+                }
+            }
+            System.out.println( count + "  " + uniqueDomain );
+        }
+    }
 
 
   /**
@@ -52,43 +52,43 @@ public class CumulativeFrequncyCounter {
    *  call helper function to process each candidate domain string
    */
   public static Set<String> getDomains( Set<String> keys ) {
-	Set<String> validDomains = new HashSet<String>();
+    Set<String> validDomains = new HashSet<String>();
     for (String source : keys ) {
-		System.out.println("Current Input domain : " + source);
-		List<String> currentValidDomains = getCurrentValidDomains( source );
-		for( String currentDomain : currentValidDomains ) {
-			//System.out.println("Separated Domain : " + currentDomain);
-			validDomains.add( currentDomain );
-		}
+        System.out.println("Current Input domain : " + source);
+        List<String> currentValidDomains = getCurrentValidDomains( source );
+        for( String currentDomain : currentValidDomains ) {
+            //System.out.println("Separated Domain : " + currentDomain);
+            validDomains.add( currentDomain );
+        }
     }
     return validDomains;
   }
 
   /**
    *  candidate: mail.yahoo.com
-   *  Output :	mail.yahoo.com
-   *			yahoo.com
-   *			com
+   *  Output :  mail.yahoo.com
+   *            yahoo.com
+   *            com
    */
   public static List<String> getCurrentValidDomains( String singleSource ) {
-	  List<String> domains = new ArrayList<String>();
-	  String[] parts = singleSource.split("\\.");
-	  StringBuffer buffer = new StringBuffer();
-	  int pointer = 0;
-	  System.out.println("Parts Found : " + parts.length );
-	  while( pointer < parts.length ) {
-		  for( int i = pointer; i < parts.length; i++ ) {
-			System.out.print(" Part : " + parts[i] + " ");
-			buffer.append( parts[ i ] );
-			buffer.append( "." );
-		  }
-		  buffer.deleteCharAt( buffer.length() - 1);
-		  System.out.println( "Domain Added " + buffer.toString() );
-		  domains.add( buffer.toString() );
-		  buffer.delete( 0, buffer.length());
-		  pointer++;
-	  }
-	  return domains;
+      List<String> domains = new ArrayList<String>();
+      String[] parts = singleSource.split("\\.");
+      StringBuffer buffer = new StringBuffer();
+      int pointer = 0;
+      System.out.println("Parts Found : " + parts.length );
+      while( pointer < parts.length ) {
+          for( int i = pointer; i < parts.length; i++ ) {
+            System.out.print(" Part : " + parts[i] + " ");
+            buffer.append( parts[ i ] );
+            buffer.append( "." );
+          }
+          buffer.deleteCharAt( buffer.length() - 1);
+          System.out.println( "Domain Added " + buffer.toString() );
+          domains.add( buffer.toString() );
+          buffer.delete( 0, buffer.length());
+          pointer++;
+      }
+      return domains;
   }
 
   /**
@@ -97,17 +97,17 @@ public class CumulativeFrequncyCounter {
    * where domain is the key and the value is the frequency
    */
   public static Map<String, Integer> separateDomainAndCount( String[] input ) {
-	  Map<String, Integer> inputDomainToCount = new HashMap<String, Integer>();
-	  for(String i : input ) {
-		  String[] inputSplit = i.split(",");
-		  if(inputSplit.length == 2) {
-			  String domain = inputSplit[ 1 ];
-			  int count = Integer.valueOf( inputSplit[ 0 ] );
-			  System.out.println("Domain : " + domain + " -- " + "Count : " + count);
-			  inputDomainToCount.put( domain, count );
-		  }
-	  }
-	  return inputDomainToCount;
+      Map<String, Integer> inputDomainToCount = new HashMap<String, Integer>();
+      for(String i : input ) {
+          String[] inputSplit = i.split(",");
+          if(inputSplit.length == 2) {
+              String domain = inputSplit[ 1 ];
+              int count = Integer.valueOf( inputSplit[ 0 ] );
+              System.out.println("Domain : " + domain + " -- " + "Count : " + count);
+              inputDomainToCount.put( domain, count );
+          }
+      }
+      return inputDomainToCount;
   }
 }
 
