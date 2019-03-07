@@ -18,6 +18,7 @@ class IntervalAddition {
     public static void main( String[] args ) {
 
         List<Interval> intervals = new LinkedList<Interval>();
+        /*
         intervals.add(new Interval(2, 4));
         intervals.add(new Interval(6, 8));
         intervals.add(new Interval(9, 10));
@@ -26,6 +27,12 @@ class IntervalAddition {
         intervals.add(new Interval(19, 22));
         intervals.add(new Interval(23, 25));
         intervals.add(new Interval(26, 28));
+        */
+        intervals.add(new Interval(1, 2));
+        intervals.add(new Interval(3, 5));
+        intervals.add(new Interval(6, 7));
+        intervals.add(new Interval(8, 10));
+        intervals.add(new Interval(12, 16));
         System.out.println("Before Insertion of new interval");
         printIntervals(intervals);
         System.out.println();
@@ -67,7 +74,7 @@ class IntervalAddition {
             int end = newInterval.end;
 
             //we need to find interval where end > newInterval.end, so that we can merge inbetween intervals if any
-            while(i < intervals.size() && intervals.get(i).start < end) {
+            while(i < intervals.size() && intervals.get(i).start <= end ) {
                 //Look for start which is minimum as that will be closer to previous interval end
                 start = Math.min (intervals.get(i).start, start);
                 //maximize the end so as to encompass smaller intervals and merge them
