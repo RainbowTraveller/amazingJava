@@ -37,8 +37,7 @@ public class Connect4 {
     }
 
     /**
-     * TODO:  Create only one method and pass delta to them and go on collecting the values
-     *
+     * TODO: This was the question to code this method
      * This method is called after each move.
      *
      * @param board = 2 dimensional index of player indexes which are 0 or greater
@@ -46,128 +45,68 @@ public class Connect4 {
      * @return index of winning player; -1 if no winner detected
      */
     public int winningPlayerIndex(int[][] board, Move lastMove) {
+        int col = lastMove.col;
+        int row = lastMove.row;
 
-      int col = lastMove.col;
-      int row = lastMove.row;
+        int left = getConsecutivePlaces(lastMove, board, row, col, -1, 0);
+        if(left == 4) {
+          return lastMove.playerIndex;
+        }
 
-      /*
-      int leftCount = checkLeftRow(board, row, col - 1, lastMove.playerIndex);
+        int right = getConsecutivePlaces(lastMove, board, row, col, 1, 0);
+        if(right == 4 || right + left - 1 >= 4) {
+          return lastMove.playerIndex;
+        }
 
-      if(leftCount + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
+        int up = getConsecutivePlaces(lastMove, board, row, col, 0, -1);
+        if(up == 4) {
+          return lastMove.playerIndex;
+        }
 
-      int rightCount = checkRightRow(board, row, col + 1, lastMove.playerIndex);
+        int down = getConsecutivePlaces(lastMove, board, row, col, 0, 1);
+        if(down == 4 || up + down - 1 >= 4) {
+          return lastMove.playerIndex;
+        }
 
-      if(leftCount + rightCount + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
+        int rightUp = getConsecutivePlaces(lastMove, board, row, col, 1, -1);
+        if(rightUp == 4) {
+          return lastMove.playerIndex;
+        }
 
-      int upCount = checkUpColumn(board, row - 1, col, lastMove.playerIndex);
-      if(upCount + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
+        int leftDown = getConsecutivePlaces(lastMove, board, row, col, -1, 1);
+        if(rightUp == 4 || rightUp + leftDown - 1 >= 4) {
+          return lastMove.playerIndex;
+        }
 
-      int downCount = checkDownColumn(board, row + 1, col, lastMove.playerIndex);
+        int leftUp = getConsecutivePlaces(lastMove, board, row, col, -1, -1);
+        if(leftUp == 4) {
+          return lastMove.playerIndex;
+        }
 
-      if(upCount + downCount + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
-
-      int rightUp = checkRightUp(board, row - 1, col + 1, lastMove.playerIndex);
-
-      if(rightUp + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
-
-      int leftDown = checkLeftDown(board, row + 1, col - 1, lastMove.playerIndex);
-
-
-      if(rightUp + leftDown + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
-
-      int leftUp = checkLeftUp(board, row - 1, col - 1, lastMove.playerIndex);
-       if(leftUp + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
-
-      int rightDown = checkRightDown(board, row + 1, col + 1, lastMove.playerIndex);
-
-      if(leftUp + rightDown + 1 >= 4) {
-        return lastMove.playerIndex;
-      }
-*/
+        int rightDown = getConsecutivePlaces(lastMove, board, row, col, 1, 1);
+        if(rightDown == 4 || leftUp + rightDown - 1 >= 4) {
+          return lastMove.playerIndex;
+        }
+        return -1;
     }
 
 
-
-
-/*
-    private int checkLeftRow(int[][] board, int row, int col, int playerIndex) {
-      if(col < 0 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkLeftRow(board, row, col - 1, playerIndex);
-      }
+    /**
+     * Common function which takes in a delta for x and y. When added to x and y coordinates
+     * the positions on the board are moved accordingly
+     *
+     */
+    private int getConsecutivePlaces( Move currMove, int[][] board, int x, int y, int xDelta, int yDelta) {
+        int count = 0;
+        System.out.println("X : " + x + " Y : " + y);
+        while(x >= 0 && x < board.length && y >= 0 && y < board[0].length && count < 4 && board[x][y] == currMove.playerIndex ) {
+            count++;
+            x += xDelta;
+            y += yDelta;
+        }
+        System.out.println("Count : " + count);
+        return count;
     }
-
-    private int checkRightRow(int[][] board, int row, int col, int playIndex) {
-      if(col > this.numCols - 1 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkRightRow(board, row, col + 1 ,playerIndex);
-      }
-    }
-
-    private int checkDownColumn(int[][] board, int row, int col, int playIndex) {
-      if(col > this.numCols - 1 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkRightRow(board, row + 1, col, playerIndex);
-      }
-    }
-
-    private int checkUpColumn(int[][] board, int row, int col, int playIndex) {
-      if(row < 0 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkUpColumn(board, row - 1, col, playerIndex);
-      }
-    }
-
-    private int checkRightUp(int[][] board, int row, int col, int playIndex) {
-      if(row < 0 || col > this.numCols - 1 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkRightUp(board, row - 1, col + 1, playerIndex);
-      }
-    }
-
-    private int checkLeftDown(int[][] board, int row, int col, int playIndex) {
-      if(row > this.numRows - 1 || col < 0 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkLeftDown(board, row + 1, col - 1, playerIndex);
-      }
-    }
-
-    private int checkLeftDown(int[][] board, int row, int col, int playIndex) {
-      if(row > this.numRows - 1 || col < 0 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkDownColumn(board, row + 1, col - 1, playerIndex);
-      }
-    }
-
-    private int checkLeftUp(int[][] board, int row, int col, int playIndex) {
-      if(row < 0  || col < 0 || board[row][col] != playerIndex) {
-          return 0;
-      } else {
-        return 1 + checkDownColumn(board, row - 1, col - 1, playerIndex);
-      }
-    }
-*/
 
     public String getUserInput(String prompt) {
         // create a scanner so we can read the command-line input
