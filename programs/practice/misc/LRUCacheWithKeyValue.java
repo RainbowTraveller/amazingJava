@@ -4,8 +4,11 @@ class LRUCacheWithKeyValue {
     int capacity;
 
     public LRUCache(int capacity) {
+        //Actual cache storing values
         cache = new LinkedList<Integer>();
+        //Mapping between key - value index in cache
         tracker = new LinkedHashMap<Integer, Integer>();
+        //Cache size
         this.capacity = capacity;
     }
 
@@ -17,8 +20,8 @@ class LRUCacheWithKeyValue {
             System.out.println("Cache : " + cache);
             System.out.println("Tracker" + tracker);
             val = cache.get(indexIntoList);
+            put(key, val);
         }
-        put(key, val);
         return val;
     }
 
@@ -27,19 +30,7 @@ class LRUCacheWithKeyValue {
             int index = tracker.get(key);
             adjust(index);
             cache.remove(index);
-            for(int currKey : tracker.keySet()) {
-                if(tracker.get(currKey) == index) {
-                    tracker.remove(currKey);
-                    break;
-                }
-            }
         } else if(cache.size() == capacity) {
-            for(int currKey : tracker.keySet()) {
-                if(tracker.get(currKey) == 0) {
-                    tracker.remove(currKey);
-                    break;
-                }
-            }
             adjust(0);
             cache.removeFirst();
         }
@@ -51,13 +42,19 @@ class LRUCacheWithKeyValue {
     }
 
     private void adjust( int index ) {
+        int keyToRemove = -1;
         for(int currKey : tracker.keySet()) {
             int currIndex = tracker.get(currKey);
             if( currIndex > index) {
                 currIndex--;
                 tracker.put(currKey, currIndex);
+            } else if(currIndex == index) {
+                keyToRemove = currKey;
             }
         }
+
+        if(keyToRemove != -1 )
+            tracker.remove(keyToRemove);
     }
 }
 
