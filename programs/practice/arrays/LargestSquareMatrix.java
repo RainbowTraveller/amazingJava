@@ -10,20 +10,14 @@ class MatrixSizer {
 
     /*
      * Complete the 'largestMatrix' function below.
-     *
      * The function is expected to return an INTEGER.
      * The function accepts 2D_INTEGER_ARRAY arr as parameter.
      */
-
-
-
     public static int largestMatrix(List<List<Integer>> arr) {
         int maxSize = 0;
         if( arr != null) {
             int rows = arr.size();
             int columns = arr.get(0).size();
-
-
             for(int i = 0; i < rows; ++i) {
                 List<Integer> currRow = arr.get(i);
                 for(int j = 0; j < columns; ++j) {
@@ -34,7 +28,6 @@ class MatrixSizer {
                     }
                 }
             }
-
         }
         return maxSize;
     }
@@ -55,6 +48,34 @@ class MatrixSizer {
 
 }
 
+/*
+ * Input : a square matrix
+ * This contains only 0s and 1s.
+ *
+ * Output : dimension of the largest square matrix which contains all 1s
+ *
+ * 3
+ * 3
+ * 1 1 0
+ * 1 1 0
+ * 1 0 1
+ * 2
+ *
+ * 4
+ * 4
+ * 1 1 1 0
+ * 0 1 1 1
+ * 0 1 1 1
+ * 0 1 1 1
+ * 3
+ *
+ * 3
+ * 3
+ * 1 0 1
+ * 1 0 0
+ * 0 0 1
+ * 1
+ */
 public class LargestSquareMatrix {
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
