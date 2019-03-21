@@ -18,12 +18,16 @@ class MatrixSizer {
         if( arr != null) {
             int rows = arr.size();
             int columns = arr.get(0).size();
+            //Scan the matrix
             for(int i = 0; i < rows; ++i) {
                 List<Integer> currRow = arr.get(i);
                 for(int j = 0; j < columns; ++j) {
                     int currNum = currRow.get(j);
+                    //Process only when 1 is encountered
                     if( currNum == 1) {
+                        //check maximum square matrix starting at this position
                         int currSize = getMetrixSize(i, j, arr, 1);
+                        //Get the maximum size so far
                         maxSize = Math.max( currSize, maxSize);
                     }
                 }
@@ -32,20 +36,68 @@ class MatrixSizer {
         return maxSize;
     }
 
-    public static int getMetrixSize(int row, int column, List<List<Integer>> arr, int level) {
+    /**
+     * level is important parameter, when 1 is encountered we send level 1
+     * meaning that we have obtained 1 * 1 matrix
+     * At each subsequent level or call we pass level incremented by 1
+     * if we find that the element at this position is 0, we return a level that is 1 less
+     * than level passed to us. This indicates that if at all the n * n matrix is at previous
+     * level
+     *
+     */
+    private static int getMetrixSize(int row, int column, List<List<Integer>> arr, int level) {
         int currLevel = 0;
         if( row < 0 || row >= arr.size() || column < 0 || column >= arr.get(0).size() || arr.get(row).get(column) == 0) {
             return level - 1;
         }
 
+        //only check 2 * 2 matrix recursively
         int level_1 = getMetrixSize(row, column + 1, arr, level + 1);
         int level_2 = getMetrixSize(row + 1, column, arr, level + 1);
         int level_3 = getMetrixSize(row + 1, column + 1, arr, level + 1);
         int tempLevel = Math.min(level_1, level_2);
         currLevel =  Math.min(tempLevel, level_3);
+        //Choose minimum of the values obtained so far as that is the true indicator of matrix size at this
+        //level
         return currLevel;
     }
 
+    public static int getLargestMatrixSizeDynamically(List<List<Integer>> arr) {
+        int maxSize = 0;
+        if(arr != null) {
+            if(arr.size() > 0 && arr.get(0) != null && arr.get(0).size() != 0){
+                //Tracker of same size
+                int [][] tracker = new int[arr.size()][arr.get(0).size()];
+                int rows = arr.size();
+                int columns = arr.get(0).size();
+                for(int i = 0; i < rows; ++i) {
+                    List<Integer> currRow = arr.get(i);
+                    for(int j = 0; j < columns; ++j) {
+                        int currNum = currRow.get(j);
+                        //Set everything to 0
+                        tracker[i][j] = 0;
+                        //If original element is 1 then process
+                        if( currNum == 1) {
+                            if( i - 1 >= 0 && j - 1 >= 0 ) {
+                                //if surroundings is within the bound, get minimums of surroundings elements and add 1 to it
+                                tracker[i][j] = Math.min( tracker[i - 1][j - 1], Math.min(tracker[ i ][j - 1], tracker[ i - 1 ][ j ])) + 1;
+                                //Check for max so far
+                                maxSize = Math.max(tracker[i][j], maxSize);
+                            }
+                        }
+                    }
+                }
+                //Print Tracker
+                //for(int i = 0; i < rows; ++i) {
+                //    for(int j = 0; j < columns; ++j) {
+                //        System.out.print(tracker[i][j] + " ");
+                //    }
+                //    System.out.println();
+                //}
+            }
+        }
+        return maxSize;
+    }
 }
 
 /*
@@ -102,8 +154,10 @@ public class LargestSquareMatrix {
         }
 
         int result = MatrixSizer.largestMatrix(arr);
+        int resultDynamic  = MatrixSizer.getLargestMatrixSizeDynamically(arr);
 
         System.out.println(String.valueOf(result));
+        System.out.println(String.valueOf(resultDynamic));
         //bufferedWriter.write(String.valueOf(result));
         //bufferedWriter.newLine();
 
