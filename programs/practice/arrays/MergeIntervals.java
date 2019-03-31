@@ -53,6 +53,11 @@ public class MergeIntervals {
                 } else if ( i1.start > i2.start ) {
                     return 1;
                 } else {
+                    if(i1.end < i2.end) {
+                        return -1;
+                    } else if (i1.end > i2.end) {
+                        return 1;
+                    }
                     return 0;
                 }
             }
