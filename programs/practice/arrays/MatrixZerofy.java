@@ -6,7 +6,7 @@ public class MatrixZerofy {
      */
 
     public static void main(String[] args) {
-        int [][] matrix = {{1, 3, 6},{8, 0 , 4},{0 ,11, 17}};
+        int [][] matrix = {{1, 3, 6, 4},{8, 0 , 4, 9},{0 ,11, 17, 19}};
         boolean [] rows = new boolean[matrix.length];//Stores row containing zero
         boolean [] columns = new boolean[matrix[0].length];//Stores column containing zero
 
@@ -40,7 +40,7 @@ public class MatrixZerofy {
      * Zerofy the row and keep column changing
      */
     public static void zerofyRows(int [][] matrix, int row) {
-        for(int i = 0; i < matrix.length; ++i) {
+        for(int i = 0; i < matrix[0].length; ++i) {
             matrix[row][i] = 0;
         }
     }
@@ -49,7 +49,7 @@ public class MatrixZerofy {
      * Zerofy the column and keep column changing
      */
     public static void zerofyColumns(int [][] matrix, int column) {
-        for(int i = 0; i < matrix[0].length; ++i) {
+        for(int i = 0; i < matrix.length; ++i) {
             matrix[i][column] = 0;
         }
     }
