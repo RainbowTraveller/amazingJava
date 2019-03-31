@@ -11,15 +11,17 @@ public class LongestIncreasingSequence {
         int max = 1;
         if( arr != null ) {
             for( int i = 0; i < arr.length; ++i) {
-                int curr = 1;
-                int currMax = arr[i];
+                int currMaxLength = 1;
+                int currMaxNumer = arr[i];
                 for(int j = i + 1; j < arr.length; ++j ) {
-                    if( arr[j] > currMax ) {
-                        curr++;
-                        currMax = arr[j];
+                    System.out.println("J : "  + j);
+                    if( arr[j] > currMaxNumer) {
+                        currMaxLength++;
+                        currMaxNumer = arr[j];
                     }
                 }
-                max = Math.max( max, curr );
+                max = Math.max( max, currMaxLength );
+                System.out.println("currMaxNumber : " + currMaxNumer + "currMaxLength : " + currMaxLength + " Max : " + max);
             }
         }
             System.out.println( "Longest increasing subsequence length : " + max );
