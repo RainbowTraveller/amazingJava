@@ -71,24 +71,34 @@ public class CumulativeFrequncyCounter {
    *            com
    */
   public static List<String> getCurrentValidDomains( String singleSource ) {
-      List<String> domains = new ArrayList<String>();
-      String[] parts = singleSource.split("\\.");
-      StringBuffer buffer = new StringBuffer();
-      int pointer = 0;
-      System.out.println("Parts Found : " + parts.length );
-      while( pointer < parts.length ) {
-          for( int i = pointer; i < parts.length; i++ ) {
-            System.out.print(" Part : " + parts[i] + " ");
-            buffer.append( parts[ i ] );
-            buffer.append( "." );
-          }
-          buffer.deleteCharAt( buffer.length() - 1);
-          System.out.println( "Domain Added " + buffer.toString() );
-          domains.add( buffer.toString() );
-          buffer.delete( 0, buffer.length());
-          pointer++;
-      }
-      return domains;
+        List<String> domains = new ArrayList<String>();
+        /*String[] parts = singleSource.split("\\.");
+        StringBuffer buffer = new StringBuffer();
+        int pointer = 0;
+        System.out.println("Parts Found : " + parts.length );
+        while( pointer < parts.length ) {
+            for( int i = pointer; i < parts.length; i++ ) {
+                System.out.print(" Part : " + parts[i] + " ");
+                buffer.append( parts[ i ] );
+                buffer.append( "." );
+            }
+            buffer.deleteCharAt( buffer.length() - 1);
+            System.out.println( "Domain Added " + buffer.toString() );
+            domains.add( buffer.toString() );
+            buffer.delete( 0, buffer.length());
+            pointer++;
+        }*/
+        int index  = 0;
+        while(index >= 0) {
+            if(index != 0) {
+                index++;
+            }
+            String currentDomain = singleSource.substring(index );
+            domains.add(currentDomain);
+            System.out.println("C D : " + currentDomain);
+            index = singleSource.indexOf(".", index  + 1);
+        }
+        return domains;
   }
 
   /**
