@@ -13,16 +13,19 @@ public class LongestPalindromeSubstring {
 	public static void main ( String[] args ) {
 
 		//Naive Approach
-		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.countSubstrings("aaa"));
+		//System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.countSubstrings("aaa"));
 
 		System.out.println("LPS DYNAMIC ");
 
-		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaa"));
-		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("abc"));
+		//System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaa"));
+		//System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("abc"));
 
 		System.out.println("LPS");
 
-		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("aaaa"));
+		//System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("aaaa"));
+		//System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaa"));
+		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("cbbd"));
+		System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
 	}
 
 	/*
@@ -116,6 +119,8 @@ public class LongestPalindromeSubstring {
 					tracker[i][i+1] = true;
 					palindrome.add(s.substring(i, i + 2));
 					count++;
+                    start = i;
+                    end = i + 1;
                     maxLength = 2;
 				}
 			}
@@ -130,6 +135,7 @@ public class LongestPalindromeSubstring {
 						palindrome.add(s.substring(i, j + 1));
 						tracker[i][j] = true;
 						if( k > maxLength) {
+                            System.out.println("K : " + k);
 							start = i;
 							end = j;
 							maxLength = k;
