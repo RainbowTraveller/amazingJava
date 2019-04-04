@@ -13,19 +13,22 @@ public class LongestPalindromeSubstring {
     public static void main ( String[] args ) {
 
         //Naive Approach
-        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.countSubstrings("aaaa"));
+        System.out.println("Naive Approach O(n^3)");
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.countSubstrings("ac"));
 
-        System.out.println("LPS DYNAMIC ");
-
+        System.out.println("LPS DYNAMIC : O(n^2) but with O(n^2) space complexity");
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaa"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("abc"));
 
-        System.out.println("LPS");
-
-        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("aaaa"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaa"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("cbbd"));
-        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));*
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        System.out.println("LPS : O(n^2) with O(1) space complexity");
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("ac"));
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("a"));
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("aa"));
+
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("abcda"));
     }
 
     /*
@@ -36,37 +39,40 @@ public class LongestPalindromeSubstring {
     public static int lps(String s) {
         List<String> palindrome = new LinkedList<String>();
         int count = 0;
+
         int start = 0;
-        int end = 0;
-        int maxLength = 0;
+        int maxLength = 1;
         int length = s.length();
         int low, high;
+
+        //Searching around the center
         if(s != null ) {
             for(int i = 1 ; i < length; ++i) {
+                //Try first even length palindromes from i and i - 1
+                //till the end.
                 low = i - 1;
                 high = i;
-                while( low >= 0 && high  < length ) {
-                    if(s.charAt(low) == s.charAt(high) ) {
-                        count++;
-                        palindrome.add(s.substring(low, high + 1));
-                        if(high - low + 1 > maxLength) {
-                            start = low;
-                            maxLength = high - low + 1;
-                        }
+                while( low >= 0 && high  < length && s.charAt(low) == s.charAt(high) ) {
+                    count++;
+                    palindrome.add(s.substring(low, high + 1));
+                    if(high - low + 1 > maxLength) {
+                        start = low;
+                        maxLength = high - low + 1;
                     }
+                    //Increase the range of the characters to be considered
                     --low;
                     ++high;
                 }
+
+                //now consider all odd length palindromes with i as central character
                 low = i - 1;
                 high = i + 1;
-                while(  low >= 0 && high < length ) {
-                    if(s.charAt(low) == s.charAt(high)) {
-                        palindrome.add(s.substring(low, high + 1));
-                        count++;
-                        if(high - low + 1 > maxLength) {
-                            start = low;
-                            maxLength = high - low + 1;
-                        }
+                while(  low >= 0 && high < length && s.charAt(low) == s.charAt(high)) {
+                    palindrome.add(s.substring(low, high + 1));
+                    count++;
+                    if(high - low + 1 > maxLength) {
+                        start = low;
+                        maxLength = high - low + 1;
                     }
                     --low;
                     ++high;
@@ -74,6 +80,9 @@ public class LongestPalindromeSubstring {
             }
         }
         System.out.println("Longest Palindrome String : " + s.substring(start, start + maxLength) + " Length : " + maxLength);
+        if(palindrome.size() == 0) {
+            palindrome.add(s.substring(start, start + maxLength ));
+        }
         System.out.println( "All the palindrome Strings possible : " + palindrome);
         return count;
     }
