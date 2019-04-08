@@ -3,6 +3,12 @@ import java.util.ArrayList;
 import java.lang.Math;
 import java.lang.Thread;
 
+
+/**
+ * handling interruptedException
+ * https://www.yegor256.com/2015/10/20/interrupted-exception.html
+ * http://www.ibm.com/developerworks/library/j-jtp05236/
+ */
 public class ReaderWriter {
 	public static void main( String [] args ) {
 		Writer w  = new Writer();
@@ -55,7 +61,7 @@ class Reader implements Runnable {
 						System.out.println( "Contents of Writer : " + writer.getWords() );
 
 					} catch (InterruptedException ie) {
-						System.out.println("Inturruption Occurred!");
+						System.out.println("Interruption Occurred!");
 					}
 				}
 				System.out.println( "Word Read : " + writer.getWord( index ) );
@@ -115,7 +121,7 @@ class Writer implements Runnable {
 			try {
 				Thread.sleep(9000);
 			} catch (InterruptedException ie) {
-				System.out.println("Inturruption Occurred while Sleeping !");
+				System.out.println("Interruption Occurred while Sleeping !");
 			}
 		}
 	}
