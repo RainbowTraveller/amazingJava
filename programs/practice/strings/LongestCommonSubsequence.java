@@ -1,7 +1,7 @@
 /**
  Find the length of longest common  subsequence
-
-
+ This is not a substring, so continuous character matching is not
+ expected
 */
 public class LongestCommonSubsequence {
 
@@ -36,14 +36,21 @@ public class LongestCommonSubsequence {
 	 * Actual recursive function, pretty straight forward
 	 */
 	private static int LCSRecursiveHelper( int i, int j, int len1, int len2, String s1, String s2 ) {
+        //If either of the strings is exhausted, return 0 as no
+        //characters to compare, addition to already found length can
+        //not be made
 		if( i >= len1 || j >= len2 ) {
 			return 0;
 		}
 
 		if( s1.charAt( i  ) == s2.charAt( j  ) ) {
+            //In case of a match, increment both indexes to check next
+            //available character
 			return 1 + LCSRecursiveHelper( i + 1, j + 1, len1, len2, s1, s2 );
 		}
 
+        //In case of mismatch, try to match next character with current character
+        //from either of the strings and continue
 		return Math.max( LCSRecursiveHelper( i, j + 1, len1, len2, s1, s2 ),
 			LCSRecursiveHelper( i + 1, j, len1, len2, s1, s2 )
 		);
