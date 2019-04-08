@@ -22,7 +22,6 @@ public class SearchString {
 						return true;
 					}
 				}
-				i = startIndex + 1;
 			}
 		}
 		return false;
