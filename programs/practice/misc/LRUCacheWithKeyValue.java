@@ -1,9 +1,14 @@
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Scanner;
+
 class LRUCacheWithKeyValue {
     LinkedList<Integer> cache;
     Map<Integer, Integer> tracker;
     int capacity;
 
-    public LRUCache(int capacity) {
+    public LRUCacheWithKeyValue(int capacity) {
         //Actual cache storing values
         cache = new LinkedList<Integer>();
         //Mapping between key - value index in cache
@@ -56,6 +61,20 @@ class LRUCacheWithKeyValue {
         if(keyToRemove != -1 )
             tracker.remove(keyToRemove);
     }
+
+	public static void main ( String[] args ) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("Please enter Cache Capacity : ");
+		int c = sc.nextInt();
+		LRUCacheWithKeyValue lru = new LRUCacheWithKeyValue( c );
+
+		while( true ) {
+			System.out.println("Please enter Cache element : ");
+			int i = sc.nextInt();
+			System.out.println( lru.get( i ) );
+			System.out.println( lru );
+		}
+	}
 }
 
 /**
