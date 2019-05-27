@@ -1,3 +1,4 @@
+import java.util.List;
 import java.util.LinkedList;
 import java.util.LinkedHashSet;
 
@@ -12,79 +13,29 @@ import java.util.LinkedHashSet;
  */
 public class BracketCombos {
 
-    public String prefix(String combo) {
-        return "()" + combo;
 
-    }
+    public void processParenthesis(List<String> result,  StringBuffer buff, int open, int close,int max) {
+        if (buff.length() == max * 2) {
+          result.add(buff.toString());
+          return;
+        }
 
-    public String suffix(String combo) {
-        return  combo + "()";
-    }
+        if (open < max) {
+          processParenthesis(result, buff.append("("), open+1, close, max);
+          buff.deleteCharAt(buff.length() - 1);
+        }
 
-    public String surround(String combo) {
-        return "(" + combo + ")";
-
-    }
-
-    public void paranthesisCombo(LinkedList<LinkedHashSet<String>> al, int len) {
-        if(len == 1) {
-            String str = "()";
-            LinkedHashSet<String> pc = new LinkedHashSet<String>();
-            pc.add(str);
-            al.add(pc);
-        } else {
-            paranthesisCombo(al, len - 1);
-            LinkedHashSet<String> prev = al.getLast();
-            LinkedHashSet<String> curr = new LinkedHashSet<String>();
-            for(String combo : prev) {
-                curr.add(prefix(combo));
-                curr.add(suffix(combo));
-                curr.add(surround(combo));
-            }
-            al.add(curr);
+        if (close < open) {
+          processParenthesis(result, buff.append(")"), open, close+1, max);
+          buff.deleteCharAt(buff.length() - 1);
         }
     }
-
-
-	public LinkedList<LinkedHashSet<String>> paranthesisComboNR( int count ) {
-
-		LinkedList<LinkedHashSet<String>> combos = new LinkedList<LinkedHashSet<String>>();
-		for(int i = 0; i < count; ++i) {
-			if( i ==0 ) {
-				LinkedHashSet<String> curr = new LinkedHashSet<String>();
-				curr.add( "()" );
-				combos.add(curr);
-			} else {
-				LinkedHashSet<String> curr = new LinkedHashSet<String>();
-				LinkedHashSet<String> prev = combos.getLast();
-				for(String s : prev) {
-					curr.add( prefix( s ) );
-					curr.add( suffix( s ) );
-					curr.add( surround( s  ) );
-				}
-				combos.add( curr );
-			}
-		}
-		return combos;
-	}
 
     public static void main(String[] args) {
         String input = args[0];
         BracketCombos bc = new BracketCombos();
-        /*LinkedList<LinkedHashSet<String>> al = new LinkedList<LinkedHashSet<String>>();
-        bc.paranthesisCombo(al,Integer.parseInt(input));
-        LinkedHashSet<String> lhs = al.getLast();
-        for(String s : lhs) {
-            System.out.println(s);
-        }*/
-
-		//---------------------------------------------------
-
-		System.out.println(" Non Recursive ");
-        LinkedList<LinkedHashSet<String>> combosNR = bc.paranthesisComboNR( Integer.parseInt( input ) );
-        LinkedHashSet<String> actual = combosNR.getLast();
-        for(String s : actual) {
-            System.out.println(s);
-        }
+        List<String> result =  new LinkedList<String>();
+        bc.processParenthesis(result, new StringBuffer(), 0,0, Integer.parseInt(input));
+        System.out.println(result);
     }
 }
