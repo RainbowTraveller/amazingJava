@@ -8,7 +8,10 @@ import java.util.LinkedHashSet;
  * Print all the valid combinations of a pair of braces
  * take input at no. of pairs of braces
  *
- * LinkedHashSet is used as we need the last set of strings hence order needs to be maintained
+ *      Basic backtracking principles
+ *      input : ( or  )
+ *      constraint : closed < open  then proceed adding closed
+ *      goal : total count is 2 * n brackets
  *
  */
 public class BracketCombos {
