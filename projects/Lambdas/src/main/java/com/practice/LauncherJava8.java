@@ -5,6 +5,7 @@ import java.util.Arrays;
 import com.practice.Person;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.function.Predicate;
 
 public class LauncherJava8 {
 
@@ -30,7 +31,7 @@ public class LauncherJava8 {
         printList( people, p -> p.getLastName().startsWith("G") );
     }
 
-    public static void printList(List<Person> people, Condition c) {
+    public static void printList(List<Person> people, Predicate<Person> c) {
         for(Person p : people) {
             if(c.test(p)) {
                 System.out.println(" : " + p + " : ");
