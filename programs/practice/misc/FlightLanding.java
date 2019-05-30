@@ -54,15 +54,13 @@ public class FlightLanding {
     }
 
     public void scheduleFlightLandings(List<Flight> flights) {
-        Comparator<Flight> flightComparator = new Comparator<Flight>() {
-            public int compare(Flight f1, Flight f2) {
-                return f1.flightNo - f2.flightNo;
-            }
-        };
-        PriorityQueue<Flight> priorityFlights = new PriorityQueue<Flight>(flightComparator);
-        for(Flight currFlight : flights) {
-            priorityFlights.add(currFlight);
-        }
+        //Using lambda instead of traditional Java7 comparator
+        PriorityQueue<Flight> priorityFlights = new PriorityQueue<Flight>((f1, f2) -> f1.flightNo - f2.flightNo);
+
+        //Using stream based internal for loop against conventional external looping
+        flights.stream()
+            .forEach(priorityFlights::add);//Method reference at work
+
         int currFlightDuration  = 0;
         while(!priorityFlights.isEmpty()){
             Flight currFlight = priorityFlights.poll();
