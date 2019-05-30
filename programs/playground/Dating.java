@@ -6,6 +6,12 @@ import java.text.SimpleDateFormat;
 
 public class Dating {
     public static void main(String [] args) throws Exception {
+        String soTime = "Mon Jan 01 00:00:00 AEDT 1990";
+        SimpleDateFormat so = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
+        SimpleDateFormat desiredFormat = new SimpleDateFormat("yyyyMMdd");
+        desiredFormat.setTimeZone(TimeZone.getTimeZone("Australia/Sydney"));
+        Date sodate = so.parse(soTime);
+        System.out.println("DAY : " + desiredFormat.format(sodate));
 
         SimpleDateFormat apacheDateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy");
         apacheDateFormat.setTimeZone(TimeZone.getTimeZone("America/Los_Angeles"));
