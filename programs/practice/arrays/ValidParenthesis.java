@@ -36,9 +36,24 @@ class ValidParenthesis {
     public List<String> removeInvalidParentheses(String s) {
         Set<String> valid = new HashSet<String>();
         if (s != null && s.length() > 0) {
-            StringBuffer buffer = new StringBuffer();
             valid.clear();
-            recursiveRemovalOfInvalidParentheses( s, buffer, 0, 0, 0, valid, Integer.MAX_VALUE, 0);
+            //recursiveRemovalOfInvalidParentheses( s, new StringBuffer(), 0, 0, 0, valid, Integer.MAX_VALUE, 0);
+
+			//Calculating only faulty open or close brackets
+			int leftRem = 0 , rightRem = 0;
+			for(int i = 0; i < s.length(); ++i) {
+				if(s.charAt(i) == '(') {
+					//Just count open brackets
+					leftRem++;
+				} else if (s.charAt(i) == ')') {
+					//Check if there were previously found left ones, if not this is faulty closing bracket, count it
+					rightRem = leftRem == 0 ? rightRem + 1 : rightRem;
+					//Just reduce the number of matching left brackets
+					leftRem = leftRem > 0 ? leftRem - 1 : 0;
+				}
+			}
+
+            recursiveRemovalOfInvalidParentheses( s, new StringBuffer(), valid, 0, 0, 0, leftRem, rightRem);
         }
         if (valid.size() == 0) {
             valid.add(new String());
@@ -106,4 +121,33 @@ class ValidParenthesis {
         }
         return minRemoved;
     }
+
+	public void recursiveRemovalOfInvalidParentheses(String s, StringBuffer b, Set<String> valid, int index, int open, int close, int openRem, int closeRem) {
+		if(index == s.length()) {
+			if(openRem == 0 && closeRem == 0) {
+				valid.add(b.toString());
+			}
+		} else {
+            char curr = s.charAt(index);
+            int len = b.length();
+
+			if( ( curr == '(' && openRem > 0 ) || ( curr == ')' && closeRem > 0) ) {
+				//When we are not considering then only decrement the count of not considered brackets
+				recursiveRemovalOfInvalidParentheses( s, b, valid, index + 1, open, close, openRem - ( curr == '(' ? 1 : 0), closeRem - ( curr == ')' ?  1 : 0));
+			}
+
+			b.append(curr);
+            if(curr != '(' && curr != ')') {
+				recursiveRemovalOfInvalidParentheses( s, b,valid, index + 1, open, close, openRem, closeRem);
+			}
+			if(curr == '(') {
+				recursiveRemovalOfInvalidParentheses( s, b,valid, index + 1, open + 1, close, openRem , closeRem );
+			} else if( open > close ) {//We only consider the ) bracket if they are less in number than opening ones or obviously expression is
+			//invalid, so no point in continuing recursion
+				recursiveRemovalOfInvalidParentheses( s, b,valid, index + 1, open, close + 1, openRem , closeRem );
+			}
+			//This deletion does not mean not considering, we need to make sure previous call in recursion gets buffer agnostic of what happened in this recursive call
+			b.deleteCharAt(len);
+		}
+	}
 }
