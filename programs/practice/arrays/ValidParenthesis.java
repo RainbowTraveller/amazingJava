@@ -1,0 +1,109 @@
+/*
+*  Remove the minimum number of invalid parentheses in order to make the input string valid. Return all possible results.
+*
+*  Note: The input string may contain letters other than the parentheses ( and ).
+*
+*  Example 1:
+*
+*  Input: "()())()"
+*  Output: ["()()()", "(())()"]
+*  Example 2:
+*
+*  Input: "(a)())()"
+*  Output: ["(a)()()", "(a())()"]
+*  Example 3:
+*
+*  Input: ")("
+*  Output: [""]
+*
+*/
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Scanner;
+import java.util.LinkedList;
+import java.util.ArrayList;
+
+class ValidParenthesis {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Please enter the bracket pattern :");
+        String pattern = sc.next();
+        ValidParenthesis vp = new ValidParenthesis();
+        System.out.println("Possible Valid Patterns : " + vp.removeInvalidParentheses(pattern));
+    }
+
+    public List<String> removeInvalidParentheses(String s) {
+        Set<String> valid = new HashSet<String>();
+        if (s != null && s.length() > 0) {
+            StringBuffer buffer = new StringBuffer();
+            valid.clear();
+            recursiveRemovalOfInvalidParentheses( s, buffer, 0, 0, 0, valid, Integer.MAX_VALUE, 0);
+        }
+        if (valid.size() == 0) {
+            valid.add(new String());
+        }
+        return new ArrayList<String>(valid);
+    }
+
+	/* Recursive function that is called to check each possibility by toggling choice of a character.
+	 * For each character first it is not considered and then again subsequent character as not considered and
+	 * considered. Then the current character is considered and then again following characters are considered and not
+	 * considered. Thus an exhaustive search is done. Each time we find we have reached the end of the input string
+	 * we check if left and right parentheses are matching. In that case we also track, how many brackets we have removed.
+	 * if we have removed less no. of brackets then we have better solution, so we removed all previous ones and insert this.
+	 * So we finally get all the valid bracket expressions with minimum invalid brackets removed
+	 *
+	 * @param s input string
+	 * @param b string buffer which collects the characters
+	 * @param index which character from input string is to be considered now
+	 * @param open no. of opening brackets encountered so far
+	 * @param close no. of closing brackets encountered so far
+	 * @param valid set of valid outputs so far
+	 * @param minRemoved min no of brackets removed so far
+	 * @param removed no. of brackets not considered so far
+	 *
+	 */
+    public int recursiveRemovalOfInvalidParentheses(String s, StringBuffer b, int index, int open, int close,
+                Set<String> valid, int minRemoved, int removed ) {
+        if(index == s.length()) {
+            if(open == close ) {
+				//No point if we have already removed less no. of brackets, ignore if more no. of brackets removed
+                if(removed <= minRemoved) {
+                    String candidate = b.toString();
+                    if(removed < minRemoved) {
+						//if less then we need to modify minRemoved value as we have found a better solution
+                        valid.clear();
+                        minRemoved = removed;
+                    }
+                    valid.add(candidate);
+                    //System.out.println("Candidate : " + candidate);
+                }
+            }
+        } else  {
+            char curr = s.charAt(index);
+            int len = b.length();
+            if(curr != '(' && curr != ')') {
+				// We need all the characters other than brackets intact, so try adding and removing each
+				// in short we always consider them
+                b.append(curr);
+                recursiveRemovalOfInvalidParentheses( s, b, index + 1, open, close, valid, minRemoved, removed);
+                b.deleteCharAt(len);
+            } else {
+				//First don't consider current bracket
+                recursiveRemovalOfInvalidParentheses( s, b, index + 1, open, close, valid, minRemoved, removed + 1);
+				//Now consider
+                b.append(curr);
+                if(curr == '(') {
+                    minRemoved = recursiveRemovalOfInvalidParentheses( s, b, index + 1, open + 1, close, valid, minRemoved, removed);
+                } else if( open > close ) {//We only consider the ) bracket if they are less in number than opening ones or obviously expression is
+				//invalid, so no point in continuing recursion
+                    minRemoved = recursiveRemovalOfInvalidParentheses( s, b, index + 1, open, close + 1, valid, minRemoved, removed);
+                }
+				//This deletion does not mean not considering, we need to make sure previous call in recursion gets buffer agnostic of what happened in this recursive call
+                b.deleteCharAt(len);
+            }
+        }
+        return minRemoved;
+    }
+}
