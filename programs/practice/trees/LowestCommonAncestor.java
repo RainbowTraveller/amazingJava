@@ -9,9 +9,7 @@
  */
 class LowestCommonAncestor {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        if( root == null ) {
-            return null;
-        } else if ( root.val == p.val || root.val == q.val) {
+        if( root == null ||  root.val == p.val || root.val == q.val) {
             return root;
         } else {
             TreeNode left = lowestCommonAncestor( root.left, p, q);
