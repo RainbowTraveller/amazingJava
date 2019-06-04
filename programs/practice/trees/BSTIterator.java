@@ -41,7 +41,7 @@ public class BSTIterator {
     /** @return the next smallest number */
     public int next() {
         int val = 0;
-        if( stack.peek() != null) {
+        if(hasNext()) {
             TreeNode curr = stack.pop();
 			//next least element will be leftmost
 			//element of right child, so ....
