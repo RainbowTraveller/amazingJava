@@ -3,7 +3,7 @@
  *   Examples:
  *   Input: abc, k = 2
  *   Output: 2
- *   Possible substrings are {"ab", "bc"}
+ *   Possible substrings are {"ab", "bc"} // ab has 2 distinct characters a and b, bc has 2 distinct character b and c
  *   Input: aba, k = 2
  *   Output: 3
  *   Possible substrings are {"ab", "ba", "aba"}
