@@ -120,7 +120,6 @@ public class LongestSubStringwithUniqueChars {
 	}
 
 	public static int lengthOfLongestSubstringLinearIndex(String s) {
-		int len = 0;
         int start = 0;
         int end = 0;
         int maxLen = 0;
@@ -128,7 +127,7 @@ public class LongestSubStringwithUniqueChars {
             while(start <= end && end < s.length()) {
                 char endChar = s.charAt(end);
                 int index = s.indexOf(endChar, start);
-                if(index >= 0 && index < end) {
+                if(index >= start && index < end) {
                     maxLen = Math.max(maxLen, end - start);
 					//Adjust the start to shrink the sliding window
 					//start with the next character where the previous occurrence
@@ -137,11 +136,6 @@ public class LongestSubStringwithUniqueChars {
 					//if index = 3, characters are 4 but we already
 					//have end character added so reduce length
 					//by index value which is perfect
-                    len = len - index;
-                } else {
-					//Gives true length end - start of the corrent
-					//String being considered
-                    len = end - start;
                 }
                 end++;
             }
