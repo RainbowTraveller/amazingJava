@@ -35,13 +35,7 @@ public class ElectionCandidates {
 		Set<Map.Entry<String,Integer>> votingSet = voteTracker.entrySet();
 		//Make List of Map.Entry
 		List<Map.Entry<String, Integer>> listOfVoting = new ArrayList<Map.Entry<String, Integer>>(votingSet);
-		Collections.sort( listOfVoting, new Comparator<Map.Entry<String, Integer>>()
-		{
-			public int compare( Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2 )
-			{
-				return (e2.getValue()).compareTo( e1.getValue() );
-			}
-		} );
+		Collections.sort( listOfVoting,(e1, e2) -> (e2.getValue() - e1.getValue()));
 
 		/*This works as well
 		TreeSet<String> higestVotedCandidates = new TreeSet<String>();
