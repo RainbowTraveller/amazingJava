@@ -23,29 +23,27 @@ public class PermutationsWithRepeatedChars {
     }
 
     public static void main(String [] args) {
-		Map<Character, Integer> unique = new HashMap<Character, Integer>();
-		String input = args[0];
-		int len = input.length();
-		StringBuffer output = new StringBuffer(len);
-		char [] inputArr = input.toCharArray();
-		for(int i=0; i < len; ++i) {
-			int frequency = 0;
-			if(unique.containsKey(inputArr[i])) {
-				frequency =  unique.get(inputArr[i]);
-			}
-			frequency++;
-			unique.put(inputArr[i], frequency);
-		}
-		int[] allowed = new int[unique.size()];
-		int i = 0;
-		//Note: take only set of characters with are unique
-		//Frequency is already computed
-		inputArr = new char[ unique.size()];
-		for(Character c : unique.keySet()) {
-			allowed[i] = unique.get(c);
-			inputArr[i] = c;
-			i++;
-		}
-		perms(inputArr, output, allowed, len);
-		}
+        Map<Character, Integer> unique = new HashMap<Character, Integer>();
+        String input = args[0];
+        int len = input.length();
+        StringBuffer output = new StringBuffer(len);
+        char [] inputArr = input.toCharArray();
+        for(int i=0; i < len; ++i) {
+            if(unique.containsKey(inputArr[i])) {
+                int frequency =  unique.getOrDefault(inputArr[i], 0);
+                unique.put(inputArr[i], frequency + 1);
+            }
+        }
+        int[] allowed = new int[unique.size()];
+        int i = 0;
+        //Note: take only set of characters with are unique
+        //Frequency is already computed
+        inputArr = new char[ unique.size()];
+        for(Character c : unique.keySet()) {
+            allowed[i] = unique.get(c);
+            inputArr[i] = c;
+            i++;
+        }
+        perms(inputArr, output, allowed, len);
+        }
 }
