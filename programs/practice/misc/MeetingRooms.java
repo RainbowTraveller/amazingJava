@@ -77,18 +77,11 @@ public class MeetingRooms {
         }
        */
         //For sorting based on start time
-        Collections.sort(today, new Comparator<MeetingInterval>() {
-            public int compare(MeetingInterval m1, MeetingInterval m2) {
-                return m1.getStart() - m2.getStart();
-            }});
-
+        Collections.sort(today, (mi1, mi2) -> (mi1.getStart() - mi2.getStart()));
         System.out.println("Sorted Meetings  " + today);
 
         //For priority queue based on end time
-        PriorityQueue<Integer> allocator = new PriorityQueue<Integer>(today.size(), new Comparator<Integer>() {
-                public int compare(Integer i1, Integer i2) {
-                    return i1 - i2;
-                }});
+        PriorityQueue<Integer> allocator = new PriorityQueue<Integer>(today.size());
         //Add first meeting with earliest start time
         allocator.add(today.get(0).getEnd());
 
