@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class KEqualSumSeparation {
@@ -17,11 +18,7 @@ public class KEqualSumSeparation {
 
     public boolean canPartitionKSubsets(int[] arr, int k) {
         // The total sum to be considered
-        int sumOfAllArrayItems = 0;
-        for (int num : arr) {
-            sumOfAllArrayItems += num;
-        }
-
+        int sumOfAllArrayItems = Arrays.stream(arr).sum();
         /*
         * 1. We can not have negative partitions
         * 2. We can not divide x no of elements into y parts where y > x
