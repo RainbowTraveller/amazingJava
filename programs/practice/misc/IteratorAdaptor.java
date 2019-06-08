@@ -1,5 +1,5 @@
 /* Given a nested list of elements in the nested form
- * e.g. {1, 2, {1, 2, 3}, {}, {4, 5}, {}, 9}
+ * e.g. {{1}, {2}, {1, 2, 3}, {}, {4, 5}, {}, {9}}
  *
  * Write an iterator which will flatten this list meaning next() will return only integer
  * So using such an iterator the output will be : 1, 2, 1, 2, 3, 4, 5, 9
