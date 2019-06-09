@@ -56,10 +56,9 @@ public class CumulativeFrequncyCounter {
     for (String source : keys ) {
         System.out.println("Current Input domain : " + source);
         List<String> currentValidDomains = getCurrentValidDomains( source );
-        for( String currentDomain : currentValidDomains ) {
-            //System.out.println("Separated Domain : " + currentDomain);
-            validDomains.add( currentDomain );
-        }
+        //Using streams and internal iterator
+        currentValidDomains.stream()
+            .forEach(validDomains::add);//Method reference
     }
     return validDomains;
   }
@@ -70,24 +69,8 @@ public class CumulativeFrequncyCounter {
    *            yahoo.com
    *            com
    */
-  public static List<String> getCurrentValidDomains( String singleSource ) {
+    public static List<String> getCurrentValidDomains( String singleSource ) {
         List<String> domains = new ArrayList<String>();
-        /*String[] parts = singleSource.split("\\.");
-        StringBuffer buffer = new StringBuffer();
-        int pointer = 0;
-        System.out.println("Parts Found : " + parts.length );
-        while( pointer < parts.length ) {
-            for( int i = pointer; i < parts.length; i++ ) {
-                System.out.print(" Part : " + parts[i] + " ");
-                buffer.append( parts[ i ] );
-                buffer.append( "." );
-            }
-            buffer.deleteCharAt( buffer.length() - 1);
-            System.out.println( "Domain Added " + buffer.toString() );
-            domains.add( buffer.toString() );
-            buffer.delete( 0, buffer.length());
-            pointer++;
-        }*/
         int index  = 0;
         while(index >= 0) {
             if(index != 0) {
