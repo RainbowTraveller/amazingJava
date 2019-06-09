@@ -8,6 +8,7 @@ public class MaximumSumSubArray {
 
         int [] input = { -2,1,-3,4,-1,2,1,-5,4 };
         System.out.println(MaximumSumSubArray.getMaxSumSubarray(input));
+        System.out.println(MaximumSumSubArray.getMaxSumSubarrayNaive(input));
     }
 
     static List<Integer> getMaxSumSubarray(int[] input) {
@@ -35,7 +36,7 @@ public class MaximumSumSubArray {
                     end = i;
                 }
             }
-            System.out.println("Start : " + start + " End : " + end);
+            System.out.println("Start : " + start + " End : " + end + " Max Sum : " + maxSoFar);
             for(int i = start; i <= end; ++i) {
                 elements.add(input[i]);
             }
@@ -43,4 +44,30 @@ public class MaximumSumSubArray {
         return elements;
     }
 
+    public static List<Integer> getMaxSumSubarrayNaive( int [] arr ) {
+        List<Integer> elements = null;
+        if(arr != null && arr.length > 0) {
+            int max = Integer.MIN_VALUE;
+            int start  = 0;
+            int end = 0;
+            //list will host the subarray elements
+            elements = new ArrayList<Integer>();
+            for(int i = 0; i < arr.length; ++i) {
+                int curr = 0;
+                for(int j = i; j < arr.length; ++j) {
+                    curr += arr[j];
+                    max = Math.max(max, curr);
+                    if(max == curr) {
+                        start = i;
+                        end = j;
+                    }
+                }
+            }
+            System.out.println("MAX : " + max + " Start : " + start + " End : " + end);
+            for(int i = start; i <= end; ++i) {
+                elements.add(arr[i]);
+            }
+        }
+        return elements;
+    }
 }
