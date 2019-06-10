@@ -67,9 +67,9 @@ class MatrixSizer {
         if(arr != null) {
             if(arr.size() > 0 && arr.get(0) != null && arr.get(0).size() != 0){
                 //Tracker of same size
-                int [][] tracker = new int[arr.size()][arr.get(0).size()];
                 int rows = arr.size();
                 int columns = arr.get(0).size();
+                int [][] tracker = new int[rows][columns];
                 for(int i = 0; i < rows; ++i) {
                     List<Integer> currRow = arr.get(i);
                     for(int j = 0; j < columns; ++j) {
