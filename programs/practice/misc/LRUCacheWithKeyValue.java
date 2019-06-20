@@ -34,11 +34,10 @@ class LRUCacheWithKeyValue {
         if(tracker.containsKey(key)) {
             int index = tracker.get(key);
             adjust(index);
-            cache.remove(index);
         } else if(cache.size() == capacity) {
             adjust(0);
-            cache.removeFirst();
         }
+        cache.remove(index);
         cache.addLast(value);
         tracker.put(key, cache.size() - 1);
         System.out.println("Put");
@@ -51,8 +50,7 @@ class LRUCacheWithKeyValue {
         for(int currKey : tracker.keySet()) {
             int currIndex = tracker.get(currKey);
             if( currIndex > index) {
-                currIndex--;
-                tracker.put(currKey, currIndex);
+                tracker.put(currKey, currIndex - 1);
             } else if(currIndex == index) {
                 keyToRemove = currKey;
             }
