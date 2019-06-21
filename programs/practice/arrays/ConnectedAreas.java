@@ -53,9 +53,7 @@ public class ConnectedAreas {
 					noOfIslands++;
 					int currentIslandSize  = getBiggestIsland( i, j );
 					//System.out.println( " Current : "  + currentIogslandSize  + " Biggest : "  +  biggestIslandSize);
-					if( currentIslandSize > biggestIslandSize ) {
-						 biggestIslandSize = currentIslandSize;
-					}
+                    biggestIslandSize = Math.max(biggestIslandSize, currentIslandSize);
 				}
 			}
 		}
