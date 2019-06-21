@@ -77,4 +77,30 @@ public class TrapRainWater {
         return trapped;
     }
 
+
+    /**
+     * if we observe in first 2 approaches we notice that at a given point
+     * the water quantity is decided by the lowest of the left and right.
+     * So as long as one side less less than other just keep considering that
+     * to calculate water quantity at a location. When it becomes greater than
+     * its counterpart then we switch
+     */
+    public static int trapLinear(int [] height) {
+        int water = 0;
+        int leftMax = 0;
+        int rightMax = 0;
+
+        int left  = 0, right = height.length - 1;
+
+        while(left < right) {
+            if(height[left] < height[right]) {
+                height[left] >= leftMax ? leftMax = height[left] : water += leftMax - height[left];
+                left++;
+            } else {
+                height[right] >= rightMax ? rightMax = height[right] : water += rightMax - height[right];
+            }
+        }
+        return water;
+    }
+
 }
