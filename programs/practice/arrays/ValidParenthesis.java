@@ -58,7 +58,6 @@ class ValidParenthesis {
                     leftRem = leftRem > 0 ? leftRem - 1 : 0;
                 }
             }
-
             smartProcessing( s, new StringBuffer(), valid, 0, 0, 0, leftRem, rightRem);
         }
         if (valid.size() == 0) {
