@@ -40,6 +40,7 @@ class ValidParenthesis {
             //PART - 1
             //Exhaustive processing by checking each and every open and closed bracket
             //exhaustiveProcessing( s, new StringBuffer(), 0, 0, 0, valid, Integer.MAX_VALUE, 0);
+            //exhaustiveSimplified( s, new StringBuffer(), 0, 0, 0, valid, 0)
 
             //PART - 2
             //Smart processing by considering only faulty parenteses
@@ -67,7 +68,7 @@ class ValidParenthesis {
     }
 
     /* Recursive function that is called to check each possibility by toggling choice of a character.
-     * For each character first it is not considered and then again subsequent character as not considered and
+     * For each character first it is not considered and then again subsequent character is not considered and
      * considered. Then the current character is considered and then again following characters are considered and not
      * considered. Thus an exhaustive search is done. Each time we find we have reached the end of the input string
      * we check if left and right parentheses are matching. In that case we also track, how many brackets we have removed.
@@ -123,6 +124,51 @@ class ValidParenthesis {
             b.deleteCharAt(len);
         }
         return minRemoved;
+    }
+
+    /*
+     * The core approach remains the same, but follows a more logical flow which also gives same results
+     * @param input input string
+     * @param buff string buffer which collects the characters
+     * @param currIndex which character from input string is to be considered now
+     * @param open no. of opening brackets encountered so far
+     * @param close no. of closing brackets encountered so far
+     * @param valid set of valid outputs so far
+     * @param maxLen max length of the output obtained so far
+     */
+    public int exhaustiveSimplified(String input, StringBuffer buf, int currIndex, int open, int close,
+            Set<String> valid, int maxLen) {
+        if (currIndex == input.length()) {
+            if (open == close) {
+                if (buff.length() >= maxLen) {
+                    if (buff.length() > maxLen) {
+                        maxLen = buff.length();
+                        valid.clear();
+                    }
+                    valid.add(buff.toString());
+                }
+            }
+        } else {
+            char curr = input.charAt(currIndex);
+            //if not one of the braces, add, consider subsequent patterns and then remove
+            if (curr != ')' && curr != '(') {
+                maxLen = removeInvalidParenthesis(valid, input, currIndex + 1, open, close, buff.append(curr), maxLen);
+                buff.deleteCharAt(buff.length() - 1);
+            } else {
+                //First consider the current brace But only if it is '(',
+                //for ')' number of open brackets should be more than close or expression is invalid
+                //so no need to proceed
+                if (curr == '(' || (curr == ')' && close < open)) {
+                    maxLen = removeInvalidParenthesis(valid, input, currIndex + 1, curr == '(' ? open + 1 : open,
+                            curr == ')' ? close + 1 : close, buff.append(curr), maxLen);
+                    buff.deleteCharAt(buff.length() - 1);
+                }
+                maxLen = removeInvalidParenthesis(valid, input, currIndex + 1, open, close, buff, maxLen);
+            }
+        }
+        //When we remove min no. of invalid brackets length will be max so keep
+        //track of it and only consider string with max length
+        return maxLen;
     }
 
     /* Reduces the running time considerably by only looking at faulty opening and closing brackets.Like previous approach
