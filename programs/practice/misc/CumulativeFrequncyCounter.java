@@ -28,11 +28,13 @@ public class CumulativeFrequncyCounter {
             "10,stackoverflow.com",
             "2,en.wikipedia.org",
             "1,es.wikipedia.org" };
-
+/*
         //Separate each given domain and the count
         Map<String, Integer> inputSeparated = separateDomainAndCount( counts );
         //Process each domain to obtain basic domains to look for
         Set<String> domains = getDomains( inputSeparated.keySet() );
+
+
         //Search obtained basic domain in the input and check for presence
         //add the frequency encountered
         for( String uniqueDomain : domains ) {
@@ -44,6 +46,28 @@ public class CumulativeFrequncyCounter {
             }
             System.out.println( count + "  " + uniqueDomain );
         }
+*/
+        /*
+         * Simple way of finding this out instead of above cumbersome way
+         */
+
+		Map<String, Integer> domains = new HashMap();
+        for(String domain : counts) {
+            //String[] split = domain.split("\\s+");
+            String[] split = domain.split(",");
+
+            String candidate = split[1];
+            int count = Integer.valueOf(split[0]);
+            int dotIndex = 0;
+            while(dotIndex >= 0) {
+                String currDomain = candidate.substring(dotIndex == 0 ? dotIndex : dotIndex + 1);
+                domains.put(currDomain, domains.getOrDefault(currDomain, 0) + count);
+                dotIndex = candidate.indexOf('.', dotIndex + 1);
+            }
+        }
+
+        for (String dom: domains.keySet())
+            System.out.println(" " + domains.get(dom) + " " + dom);
     }
 
 
