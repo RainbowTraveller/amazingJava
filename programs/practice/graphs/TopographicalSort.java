@@ -13,15 +13,15 @@ import java.util.LinkedList;
 public class TopographicalSort {
 
     public static void main(String[] args) {
-		Graph g = new Graph(6);
+        Graph g = new Graph(6);
         g.addEdge(5, 2);
         g.addEdge(5, 0);
         g.addEdge(4, 0);
         g.addEdge(4, 1);
         g.addEdge(2, 3);
         g.addEdge(3, 1);
-		System.out.println(g);
-		g.topographicalSort();
+        System.out.println(g);
+        g.topographicalSort();
     }
 }
 
@@ -92,7 +92,7 @@ class Graph {
             }
         }
 
-		System.out.print("Topographical Sort : ");
+        System.out.print("Topographical Sort : ");
         while(!order.isEmpty()) {
             System.out.print(order.pop() + " ");
         }
@@ -108,9 +108,9 @@ class Graph {
         visited[v] = true;
         List<Integer> neighbors = e[v];
         for(Integer neighbor : neighbors) {
-			if( !visited[neighbor] ) {
-            	topographicalSortUtil( neighbor, order, visited );
-        	}
+            if( !visited[neighbor] ) {
+                topographicalSortUtil( neighbor, order, visited );
+            }
         }
         order.push(v);
     }
