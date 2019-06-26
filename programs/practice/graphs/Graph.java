@@ -27,6 +27,7 @@ class Graph<E> {
         c.addEdge('d', 'b');
         c.addEdge('c', 'd');
         c.addEdge('a', 'b');
+        c.addEdge('a', 'e');
         System.out.println(c);
         c.topographicalSort();
     }
@@ -94,11 +95,17 @@ class Graph<E> {
             }
         }
 
+        StringBuffer s = new StringBuffer();
         System.out.println("Topographical Sort : ");
         while(!order.isEmpty()) {
-            System.out.print(order.pop() + " ");
+            s.append(order.pop());
         }
-        System.out.println();
+
+        if(s.length() == vertices.size()) {
+            System.out.println(s);
+        } else {
+            System.out.println("Invalid Graph");
+        }
     }
 
     /*
