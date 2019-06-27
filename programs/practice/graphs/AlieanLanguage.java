@@ -1,6 +1,7 @@
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Set;
@@ -9,18 +10,18 @@ public class AlieanLanguage {
 
     public static void main(String [] args) {
         String[] words = {
-            "z",
-            "x",
-            "z"
+            //"wrt","wrf","er","ett","rftt"
+            "z", "z"
         };
         AlieanLanguage al = new AlieanLanguage();
-        System.out.println(al.getTopographicalOrder(words));
     }
 
     public String getTopographicalOrder(String [] words) {
         if(words != null) {
             //Tracks incoming edges from other vertices
             int [] inDegree = new int[26];
+            //Arrays.stream(inDegree)
+            //    .forEach(System.out :: print);
             //This is graph implementation as adjacency list
             Map<Character, List<Character>> graph = new HashMap<Character, List<Character>>();
             bulildGraph(inDegree, graph, words);
@@ -30,6 +31,14 @@ public class AlieanLanguage {
     }
 
     public void bulildGraph(int[] inDegree, Map<Character, List<Character>> graph, String[] words) {
+        //Initialize
+        //important because for input like { "z", "z" } answer is "z"
+        for(String word : words) {
+            for(Character c : word.toCharArray()) {
+                graph.putIfAbsent(c, new LinkedList());
+            }
+        }
+
         for(int i = 0 ; i < words.length - 1; ++i ) {
             //Consider consecutive strings
             String currWord = words[i];
@@ -44,11 +53,10 @@ public class AlieanLanguage {
                 //Get first occurrence of mismatching character
                 if(cw != nw) {
                     // We found one ordered pair
-                    List<Character> neighbors = graph.getOrDefault(nw, new LinkedList<Character>());
+                    List<Character> neighbors = graph.getOrDefault(cw, new LinkedList<Character>());
                     if(!neighbors.contains(nw)) {
                         //Update the adjacency metrix
                         neighbors.add(nw);
-
                         //Add in degree of destination vertex
                         ++inDegree[nw - 'a'];
                         graph.put(cw, neighbors);
@@ -62,7 +70,6 @@ public class AlieanLanguage {
                 }
             }
         }
-        System.out.println("Graph :" + graph);
     }
 
     public String topgraphicalSort(int [] inDegree,Map<Character, List<Character>> graph ) {
