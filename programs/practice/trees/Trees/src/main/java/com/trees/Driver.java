@@ -1,8 +1,6 @@
 package com.trees;
 
-import com.trees.BinaryTree;
 import com.trees.BinarySearchTree;
-import com.trees.Node;
 
 public class Driver {
     public static void main( String[] args ) {
