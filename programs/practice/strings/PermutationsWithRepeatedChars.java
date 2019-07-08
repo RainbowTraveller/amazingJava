@@ -29,10 +29,8 @@ public class PermutationsWithRepeatedChars {
         StringBuffer output = new StringBuffer(len);
         char [] inputArr = input.toCharArray();
         for(int i=0; i < len; ++i) {
-            if(unique.containsKey(inputArr[i])) {
-                int frequency =  unique.getOrDefault(inputArr[i], 0);
-                unique.put(inputArr[i], frequency + 1);
-            }
+            int frequency =  unique.getOrDefault(inputArr[i], 0);
+            unique.put(inputArr[i], frequency + 1);
         }
         int[] allowed = new int[unique.size()];
         int i = 0;

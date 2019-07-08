@@ -23,12 +23,8 @@ public class ElectionCandidates {
 
 		//Get frequency based on a Hash Map
 		for(String candidate : votes) {
-			int voteNumber = 1;
-			if(voteTracker.containsKey(candidate)) {
-				voteNumber = voteTracker.get(candidate);
-				voteNumber++;
-			}
-			voteTracker.put(candidate, voteNumber);
+			int voteNumber = voteTracker.getOrDefault(candidate, 0);
+			voteTracker.put(candidate, voteNumber + 1);
 		}
 
 		//Make Set of Map.Entry
