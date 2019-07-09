@@ -83,7 +83,7 @@ public class MatrixZerofy {
      *
      * No need of extra space
      */
-    public static void zerofyMatrixNoXtraSpace(int[][] matrix) { {
+    public static void zerofyMatrixNoXtraSpace(int[][] matrix) {
         boolean isFirstCol = false;
 
         int rows = matrix.length;
