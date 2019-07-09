@@ -95,12 +95,8 @@ class Consumer implements Runnable {
 	 * Keeps track of the each string count
 	 */
 	private void consume(String event) {
-		int eventCount = 1;
-		if(eventCountTracker.containsKey(event)) {
-			eventCount = eventCountTracker.get(event);
-			eventCount++;
-		}
-		eventCountTracker.put(event,eventCount);
+		int eventCount = eventCountTracker.getOrDefault(event, 0);
+		eventCountTracker.put(event,eventCount + 1);
 	}
 
 	private void result() {
