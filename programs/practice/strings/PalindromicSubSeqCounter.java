@@ -7,12 +7,28 @@
  *    a a b : starting with each letter ( position ) and count strings with 1 len, 2 len
  *    a, a, b : 3 palindromes with 1 char ( diagonal of matrix )
  *    aa : starting from 0, 2 char long sequence starting at 0 ending at 1 so matrix[0][1] = 3 ( a, a, aa )
- *    ab : starting at position 1, 2 char sequence, not palindrome, starting at 1 ending at 2, so matrix[1][2] = 2 (a, b)
+ *    ab : starting at position 1, 2 char sequence, not palindrome, starting at 1 ending at 2,
+ * 			so matrix[1][2] = 2 (a, b)
  *    aab : in aa 3, and in ab : 2 palindromes = 5, but middle a is counted twice so 5 -1 = 4 sequences
+ *
+ *
+ *    input : abba
+ *			1 2 4 9
+ *			0 1 3 4
+ *			0 0 1 2
+ *			0 0 0 1
+ *			Total palindromic subsequence are : 9
+ *
+ *    input : abcd
+ *			1 2 3 4
+ *			0 1 2 3
+ *			0 0 1 2
+ *			0 0 0 1
+ *			Total palindromic subsequence are : 4
  */
 public class PalindromicSubSeqCounter {
     public static void main(String [] args) {
-        String str = "aaab";
+        String str = "abcd";
         //String str = "aaaa";
         //String str = "abcb";
         System.out.println("Total palindromic "+
