@@ -27,32 +27,18 @@
 import java.io.*;
 import java.util.*;
 
-
-
 class BoardGame {
-  public static void main(String[] args) {
+    public static void main(String[] args) {
 
-    int[][] board1 = new int[][] {
-        { 0,  0,  0, 0, -1 },
-        { 0, -1, -1, 0,  0 },
-        { 0,  0,  0, 0,  0 },
-        { 0, -1,  0, 0,  0 },
-        { 0,  0,  0, 0,  0 },
-        { 0,  0,  0, 0,  0 },
-    };
+        int[][] board1 = new int[][] { { 0, 0, 0, 0, -1 }, { 0, -1, -1, 0, 0 }, { 0, 0, 0, 0, 0 }, { 0, -1, 0, 0, 0 },
+                { 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0 }, };
 
-    int[][] board2 = new int[][] {
-        {  0,  0,  0, 0, -1 },
-        {  0, -1, -1, 0,  0 },
-        {  0,  0,  0, 0,  0 },
-        { -1, -1,  0, 0,  0 },
-        {  0, -1,  0, 0,  0 },
-        {  0, -1,  0, 0,  0 },
-    };
-    int [] start = {0, 0};
-    System.out.println("Is Travel Possible ? : " + isTravelPossible(board1, start ));
-    System.out.println("Is Travel Possible ? : " + isTravelPossible(board2, start));
-  }
+        int[][] board2 = new int[][] { { 0, 0, 0, 0, -1 }, { 0, -1, -1, 0, 0 }, { 0, 0, 0, 0, 0 }, { -1, -1, 0, 0, 0 },
+                { 0, -1, 0, 0, 0 }, { 0, -1, 0, 0, 0 }, };
+        int[] start = { 0, 0 };
+        System.out.println("Is Travel Possible ? : " + isTravelPossible(board1, start));
+        System.out.println("Is Travel Possible ? : " + isTravelPossible(board2, start));
+    }
 
     static class Position {
         int row;
@@ -68,48 +54,48 @@ class BoardGame {
         }
 
         public boolean equals(Object o) {
-            if(o != null && o instanceof Position) {
+            if (o != null && o instanceof Position) {
                 Position p = (Position) o;
                 return this.row == p.row && this.column == p.column;
             }
             return false;
         }
 
-
         public int hashCode() {
-            return  row | (column << 15);
+            return row | (column << 15);
         }
     }
 
-
-  public static List<Position> getPossibleMoves(int [][] board, int [] currentPosition) {
-    List<Position> possibleMoves = new LinkedList<Position>();
-    if(board != null && currentPosition != null) {
-      int currRow = currentPosition[0];
-      int currColumn = currentPosition[1];
-      //currRow, currColumn + 1
-      if(currRow >= 0 && currRow < board.length && (currColumn + 1) >= 0 && (currColumn + 1) < board[0].length && board[currRow][currColumn + 1] != -1) {
-        possibleMoves.add(new Position(currRow, currColumn + 1));
-
-      }
-      //currRow, currColumn - 1
-      if(currRow >= 0 && currRow < board.length && (currColumn - 1) >= 0 && (currColumn - 1) < board[0].length && board[currRow][currColumn - 1] != -1) {
-        possibleMoves.add(new Position(currRow, currColumn - 1));
-
-      }
-      //currRow + 1, currColumn
-
-      if(currRow + 1 >= 0 && currRow + 1 < board.length && currColumn >= 0 && currColumn < board[0].length && board[currRow + 1][currColumn] != -1) {
-        possibleMoves.add(new Position(currRow + 1, currColumn));
-
-      }
-      //currRow - 1, currColumn
-      if(currRow - 1 >= 0 && currRow - 1 < board.length && currColumn >= 0 && currColumn < board[0].length && board[currRow - 1][currColumn] != -1) {
-        possibleMoves.add(new Position(currRow - 1, currColumn));
-      }
+    public static List<Position> getPossibleMoves(int[][] board, int[] currentPosition) {
+        List<Position> possibleMoves = new LinkedList<Position>();
+        if (board != null && currentPosition != null) {
+            int currRow = currentPosition[0];
+            int currColumn = currentPosition[1];
+            if (currRow >= 0 && currRow < board.length) {
+                // currRow, currColumn + 1
+                if ((currColumn + 1) >= 0 && (currColumn + 1) < board[0].length
+                        && board[currRow][currColumn + 1] != -1) {
+                    possibleMoves.add(new Position(currRow, currColumn + 1));
+                }
+                // currRow, currColumn - 1
+                if ((currColumn - 1) >= 0 && (currColumn - 1) < board[0].length
+                        && board[currRow][currColumn - 1] != -1) {
+                    possibleMoves.add(new Position(currRow, currColumn - 1));
+                }
+            }
+            if (currColumn >= 0 && currColumn < board[0].length) {
+                // currRow + 1, currColumn
+                if (currRow + 1 >= 0 && currRow + 1 < board.length && board[currRow + 1][currColumn] != -1) {
+                    possibleMoves.add(new Position(currRow + 1, currColumn));
+                }
+                // currRow - 1, currColumn
+                if (currRow - 1 >= 0 && currRow - 1 < board.length && board[currRow - 1][currColumn] != -1) {
+                    possibleMoves.add(new Position(currRow - 1, currColumn));
+                }
+            }
+        }
+        return possibleMoves;
     }
-    return possibleMoves;
-  }
 
     public static boolean isTravelPossible(int[][] board, int[] position) {
 
@@ -118,24 +104,24 @@ class BoardGame {
         int validPosition = 0;
         Set<Position> visited = new HashSet<Position>();
 
-        if(position != null && board!= null) {
+        if (position != null && board != null) {
 
             Position startPoint = new Position(position[0], position[1]);
             possibles.push(startPoint);
             visited.add(startPoint);
             count++;
-            while(!possibles.isEmpty()) {
+            while (!possibles.isEmpty()) {
                 Position curr = possibles.pop();
                 int[] currLocation = new int[2];
                 currLocation[0] = curr.row;
                 currLocation[1] = curr.column;
 
-                //Get all valid neighbouring points
+                // Get all valid neighbouring points
                 List<Position> currMoves = getPossibleMoves(board, currLocation);
 
-                for(Position p : currMoves) {
-                    //Push them to stack only if they are not already visited
-                    if(!visited.contains(p)) {
+                for (Position p : currMoves) {
+                    // Push them to stack only if they are not already visited
+                    if (!visited.contains(p)) {
                         count++;
                         possibles.push(p);
                         visited.add(p);
@@ -143,9 +129,9 @@ class BoardGame {
                 }
             }
 
-            for(int i = 0; i < board.length; ++i) {
-                for(int j = 0; j < board[0].length; ++j) {
-                    if(board[i][j] == 0) {
+            for (int i = 0; i < board.length; ++i) {
+                for (int j = 0; j < board[0].length; ++j) {
+                    if (board[i][j] == 0) {
                         validPosition++;
                     }
                 }
@@ -155,4 +141,3 @@ class BoardGame {
         return count == validPosition;
     }
 }
-
