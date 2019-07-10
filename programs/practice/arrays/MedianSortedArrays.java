@@ -45,12 +45,13 @@ public class MedianSortedArrays {
      * Here logic remains the same, only difference is keep track of the previous element so that
      * result will be average of that and current element when the count it reached
      */
-    public static int findMedianLinear(int[] x, int[] y) {
+    public static double findMedianLinear(int[] x, int[] y) {
         int lx = x.length;
         int ly = y.length;
         int count = (lx + ly) / 2;
         int prev = -1, curr = -1;
         int indexX = 0, indexY = 0;
+        //Count is even means actual elements are odd in number as the count is 0 based
         if(count % 2 == 0) {
             for(int i = 0; i <= count; ++i) {
                 if( indexX != lx && indexY != ly ) {
@@ -74,7 +75,7 @@ public class MedianSortedArrays {
                     curr = y[indexY++];
                 }
             }
-            return (prev + curr)/ 2;
+            return (prev + curr)/ 2D;
         }
     }
 
