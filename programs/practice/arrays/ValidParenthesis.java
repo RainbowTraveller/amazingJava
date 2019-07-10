@@ -39,13 +39,11 @@ class ValidParenthesis {
             valid.clear();
             //PART - 1
             //Exhaustive processing by checking each and every open and closed bracket
-            exhaustiveProcessing( s, new StringBuffer(), 0, 0, 0, valid, Integer.MAX_VALUE, 0);
-            //exhaustiveSimplified( s, new StringBuffer(), 0, 0, 0, valid, 0)
+            //exhaustiveProcessing( s, new StringBuffer(), 0, 0, 0, valid, Integer.MAX_VALUE, 0);
 
             //PART - 2
             //Smart processing by considering only faulty parenteses
             //Calculating only faulty open or close brackets
-            /*
             int leftRem = 0 , rightRem = 0;
             for(int i = 0; i < s.length(); ++i) {
                 if(s.charAt(i) == '(') {
@@ -60,7 +58,6 @@ class ValidParenthesis {
                 }
             }
             smartProcessing( s, new StringBuffer(), valid, 0, 0, 0, leftRem, rightRem);
-        */
         }
         if (valid.size() == 0) {
             valid.add(new String());
