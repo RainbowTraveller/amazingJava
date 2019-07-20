@@ -30,9 +30,7 @@ public class ShortestDistanceWords {
                 }
 
                 if(index1 >= 0 && index2 >= 0 ) {
-                    if(distance == 0 || distance > Math.abs(index1 - index2)) {
-                        distance = Math.abs(index1 - index2);
-                    }
+                    distance = Math.max(distance, Math.abs(index1 - index2));
                 }
             }
         }
