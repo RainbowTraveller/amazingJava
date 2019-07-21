@@ -10,13 +10,8 @@ public class  SwapNumsToMakeSumEqual {
     public int getTarget(int[] a, int[] b ) {
         int sumB = 0, sumA = 0;
 
-        for(int i = 0; i < a.length; ++i) {
-            sumA += a[i];
-        }
-
-        for(int i = 0; i < a.length; ++i) {
-            sumB += b[i];
-        }
+        sumA = Arrays.stream(a).sum();
+        sumB = Arrays.stream(b).sum();
 
         if((sumA - sumB) % 2 != 0) {
             return 0;
