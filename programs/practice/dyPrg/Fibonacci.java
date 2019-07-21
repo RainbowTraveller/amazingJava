@@ -12,10 +12,9 @@ public class Fibonacci {
 		if( n <= 1 ) {
 			return n;
 		}
-		if( mem[n] != 0 ) {
-			return mem[ n ];
+		if( mem[n] == 0 ) {
+		    mem[n] = fibboDynamic( n - 1, mem) + fibboDynamic( n - 2, mem );
 		}
-		mem[n] = fibboDynamic( n - 1, mem) + fibboDynamic( n - 2, mem );
 		return mem[ n ];
 	}
 
