@@ -13,10 +13,14 @@ public class Addition {
         for(int i = 0; i < b; ++i) {
             while((a & mask) != 0) {
                 a &= (~mask);
+                System.out.println("a : inside : " + a);
                 mask = mask << 1;
+                System.out.println("====> Mask : inside : " + mask);
             }
             a |= mask;
+            System.out.println("a : outside : " + a);
             mask = 1;
+            System.out.println("******** >> Mask : outside : " + mask);
         }
         return a;
     }
