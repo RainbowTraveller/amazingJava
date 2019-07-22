@@ -46,17 +46,23 @@ public class CoinChange {
             System.out.println("Highly Recursive and exhaustive : ");
             System.out.println("Minimum Coins Required : " + getMinCoins(coins, amount, 0));
             System.out.println("Total Time to heavy recursion : " + (System.currentTimeMillis() - start ) / 1000);
+            */
 
+            System.out.println("Highly Recursive and exhaustive : ");
+            System.out.println("Minimum Coins Required : " + getMinCoins(coins, amount, 0));
+            System.out.println("Total Time to heavy recursion : " + (System.currentTimeMillis() - start ) / 1000);
+
+            /*
             System.out.println("Top Down approach : Starting with amount");
             start = System.currentTimeMillis();
             System.out.println("Minimum Coins Required : " + getMinCoins(coins, amount, new int[amount]));
             System.out.println("Total Time to top down : " + (System.currentTimeMillis() - start ) / 1000);
             */
 
-            System.out.println("Top Down approach : Starting with first 1");
+            /*System.out.println("Top Down approach : Starting with first 1");
             start = System.currentTimeMillis();
             System.out.println("Minimum Coins Required : " + getMinCoins(coins,amount));
-            System.out.println("Total Time to bottom up :: " + (System.currentTimeMillis() - start ) / 1000);
+            System.out.println("Total Time to bottom up :: " + (System.currentTimeMillis() - start ) / 1000);*/
         }
     }
 
@@ -91,6 +97,57 @@ public class CoinChange {
         }
     }
 
+
+	/*
+	 * This is by far simplest approach but with depth first heavy recursion
+	 * We consider 1 coin of a denomination and immediately increase count by 1. Then
+	 * we go 1 level deeper with amount reduced by that much denomination.
+	 * 		If we hit 0 that means we can get finite no. of coins : We return count obtained so far
+	 * 		If we hit a negative no. which mean no solution possible through this path
+	 * When we reduce amount by certain denomination, we try all possible denominations and count
+	 * no. of coins required. We gather at each stage min. number and pass on to previous iteration.
+	 * Hence the final answer
+	 */
+	//With this method signature uncomment the inline code to have memoization version
+    //public static int getMinCoins(int[] coins, int amount, int index, int[] minCoins) {
+    public static int getMinCoins(int[] coins, int amount, int index) {
+		//Tracking min value at this stage
+        int min = Integer.MAX_VALUE;
+        if(val == 0) {
+			//Count so far is correct so return
+            return count;
+        }
+
+        if(val < 0) {
+			//No solution with this path
+            return -1;
+        }
+
+        //it the amount was previously encountered and we know the no. of coins for it
+        //then return the value
+        //if(minCoins[amount - 1] != 0) {
+        //    return minCoins[amount - 1];
+        //}
+
+
+		//Consider all the coins
+        for(int i = 0; i < c.length; ++i) {
+			//For each try deducing the amount and next possible options
+			//increment the no. of coins when considered
+            int curr = coins(c, val - c[i], count + 1);
+            if(curr != -1) {
+				//If valid value is returned then get min out of them
+                min = Math.min(min, curr);
+            }
+        }
+		//In some cases all values may lead to dead end
+		//hence the original min var value is not changed
+        return min == Integer.MAX_VALUE ? -1 : min;
+
+        //0 based index so we have amount - 1 as index
+        //minCoins[ amount - 1 ] = (min == Integer.MAX_VALUE ? -1 : min);
+        //return minCoins[ amount - 1 ];
+	}
 
     /*
      * This is top down approach. Here we can clearly see that the function is of the type F(S) = F( S - c ) + 1.
