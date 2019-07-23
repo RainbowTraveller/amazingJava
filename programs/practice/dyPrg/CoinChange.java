@@ -48,9 +48,11 @@ public class CoinChange {
             System.out.println("Total Time to heavy recursion : " + (System.currentTimeMillis() - start ) / 1000);
             */
 
+            /*
             System.out.println("Highly Recursive and exhaustive : ");
             System.out.println("Minimum Coins Required : " + getMinCoinsRecursion(coins, amount, 0));
             System.out.println("Total Time to heavy recursion : " + (System.currentTimeMillis() - start ) / 1000);
+            */
 
             /*
             System.out.println("Top Down approach : Starting with amount");
@@ -59,10 +61,10 @@ public class CoinChange {
             System.out.println("Total Time to top down : " + (System.currentTimeMillis() - start ) / 1000);
             */
 
-            /*System.out.println("Top Down approach : Starting with first 1");
+            System.out.println("Top Down approach : Starting with first 1");
             start = System.currentTimeMillis();
-            System.out.println("Minimum Coins Required : " + getMinCoins(coins,amount));
-            System.out.println("Total Time to bottom up :: " + (System.currentTimeMillis() - start ) / 1000);*/
+            System.out.println("Minimum Coins Required : " + getMinCoinsDyn(coins,amount));
+            System.out.println("Total Time to bottom up :: " + (System.currentTimeMillis() - start ) / 1000);
         }
     }
 
@@ -223,5 +225,41 @@ public class CoinChange {
         }
         System.out.println("Array : " + Arrays.toString(dp));
         return dp[amount] > amount ? -1 : dp[amount];
+    }
+
+    public static int getMinCoinsDyn(int [] coins, int amount) {
+        //adjust array length
+        int max = amount + 1;
+
+        //tracking
+        int[][] dp = new int[coins.length][amount + 1];
+
+        for(int i = 0; i < dp.length; ++i) {
+            dp[0][i] = 0;
+        }
+
+        //Filling array with max amount + !
+        Arrays.fill(dp[0], max);
+
+        //System.out.println("Array : " + Arrays.toString(dp));
+        //Consider all amounts from 1 to actual amount
+        for (int i = 1; i < coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
+                //Check if coin denomination is less than or equal to amount
+                //if it is greater then we can not choose this coin for our solution
+                if (coins[i] <= j) {
+                    //Get this difference current amount ( i ) and current coin
+                    //denomination ( coin[j] )
+                    //Check if we have a good value at this position meaning if this denomination of
+                    //difference is present and has figured out it's coins. If so it will require 1 more coins
+                    //of current denomination to reach the sum
+                    dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - coins[i]] + 1);
+                } else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+
+        return dp[coins.length - 1][amount] > amount ? -1 : dp[coins.length - 1][amount];
     }
 }
