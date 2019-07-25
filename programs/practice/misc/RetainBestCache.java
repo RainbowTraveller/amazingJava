@@ -41,17 +41,18 @@ public class RetainBestCache<K, T extends Rankable> {
             }
             cache.put(key, desired);
             long currentRank = desired.getRank();
-            Set<K> keySet = ranking.get( currentRank );
-            if( keySet == null ) {
-                keySet = new LinkedHashSet<K>();
-            } else {
-                keySet.add( key );
-            }
+            Set<K> keySet = ranking.getOrDefault( currentRank, new LinkedHashSet<K>());
+            keySet.add( key );
             ranking.put( currentRank, keySet );
             return desired;
         }
     }
 
+    /**
+     *  1. Get lowest ranked elements and remove oldest among them ( as controlled by linked hash set )
+     *  2. If the lowest rank set is empty remove this entry from cache as well
+     *  3. Finally remove this entry from actual cache as well
+     */
     private void evictElement( T desired ) {
         long lowestRank = ranking.firstKey();//Tree Set So first will be having lowest rank
         Set<K> lowestRankedKeys = ranking.get( lowestRank );// get corr Set of Keys
