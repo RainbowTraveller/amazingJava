@@ -10,10 +10,11 @@ public class AlieanLanguage {
 
     public static void main(String [] args) {
         String[] words = {
-            //"wrt","wrf","er","ett","rftt"
-            "z", "z"
+            "wrt","wrf","er","ett","rftt"
+            //"z", "z"
         };
         AlieanLanguage al = new AlieanLanguage();
+        System.out.println("Topographical Order : " +al.getTopographicalOrder(words));
     }
 
     public String getTopographicalOrder(String [] words) {
