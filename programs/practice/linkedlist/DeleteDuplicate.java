@@ -6,11 +6,11 @@ public class DeleteDuplicate {
             HashSet<Integer> track = new HashSet<Integer>();
             track.put(HEAD.data);
             while(ptr.next != null) {
-                if(track.contains(ptr.next.data) == null) {
+                if(track.contains(ptr.next.data)) {
+                    ptr.next = ptr.next.next;
+                } else {
                     track.put(ptr.next.data);
                     ptr = ptr.next;
-                } else {
-                    ptr.next = ptr.next.next;
                 }
             }
         }
@@ -22,9 +22,8 @@ public class DeleteDuplicate {
             while(ptr.next != null) {
                 if(ptr.data == ptr.next.data) {
                     ptr.next = ptr.next.next;
-                } else {
-                    ptr = ptr.next.next;
                 }
+                ptr = ptr.next;
             }
         }
     }
