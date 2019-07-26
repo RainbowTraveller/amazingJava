@@ -36,20 +36,18 @@ public class MaxWaterContainer {
                         lmax = height[start];
                         //New greater lmax, calculate area at once
                         w = Math.max ((end - start) * Math.min(lmax, rmax), w);
-                    } else {
-                        //if current height is still less than lmax then continue
-                        start++;
                     }
+                    //if current height is still less than lmax then continue
+                    start++;
                 } else {
                     // or try to find greater right max
                      if(rmax < height[end]) {
                         rmax = height[end];
                         //New greater rmax, calculate area at once
                         w = Math.max ((end - start) * Math.min(lmax, rmax), w);
-                    } else {
-                        //if current height is still less than rmax then continue
-                        end--;
-                     }
+                    }
+                    //if current height is still less than rmax then continue
+                    end--;
                 }
             }
         }
