@@ -10,14 +10,14 @@ import com.rnrmedia.social.messenger.model.Profile;
 public class DatabaseUtil {
 
     private static Map<Long, Message> messages = new HashMap<Long, Message>();
-    private static Map<Long, Profile> profiles  = new HashMap<Long, Profile>();
+    private static Map<String, Profile> profiles  = new HashMap<String, Profile>();
 
 
     public static Map<Long, Message> getMessages() {
         return messages;
     }
 
-    public static Map<Long, Profile> getProfiles() {
+    public static Map<String, Profile> getProfiles() {
         return profiles;
     }
 }
