@@ -58,21 +58,21 @@ class CommonCourses {
 
   public static Map<String, List<String>> getCoursesForStudent( String[][] studentCoursePairs) {
 
-    Map<String, List<String>> studentCourseTrakcer = null;
+    Map<String, List<String>> studentCourseTracker = null;
 
     if(studentCoursePairs != null) {
-      studentCourseTrakcer = new HashMap<String, List<String>>();
+      studentCourseTracker = new HashMap<String, List<String>>();
       //Create Map of student ids and courses
       for(int i = 0; i < studentCoursePairs.length; ++i) {
         String[] currPair = studentCoursePairs[i];
         String studentId = currPair[0];
         String course = currPair[1];
-        List<String> courses = studentCourseTrakcer.getOrDefault(studentId, new LinkedList<String>());
+        List<String> courses = studentCourseTracker.getOrDefault(studentId, new LinkedList<String>());
         courses.add(course);
-        studentCourseTrakcer.put(studentId, courses);
+        studentCourseTracker.put(studentId, courses);
       }
     }
-    return studentCourseTrakcer;
+    return studentCourseTracker;
   }
 
   public static Map<List<String>, List<String>> getCommonCourses( Map<String, List<String>> studentCourseTracker) {
