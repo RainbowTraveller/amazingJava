@@ -6,13 +6,11 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import com.rnrmedia.social.messenger.model.Message;
-import com.rnrmedia.social.messenger.model.Profile;
 import com.rnrmedia.social.messenger.database.DatabaseUtil;
 
 public class MessageService {
 
     private Map<Long, Message> messages = DatabaseUtil.getMessages();
-    private Map<Long, Profile> profiles = DatabaseUtil.getProfiles();
 
     public MessageService () {
         messages.put(1L, new Message(1L, "Hi There", new Date(), "Milo"));
