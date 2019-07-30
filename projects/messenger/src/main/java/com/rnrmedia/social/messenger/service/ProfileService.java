@@ -3,7 +3,6 @@ package com.rnrmedia.social.messenger.service;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.HashMap;
 
 import com.rnrmedia.social.messenger.database.DatabaseUtil;
 import com.rnrmedia.social.messenger.model.Profile;
@@ -15,6 +14,8 @@ public class ProfileService {
 
     public ProfileService() {
         profiles.put("Holmes", new Profile(1L, "Baker", "Sherlock", "Holmes"));
+        profiles.put("Bro", new Profile(2L, "Ebinburgh", "Mycroft", "Holmes"));
+        profiles.put("Enemy", new Profile(3L, "Cardiff", "Moriarty", "Debrah"));
     }
 
     public List<Profile> getAllProfiles() {
@@ -34,7 +35,7 @@ public class ProfileService {
     }
 
     public Profile updateProfile(Profile profile) {
-        if(profile.getId() <= 0) {
+        if(profile.getProfileName().isEmpty()) {
             return null;
         }
         profiles.put(profile.getProfileName(), profile);
