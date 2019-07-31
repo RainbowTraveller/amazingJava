@@ -7,7 +7,10 @@ import javax.ws.rs.HeaderParam;
 import javax.ws.rs.MatrixParam;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 
 @Path("injectdemo")
@@ -15,6 +18,10 @@ import javax.ws.rs.core.MediaType;
 @Produces(MediaType.TEXT_PLAIN)
 
 public class InjectDemoResource {
+    /**
+     * This is little tedious as in what is there are more such params. We also
+     * need to know the names of them to set. So we need some improvement
+     */
 
     @GET
     @Path("annotations")
@@ -22,6 +29,15 @@ public class InjectDemoResource {
                                                 @HeaderParam("authSessionId") String id,
                                                 @CookieParam("name") String cookie) {
 		return "Matrix param : " + matrixParam + " Header : " + id + " Cookie : " + cookie ;
+    }
+
+
+    @GET
+    @Path("context")
+    public String getParametersUsingContext(@Context UriInfo uriInfo, @Context HttpHeaders headers ) {
+        String path = uriInfo.getAbsolutePath().toString();
+        String cookie = headers.getCookies().toString();
+        return "URI : " + path + " Cookie : " + cookie;
     }
 }
 
