@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 import com.rnrmedia.social.messenger.service.MessageService;
 import com.rnrmedia.social.messenger.model.Message;
+import com.rnrmedia.social.messenger.resources.bean.MessageFilterBean;
 
 /**
  * Root resource (exposed at "messages" path)
@@ -32,11 +34,12 @@ public class MessageResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    public List<Message> getIt(@QueryParam("year") int year, @QueryParam("from") int from, @QueryParam("size") int size) {
-        if(year > 0) {
-            return msgService.getMessagesForYear(year);
-        } else if (from >=0 && size >= 0) {
-            return msgService.getPaginatedMessages(from, size);
+    //public List<Message> getIt(@QueryParam("year") int year, @QueryParam("from") int from, @QueryParam("size") int size) {
+    public List<Message> getIt(@BeanParam MessageFilterBean bean) {
+        if(bean.getYear() > 0) {
+            return msgService.getMessagesForYear(bean.getYear());
+        } else if (bean.getFrom() >=0 && bean.getSize() >= 0) {
+            return msgService.getPaginatedMessages(bean.getFrom(), bean.getSize());
 
         }
         return msgService.getAllMessages();
