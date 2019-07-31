@@ -8,6 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -31,7 +32,13 @@ public class MessageResource {
      * @return String that will be returned as a text/plain response.
      */
     @GET
-    public List<Message> getIt() {
+    public List<Message> getIt(@QueryParam("year") int year, @QueryParam("from") int from, @QueryParam("size") int size) {
+        if(year > 0) {
+            return msgService.getMessagesForYear(year);
+        } else if (from >=0 && size >= 0) {
+            return msgService.getPaginatedMessages(from, size);
+
+        }
         return msgService.getAllMessages();
     }
 

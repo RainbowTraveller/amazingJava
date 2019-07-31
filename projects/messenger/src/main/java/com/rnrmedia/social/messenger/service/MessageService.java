@@ -1,12 +1,13 @@
 package com.rnrmedia.social.messenger.service;
 
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
-import com.rnrmedia.social.messenger.model.Message;
 import com.rnrmedia.social.messenger.database.DatabaseUtil;
+import com.rnrmedia.social.messenger.model.Message;
 
 public class MessageService {
 
@@ -36,6 +37,26 @@ public class MessageService {
         */
 
         return new LinkedList<Message>(messages.values());
+    }
+
+    public List<Message> getMessagesForYear(int year) {
+        List<Message> yearMessages = new LinkedList<Message>();
+        Calendar cal = Calendar.getInstance();
+        for(Message msg : messages.values()) {
+            cal.setTime(msg.getCreated());
+            if(cal.get(Calendar.YEAR) == year) {
+                yearMessages.add(msg);
+            }
+        }
+        return yearMessages;
+    }
+
+
+    public List<Message> getPaginatedMessages(int from, int size) {
+        LinkedList<Message> list  = new LinkedList<Message>(messages.values());
+        if(from + size > list.size()) return new LinkedList<Message>();
+        return list.subList(from, from + size);
+
     }
 
     public Message addMessage( Message msg ) {
