@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.rnrmedia.social.messenger.database.DatabaseUtil;
 import com.rnrmedia.social.messenger.model.Message;
+import com.rnrmedia.social.messenger.exception.DataNotFoundException;
 
 public class MessageService {
 
@@ -76,7 +77,11 @@ public class MessageService {
     }
 
     public Message getMessage(long id) {
-        return messages.get(id);
+        Message msg = messages.get(id);
+        if(msg == null) {
+            throw new DataNotFoundException("Message with id " + id + " not found");
+        }
+        return msg;
     }
 
 
