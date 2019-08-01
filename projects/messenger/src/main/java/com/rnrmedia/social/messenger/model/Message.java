@@ -1,7 +1,10 @@
 package com.rnrmedia.social.messenger.model;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 @XmlRootElement
 public class Message {
@@ -9,16 +12,19 @@ public class Message {
     private String message;
     private Date created;
     private String author;
+    private Map<Long, Comment> comments;
 
 
     public Message() {
 
     }
+
     public Message (long id, String message, Date date, String author) {
         this.id = id;
         this.message = message;
         this.created = date;
         this.author = author;
+        this.comments = new HashMap<>();
     }
 
     public void setId( long id  ) {
@@ -54,5 +60,14 @@ public class Message {
 
     public String getAuthor() {
         return author;
+    }
+
+    @XmlTransient
+    public Map<Long, Comment> getComments() {
+        return this.comments;
+    }
+
+    public void setComments(Map<Long, Comment> comments) {
+        this.comments = comments;
     }
 }

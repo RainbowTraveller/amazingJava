@@ -17,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import com.rnrmedia.social.messenger.service.MessageService;
 import com.rnrmedia.social.messenger.model.Message;
 import com.rnrmedia.social.messenger.resources.bean.MessageFilterBean;
+import com.rnrmedia.social.messenger.resources.CommentResource;
 
 /**
  * Root resource (exposed at "messages" path)
@@ -70,5 +71,10 @@ public class MessageResource {
     @POST
     public Message  addMessage(Message message) {
         return msgService.addMessage(message);
+    }
+
+    @Path("/{messageId}/comments")
+    public CommentResource redirectToCommentResource() {
+        return new CommentResource();
     }
  }
