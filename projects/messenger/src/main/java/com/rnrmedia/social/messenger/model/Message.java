@@ -1,6 +1,11 @@
 package com.rnrmedia.social.messenger.model;
+
+import com.rnrmedia.social.messenger.model.Link;
+
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlRootElement;
@@ -13,6 +18,7 @@ public class Message {
     private Date created;
     private String author;
     private Map<Long, Comment> comments;
+    private List<Link> links = new LinkedList<Link>();
 
 
     public Message() {
@@ -69,5 +75,19 @@ public class Message {
 
     public void setComments(Map<Long, Comment> comments) {
         this.comments = comments;
+    }
+
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public List<Link> getLinks() {
+        return this.links;
+    }
+
+    public void addLink(String url, String rel) {
+        Link link = new Link(url, rel);
+        this.links.add(link);
     }
 }
