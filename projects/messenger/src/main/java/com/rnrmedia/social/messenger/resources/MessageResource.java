@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import com.rnrmedia.social.messenger.model.Message;
+import com.rnrmedia.social.messenger.model.Profile;
 import com.rnrmedia.social.messenger.resources.bean.MessageFilterBean;
 import com.rnrmedia.social.messenger.service.MessageService;
 
@@ -55,15 +56,38 @@ public class MessageResource {
     @Path("/{messageId}")
     public Message getMessage(@PathParam("messageId") long messageId, @Context UriInfo uriInfo) {
         Message message = msgService.getMessage(messageId);
-        String uri = uriInfo.getBaseUriBuilder()
+        message.addLink(getURIForSelf(uriInfo, message), "self");
+        message.addLink(getURIForProfile(uriInfo, message), "profile");
+        message.addLink(getURIForComments(uriInfo, message), "comments");
+        return message;
+    }
+
+
+    private String getURIForComments(UriInfo uriInfo, Message message) {
+        return uriInfo.getBaseUriBuilder()
+            .path(MessageResource.class)
+            .path(MessageResource.class,"redirectToCommentResource")
+            .path(CommentResource.class)
+            .resolveTemplate("messageId", message.getId())
+            .build()
+            .toString();
+    }
+
+    private String getURIForSelf(UriInfo uriInfo, Message message) {
+        return uriInfo.getBaseUriBuilder()
             .path(MessageResource.class)
             .path(Long.toString(message.getId()))
             .build()
             .toString();
-        message.addLink(uri, "self");
-        return message;
     }
 
+    private String getURIForProfile(UriInfo uriInfo, Message message) {
+        return uriInfo.getBaseUriBuilder()
+            .path(ProfileResource.class)
+            .path(message.getAuthor())
+            .build()
+            .toString();
+    }
     @PUT
     @Path("/{messageId}")
     public Message updateMessage(@PathParam("messageId") long messageId, Message message) {
