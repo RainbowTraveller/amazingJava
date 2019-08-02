@@ -18,6 +18,14 @@ public class Link {
         this.link = link;
     }
 
+    public String getLink() {
+        return this.link;
+    }
+
+    public String getRelation() {
+        return this.relation;
+    }
+
     public void setRelation( String rel ) {
         this.relation = rel;
     }
