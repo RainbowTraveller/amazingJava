@@ -15,22 +15,16 @@ public class MergeBT {
     }
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
         //If both are null nothing to do
-        if(t1 == null && t2 == null) {
-            return null;
+        if(t1 != null && t2 != null) {
+            //both are not null so process
+            t1.val += t2.val;
+            t1.left = mergeTrees(t1.left, t2.left);
+            t1.right = mergeTrees(t1.right, t2.right);
+            return t1;
         } else {
-            //Take whichever is not null
-            if(t1 != null && t2 == null) {
-                return t1;
-            } else if ( t2 != null && t1 == null) {
-                return t2;
-
-            } else {
-                //both are not null so process
-                t1.val += t2.val;
-                t1.left = mergeTrees(t1.left, t2.left);
-                t1.right = mergeTrees(t1.right, t2.right);
-                return t1;
-            }
+            //if both are null, null will be returned or non-null node will
+            //be returned
+            return t1 == null ? t2 : t1;
         }
 
     }
