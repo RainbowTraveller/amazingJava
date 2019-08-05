@@ -163,6 +163,9 @@ public class BinaryTree {
     }
 
 
+    /**
+     * Print all paths from root to leaves
+     */
     public void printPaths() {
         Deque<Node> path = new LinkedList<Node>();
         pathHelper(root, path);
