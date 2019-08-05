@@ -31,11 +31,40 @@ public class LongestPalindromeSubsequence {
         //String str = "abcd";
         //String str = "aaaa";
         String str = "abcb";
-        System.out.println("Total palindromic "+
-                            "subsequence are : "
+        System.out.println("Longest palindromic "+
+                            "subsequence length : "
                               + palindromicSubSequenceCounter(str));
+        System.out.println("Longest palindromic "+
+                            "subsequence length : "
+                              + getMaxLengthOfPalindromicSubsequnce(str, 0, str.length() - 1));
     }
 
+    /**
+     * Recursive approach with 2 base cases.
+     * 1 char long string
+     * and 2 char long string
+     * end characters are matching then length of inner palindrome + these 2 characters
+     * if they are not matching, then check for longest palindrome length from first character
+     * to the character before last one i.e. exclude last one. Also get length of largest palin
+     * drome subsequence if any from last to char next to first one i.e. excluding first 1.
+     * and then return max of these 2 lengths obtained.
+     *
+     * Exponential and drawback is subproblems are called repeatedly
+     */
+    public static int getMaxLengthOfPalindromicSubsequnce( String s, int start, int end ) {
+        if(start == end) {
+            return 1;
+        }
+        char sChar = s.charAt(start);
+        char eChar = s.charAt(end);
+        if(sChar == eChar && end - start == 1) {
+            return 2;
+        } else if( sChar == eChar ) {
+            return getMaxLengthOfPalindromicSubsequnce(s, start + 1, end - 1) + 2;
+        } else {
+            return Math.max(getMaxLengthOfPalindromicSubsequnce(s, start + 1, end), getMaxLengthOfPalindromicSubsequnce(s, start, end - 1));
+        }
+    }
     public static int palindromicSubSequenceCounter( String input ) {
         if(input != null) {
             int length = input.length();
