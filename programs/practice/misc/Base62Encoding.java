@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.HashMap;
+import java.util.stream.IntStream;
 
 public class Base62Encoding {
     public static void main(String[] args) {
@@ -7,18 +8,14 @@ public class Base62Encoding {
         String baseStr = args[1];
 
         Map<Integer, String> encoding = new HashMap<Integer, String>();
-        for(int i = 0; i < 26; ++i) {
-            encoding.put(i,  Character.toString((char)('A' + i)));
-        }
+        IntStream.range(0,26)
+            .forEach(i -> encoding.put(i,  Character.toString((char)('A' + i))));
 
-        for(int i = 26; i < 52; ++i) {
-            encoding.put(i,  Character.toString((char)('a' + (i - 26))));
-        }
+        IntStream.range(26, 52)
+            .forEach( i -> encoding.put(i,  Character.toString((char)('a' + (i - 26)))));
 
-        int index = 0;
-        for(int i = 52; i < 62; ++i) {
-            encoding.put(i,  Integer.toString(index++));
-        }
+        IntStream.range(52, 62)
+            .forEach(i -> encoding.put(i,  Integer.toString(i - 52)));
 
         //for(Integer i : encoding.keySet()) {
         //    System.out.println("Key : " + i + " Value : " + encoding.get(i) );
