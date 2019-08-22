@@ -1,65 +1,110 @@
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
 
-
 public class LRUCache {
-	private LinkedList<Integer> cache;
-	private Map<Integer, Integer> tracker;
-	private int capacity;
 
+    class DoubleLLNode {
+        int key;
+        int val;
+        DoubleLLNode prev;
+        DoubleLLNode next;
 
-	public LRUCache( int capacity ) {
-		//List containing actual data
-		this.cache		= new LinkedList<Integer>();
-		//Map stored the index where the node for key is located
-		this.tracker	= new HashMap<Integer, Integer>();
-		this.capacity	= capacity;
-	}
+        public DoubleLLNode() {
+            key = 0;
+            val = 0;
+            prev = null;
+            next = null;
+        }
 
-	public String get( int key ) {
-		String msg = null;
-		if( tracker.containsKey( key ) ) {
-			int indexIntoList = tracker.get( key );
-			//First adjust the indexes of the subsequent elements in the cache
-			adjustIndex( indexIntoList );
-			//Remove the element to be added at the end
-			cache.remove( indexIntoList );
-			msg = "Cache Hit";
-		} else {
-			msg = "Cache Miss";
-		}
-		set( key );
-		return msg;
-	}
+        public DoubleLLNode(int key, int val) {
+            this.key = key;
+            this.val = val;
+            this.prev = null;
+            this.next = null;
+        }
 
-	public void set( int key ) {
-		if( cache.size() == this.capacity ) {
-			adjustIndex( 0 );
-			int leastRecentlyUsed = cache.removeFirst();
-			System.out.println( "Capacity reached...removing first element :  " + leastRecentlyUsed);
-			tracker.remove( leastRecentlyUsed );
-		}
-		cache.addLast( key );
-		tracker.put( key, cache.size() - 1);
-		System.out.println( "Size : " + cache.size() );
-		System.out.println( "Trcker :  " + tracker);
-	}
+        public String toString() {
+            return new String("Key : " + key + " Value : " + val );
+        }
+    }
 
-	/* Decrement the index of all subsequent elements from the cache that is tracked
-	 */
-	private void adjustIndex( int indexIntoList ) {
-		for( int i = indexIntoList + 1; i < cache.size(); ++i ) {
-			int element  = cache.get( i );
-			int index = tracker.get( element );
-			index--;
-			tracker.put( element, index );
-		}
-	}
-	public String toString() {
-		return "Cache Contents : " + cache;
-	}
+    private Map<Integer,DoubleLLNode> cache;
+    private int capacity;
+    private DoubleLLNode head;
+    private DoubleLLNode tail;
+
+    public LRUCache( int capacity ) {
+        this.capacity = capacity;
+        this.cache = new HashMap<>();
+        head = new DoubleLLNode();
+        tail = new DoubleLLNode();
+        head.next = tail;
+        tail.prev = head;
+    }
+
+    //Adding latest element here
+    private void addNodeInFront(DoubleLLNode node) {
+        node.next = head.next;
+        node.prev = head;
+
+        head.next.prev = node;
+        head.next = node;
+    }
+
+    //When capacity overflows, remove node from end
+    private DoubleLLNode  removeNodeFromEnd() {
+        DoubleLLNode stale = tail.prev;
+        removeNode(stale);
+        cache.remove(stale.key);
+        return stale;
+    }
+
+    //remove specific node
+    private void removeNode(DoubleLLNode node) {
+        DoubleLLNode currPrev = node.prev;
+        DoubleLLNode currNext = node.next;
+        currPrev.next = currNext;
+        currNext.prev = currPrev;
+        node.next = null;
+        node.prev = null;
+    }
+
+    public void put(int key, int value) {
+        //add and if capacity is overflown, remove last node which is stale
+        if(cache.containsKey(key)) {
+            DoubleLLNode desiredNode = cache.get(key);
+            //Set new value
+            desiredNode.val = value;
+            //Put at the start, indicating recently used node
+            removeNode(desiredNode);
+            addNodeInFront(desiredNode);
+        } else {
+            DoubleLLNode notFoudNode = new DoubleLLNode(key, value);
+            addNodeInFront(notFoudNode);
+            cache.put(key, notFoudNode);
+            if(cache.size() > capacity) {
+                removeNodeFromEnd();
+            }
+        }
+    }
+
+    public int get(int key, int value) {
+        //Check if the key exists or return -1;
+        if(cache.containsKey(key)) {
+            DoubleLLNode foundNode = cache.get(key);
+            int val = foundNode.val;
+            //Put at the start, indicating recently used node
+            removeNode(foundNode);
+            addNodeInFront(foundNode);
+            return val;
+        }
+        return -1;
+    }
+
+    public String toString() {
+        return cache.toString();
+    }
 
 	public static void main ( String[] args ) {
 		Scanner sc = new Scanner(System.in);
@@ -69,8 +114,9 @@ public class LRUCache {
 
 		while( true ) {
 			System.out.println("Please enter Cache element : ");
-			int i = sc.nextInt();
-			System.out.println( lru.get( i ) );
+			int key = sc.nextInt();
+			int value = sc.nextInt();
+			lru.put( key, value );
 			System.out.println( lru );
 		}
 	}
