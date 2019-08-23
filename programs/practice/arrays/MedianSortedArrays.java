@@ -16,9 +16,12 @@ public class MedianSortedArrays {
         int [] y = {-2, 5, 6, 7,14,35,38};
         */
         //1, 2, 3, 5, 6, 6, 7, 8, 11, 14, 16, 33, 38
-        int [] x = {23, 25,27,30};
-        int [] y = {-2, 5, 6, 7,14};
+        //int [] x = {23, 25,27,30};
+        //int [] y = {-2, 5, 6, 7,14};
         //-2, 5, 6, 7, 14, 23, 25, 27, 30
+
+        int [] x = {1,3};
+        int [] y = {2};
         System.out.println("Median of 2 sorted arrays : " + findMedianLinear(x, y));
         System.out.println("Median of 2 sorted arrays : " + findMedian(x, y));
     }
@@ -49,10 +52,10 @@ public class MedianSortedArrays {
         int lx = x.length;
         int ly = y.length;
         int count = (lx + ly) / 2;
+        boolean isEven = (lx + ly) % 2 == 0;
         int prev = -1, curr = -1;
         int indexX = 0, indexY = 0;
-        //Count is even means actual elements are odd in number as the count is 0 based
-        if(count % 2 == 0) {
+        if(!isEven) {
             for(int i = 0; i <= count; ++i) {
                 if( indexX != lx && indexY != ly ) {
                     curr = x[indexX] > y[indexY] ? y[indexY++] : x[indexX++];
@@ -63,7 +66,6 @@ public class MedianSortedArrays {
                 }
             }
             return curr;
-
         } else {
             for(int i = 0; i <= count; ++i) {
                 prev = curr;
@@ -79,7 +81,7 @@ public class MedianSortedArrays {
         }
     }
 
-    public static int findMedian(int[] x, int[] y) {
+    public static double findMedian(int[] x, int[] y) {
         if(x != null && y != null) {
             int xLen = x.length;
             int yLen = y.length;
@@ -108,10 +110,10 @@ public class MedianSortedArrays {
     //    if the length is odd we have 1 extra element on left side due to code on line 85
     //    apply formula in below code to get desired median
     //
-    public static int medianHelper(int[] x, int [] y, int start, int end, int desiredPartition, boolean isOdd) {
+    public static double medianHelper(int[] x, int [] y, int start, int end, int desiredPartition, boolean isOdd) {
 
-        int median = -1;
-        if(start < end ) {
+        double median = -1;
+        if(start <= end ) {
             int partitionX = (start + end) / 2;
             int partitionY = desiredPartition - partitionX;
 
@@ -129,7 +131,7 @@ public class MedianSortedArrays {
                 if(isOdd) {
                     median = Math.max(leftMaxY, leftMaxX);
                 } else {
-                    median = (Math.max(leftMaxX, leftMaxY) + Math.min(rightMinX, rightMinY))  / 2;
+                    median = (Math.max(leftMaxX, leftMaxY) + Math.min(rightMinX, rightMinY))  / 2D;
                 }
             } else if(leftMaxX > rightMinY) {
                 median = medianHelper(x, y, start, partitionX - 1, desiredPartition, isOdd);
