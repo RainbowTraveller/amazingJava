@@ -92,21 +92,30 @@ public class LinkedList {
 			Node eight 	= new Node ( 8 );
 			Node nine 	= new Node ( 9 );
 
-				one.next 	= two;
-				two.next 	= three;
-				three.next 	= four;
-				four.next 	= five;
-				five.next 	= six;
-				six.next 	= seven;
-				seven.next 	= three;
-			//	eight.next 	= nine;
-			//	nine.next 	= null;
+            one.next 	= two;
+            two.next 	= three;
+            three.next 	= four;
+            four.next 	= five;
+            five.next 	= six;
+            six.next 	= seven;
+            seven.next 	= eight;
+            eight.next 	= nine;
+            nine.next 	= null;
 
-			System.out.println( LinkedList.isCyclic( one ) );
-
+			//System.out.println( LinkedList.isCyclic( one ) );
+            Node tracker = one;
+            while(tracker != null) {
+                System.out.println("Node " + tracker.value);
+                tracker = tracker.next;
+            }
+            //LinkedList.reversePrint( one );
+            tracker = LinkedList.reverseRecursive( one);
+            while(tracker != null) {
+                System.out.println("Node " + tracker.value);
+                tracker = tracker.next;
+            }
 		}
 
-		/*
 
 	public boolean equals(LinkedList newList) {
 		boolean result = false;
@@ -140,8 +149,8 @@ public class LinkedList {
 	}
 
 	public Node reverse(Node head) {
-// Time complexity: : O(n)
-// Space complexity: O(1)
+        // Time complexity: : O(n)
+        // Space complexity: O(1)
 		Node prev = null;
 		Node next = null;
 		Node curr = head;
@@ -153,6 +162,48 @@ public class LinkedList {
 		}
 		return prev;
 	}
-*/
+
+	public static Node reverseRecursive(Node head) {
+        // Time complexity: : O(n)
+        // Space complexity: O(1)
+        if(head  == null || head.next == null) {
+            return head;
+        }
+        Node reversed = reverseRecursive(head.next);
+        head.next.next = head;
+        head.next = null;
+        return reversed;
+    }
+
+	public static void reversePrint(Node head) {
+        // Time complexity: : O(n)
+        // Space complexity: O(1)
+        if(head  == null) {
+            return;
+        }
+        reversePrint(head.next);
+        System.out.println(head.value);
+    }
+
+	public static void reversePrintFaster(Node head) {
+        // Time complexity: : O()
+        // Space complexity: O()
+        if(head  == null) {
+            return;
+        }
+        Node fast = head;
+        Node slow = head;
+        while(fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next;
+            if(fast != null) {
+                fast = fast.next;
+            }
+        }
+        slow.next = null;
+        reversePrintFaster(head);
+        reversePrintFaster(slow);
+        System.out.println(head.value);
+    }
 }
 
