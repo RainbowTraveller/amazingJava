@@ -39,11 +39,13 @@ public class LongestSubStringwithUniqueChars {
         int maxLen = -1;
         int len = 0;
         if (s != null) {
+            maxLen = 1;//min length is 1 char
             len = s.length();
             for (int i = 0; i < len; ++i) {
                 for (int j = i + 1; j < len; ++j) {
                     if (hasUniqueChars(s, i, j)) {
-                        maxLen = Math.max(maxLen, j - i);
+                        maxLen = Math.max(maxLen, j - i + 1);
+                        System.out.println(" i : " + i + " j " + j);
                     }
                 }
             }
@@ -53,7 +55,7 @@ public class LongestSubStringwithUniqueChars {
 
     public static boolean hasUniqueChars(String s, int i, int j) {
         Set<Character> charSet = new HashSet<Character>();
-        while (i < j) {
+        while (i <= j) {//Need to compare all characters so <=
             char curr = s.charAt(i);
             if (charSet.contains(curr)) {
                 return false;
@@ -88,9 +90,10 @@ public class LongestSubStringwithUniqueChars {
 
     /*
      * This involves no set. We just play with the indexes. We again have a starting
-     * index and current index. If char at curr index is found between starting and
-     * curr index, then it is repeating one. So we increment starting index to this
-     * found occurrence of the char. And continue. when not found we record the
+     * index and current index. Initially both start with 0.
+     * If char at curr index is found between starting and curr index,
+     * then it is repeating one. So we increment starting index to 1 more than this
+     * found occurrence of the char. And continue. When not found we record the
      * length of the string obtained so far
      */
     public static int lengthOfLongestSubstringLinearIndex(String s) {
@@ -106,10 +109,7 @@ public class LongestSubStringwithUniqueChars {
                     // Adjust the start to shrink the sliding window
                     // start with the next character where the previous occurrence
                     // of current end char
-                    start = end;// We non unique character at this index
-                    // if index = 3, characters are 4 but we already
-                    // have end character added so reduce length
-                    // by index value which is perfect
+                    start = index + 1;// We have non unique character at this index
                 }
                 end++;
             }
