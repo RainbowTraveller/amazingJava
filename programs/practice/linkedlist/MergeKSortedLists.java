@@ -12,6 +12,8 @@
  * an array. Merge them to form a single list of sorted elements
  */
 
+import java.util.PriorityQueue;
+
 class MergeKSortedLists {
     public static void main(String [] args) {
 
@@ -81,6 +83,27 @@ class MergeKSortedLists {
         //This will be ok as original list is already sorted
         //This can be null too which don't make any difference
         headTracker.next = node;
+        return head.next;
+    }
+
+    public ListNode mergeKListsWithHeap(ListNode[] lists) {
+        PriorityQueue<ListNode> nodeHeap = new PriorityQueue<>((nodeA, nodeB) -> nodeA.val - nodeB.val);
+        //Now add all the first nodes to the queue
+        for(ListNode first : lists) {
+            nodeHeap.offer(first);
+        }
+
+        ListNode head = ListNode(0); //Dummy head
+        ListNode pointer = head;
+
+        while(!nodeHeap.isEmpty()) {
+            ListNode least = nodeHeap.poll();
+            pointer.next = least;
+            pointer = pointer.next;
+            if(least.next != null) {
+                nodeHeap.offer(least.next);
+            }
+        }
         return head.next;
     }
 
