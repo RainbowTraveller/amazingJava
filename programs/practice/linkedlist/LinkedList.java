@@ -102,8 +102,9 @@ public class LinkedList {
             eight.next 	= nine;
             nine.next 	= null;
 
+
 			//System.out.println( LinkedList.isCyclic( one ) );
-            Node tracker = one;
+            /*Node tracker = one;
             while(tracker != null) {
                 System.out.println("Node " + tracker.value);
                 tracker = tracker.next;
@@ -113,6 +114,26 @@ public class LinkedList {
             while(tracker != null) {
                 System.out.println("Node " + tracker.value);
                 tracker = tracker.next;
+            }
+            */
+
+            System.out.println("Original : ");
+            Node tracker = one;
+            while(tracker != null) {
+                System.out.println("Node : " + tracker.value);
+                tracker = tracker.next;
+            }
+            evenOdd(one);
+            System.out.println("Even Odd : ");
+            tracker = one;
+            int i = 0;
+            while(tracker != null) {
+                System.out.println("Node " + tracker.value);
+                tracker = tracker.next;
+                i++;
+                if( i > 10) {
+                    break;
+                }
             }
 		}
 
@@ -185,25 +206,31 @@ public class LinkedList {
         System.out.println(head.value);
     }
 
-	public static void reversePrintFaster(Node head) {
-        // Time complexity: : O()
-        // Space complexity: O()
-        if(head  == null) {
-            return;
-        }
-        Node fast = head;
-        Node slow = head;
-        while(fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next;
-            if(fast != null) {
-                fast = fast.next;
+    //Separate even and odd numbered nodes and place even no. node
+    //as a list after odd no. list. Do it in place
+    public static void evenOdd(Node head) {
+        if(head != null) {
+            if(head != null || head.next != null) {
+                Node trackOdd = head;
+                Node even = head.next;
+                Node trackEven = head.next;
+
+                //Invariant : trackOdd points to odd and trackEven points to even node
+                //restore this at end of each iteration
+                while(trackOdd != null &&  trackOdd.next != null && trackEven != null) {
+                    trackOdd.next = trackEven.next;
+                    //System.out.print("Track Odd : " +  trackOdd.value);
+                    //System.out.println(" :: Track even : " +  trackEven.value);
+                    trackOdd = trackOdd.next;
+                    if(trackOdd != null) {
+                        trackEven.next  = trackOdd.next;
+                        trackEven = trackEven.next;
+                    }
+                }
+                trackOdd.next = even;
             }
         }
-        slow.next = null;
-        reversePrintFaster(head);
-        reversePrintFaster(slow);
-        System.out.println(head.value);
+        System.out.println("Even Odd List : " + head);
     }
 }
 
