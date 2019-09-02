@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 
 public class RotateArray {
     public static void main(String[] args) {
-        int[] input = {7,1,2,3,4,5,6,7};
+        int[] input = {7,1,2,3,4,5,6,8};
         System.out.println("Original Array : ");
         System.out.println(Arrays.stream(input)
             .mapToObj(String::valueOf)
@@ -37,6 +37,9 @@ public class RotateArray {
             .collect(Collectors.joining(", ")));
     }
 
+    /**
+     * Using new array, extra space
+     */
     public static void rotateExtraSpace(int[] input, int k) {
         int len = input.length;
         k = k % len; // if k > length
@@ -50,23 +53,47 @@ public class RotateArray {
         }
     }
 
+    // Kinda fast pointer of the list
+    // if we go k steps each time we may come back to starting index
+    // eventually. When this happens we have travelled all the cycle
     public static void rotate(int[] input, int k) {
         int len = input.length;
         k = k % len;
         int count = 0;
-        for(int start = 0; count < len; ++start) {
+            int start = 0;
             int currIndex = start;
             int currNum = input[start];
-            do {
-                int nextIndex = (currIndex + k) % len;
-                System.out.println("Curr Index  : " + currIndex + " Start : " + start + " Count : " + count + " next : " + nextIndex);
-                int backup = input[nextIndex];
-                input[nextIndex] = currNum;
-                currNum = backup;
-                currIndex = nextIndex;
-                count++;
-            } while( start != currIndex);
-            System.out.println("Curr Index  : " + currIndex + " Start : " + start);
+        do {
+            int nextIndex = (currIndex + k) % len;
+            System.out.println("Curr Index  : " + currIndex + " Start : " + start + " Count : " + count + " next : " + nextIndex);
+            int backup = input[nextIndex];
+            input[nextIndex] = currNum;
+            currNum = backup;
+            currIndex = nextIndex;
+            count++;
+        } while( start != currIndex || count < len);
+        System.out.println("Curr Index  : " + currIndex + " Start : " + start);
+    }
+
+
+    //Using reversing
+    //1. Reverse entire array
+    //2. Reverse first k elements
+    //3. Reverse last k elements
+    public static void rotateReverse(int[] nums, int k) {
+        k %= nums.length;
+        reverse(nums, 0, nums.length - 1);
+        reverse(nums, 0, k - 1);
+        reverse(nums, k, nums.length - 1);
+    }
+
+    public static void reverse(int[] nums, int start, int end) {
+        while (start < end) {
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
         }
     }
 }
