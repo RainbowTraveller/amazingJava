@@ -31,6 +31,11 @@ class ValidParenthesis {
         String pattern = sc.next();
         ValidParenthesis vp = new ValidParenthesis();
         System.out.println("Possible Valid Patterns : " + vp.removeInvalidParentheses(pattern));
+
+        //Removing invalid parenthesis to get only 1 correct string
+        System.out.println(removeInvalidParenthesis("()(()(()"));
+        System.out.println(removeInvalidParenthesis("(x)((y)"));
+        System.out.println(removeInvalidParenthesis("(a))((b)))"));
     }
 
     public List<String> removeInvalidParentheses(String s) {
@@ -165,5 +170,61 @@ class ValidParenthesis {
             //This deletion does not mean not considering, we need to make sure previous call in recursion gets buffer agnostic of what happened in this recursive call
             b.deleteCharAt(len);
         }
+    }
+
+    /*
+     * Approach to get single valid string by removing invalid parenthesis.
+     * This is O(n) method, detecting invalid ( and ) separately in 2 passes
+     * 1. For detecting invalid ), we track count of (, increment by 1 and ) decrement by 1 any ) found when the
+     *    score is 0, we mark it with a * being invalid
+     * 2. Once it is done, we again generate a count detecting extra ( is any. This will lead to a positive count value
+     * 3. We do the same thing for ( by tracking the string obtained in step 1, this time from right to left and discarding (
+     *    encountered till the count in step 2 reaches 0
+     */
+
+    public static String removeInvalidParenthesis(String input) {
+        //Get char aaray
+        char[] inputArray = input.toCharArray();
+
+        //used for tracking
+        int count = 0;
+
+        //Scan string left to right
+        for(int i = 0; i < inputArray.length; ++i) {
+
+            if(inputArray[i] == '(') {
+                count++;
+            } else if( count != 0 &&  inputArray[i] == ')') {
+                count--;
+            //If count is already 0 then the parenthesis are balanced
+            //but if current char is ) then it is not required
+            } else if (inputArray[i] == ')'){
+                inputArray[i] = '*';
+            }
+            //if character is other than ( or ) do nothing
+        }
+
+        //Now count extra ( if any
+        count = 0;
+        for(int i = 0; i < inputArray.length; ++i) {
+            if(inputArray[i] == '(') {
+                count++;
+            } else if (inputArray[i] == ')') {
+                count--;
+            }
+        }
+
+        //System.out.println(new String(inputArray) + " Count : " + count);
+
+        StringBuffer result = new StringBuffer();
+        for(int i = inputArray.length - 1 ; i >= 0; --i) {
+            //Now if character is * or count > 0 and char is ( don't include
+            if((inputArray[i] == '*') || (count > 0 && inputArray[i] == '(')) {
+                count--;
+            } else {
+                result.append(inputArray[i]);
+            }
+        }
+        return result.reverse().toString();
     }
 }
