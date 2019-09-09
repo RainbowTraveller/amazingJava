@@ -13,7 +13,7 @@ public class LongestPalindromeSubstring {
     public static void main ( String[] args ) {
 
         //Naive Approach
-        System.out.println("Naive Approach O(n^3)");
+        /*System.out.println("Naive Approach O(n^3)");
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.countSubstrings("ac"));
 
         System.out.println("LPS DYNAMIC : O(n^2) but with O(n^2) space complexity");
@@ -23,12 +23,14 @@ public class LongestPalindromeSubstring {
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaa"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("cbbd"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lpsDynamic("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        */
         System.out.println("LPS : O(n^2) with O(1) space complexity");
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("ac"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("a"));
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("aa"));
 
         System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("abcda"));
+        System.out.println("Total no. of Palindrome strings : " + LongestPalindromeSubstring.lps("ababbc"));
     }
 
     /*
