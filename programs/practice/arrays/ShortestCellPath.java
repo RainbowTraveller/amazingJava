@@ -2,13 +2,15 @@
 /*
 *
 *  Shortest Cell Path
-*  In a given grid of 0s and 1s, we have some starting row and column sr, sc and a target row and column tr, tc. Return the length of the shortest path from sr, sc to tr, tc that walks along 1 values only.
-*
+*  In a given grid of 0s and 1s, we have some starting row and column sr, sc and a target row and column tr, tc.
+*  Return the length of the shortest path from sr, sc to tr, tc that walks along 1 values only.
 *  Each location in the path, including the start and the end, must be a 1. Each subsequent location in the path must be 4-directionally adjacent to the previous location.
-*
 *  It is guaranteed that grid[sr][sc] = grid[tr][tc] = 1, and the starting and target positions are different.
-*
 *  If the task is impossible, return -1.
+*
+*  1 1 1 1
+*  0 0 0 1
+*  1 1 1 1
 */
 
 import java.io.*;
@@ -84,6 +86,58 @@ public class ShortestCellPath {
         return -1;
     }
 
+
+    public static int shortestPathIterating(int [][] grid, int x, int y, int len, int dx, int dy) {
+        //Check if out of bound
+        //if value is 0 meaning water, can not be cross
+        //if -1 in case already visited in this iteration
+        if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == 0 || grid[x][y] == -1 ){
+            return -1;
+        }
+
+        if(x == dx && y == dy) {
+            return len;
+        }
+
+        //Mark visited
+        grid[x][y] = -1;
+        //Explore in all direcrtions
+        int one  = shortestPathIterating(grid, x + 1, y, len + 1, dx, dy);
+        int two  = shortestPathIterating(grid, x - 1, y, len + 1, dx, dy);
+        int three  = shortestPathIterating(grid, x, y - 1, len + 1, dx, dy);
+        int four  = shortestPathIterating(grid, x, y + 1, len + 1, dx, dy);
+
+        //Get the minimum path so far
+        int min = -1;
+        if( one > 0 ) {
+            min = one;
+        }
+
+        if( two > 0) {
+            if( min < 0 || (min > 0 && two < min )) {
+                min = two;
+            }
+        }
+
+        if( three > 0) {
+            if( min < 0 || (min > 0 && three < min )) {
+                min = three;
+            }
+        }
+
+        if( four > 0) {
+            if( min < 0 || (min > 0 && four < min )) {
+                min = four;
+            }
+        }
+
+        //System.out.println("1 : " + one + " 2 : " + two + " 3 " + three + " 4 " + four + " Min : " + min);
+        //All possible paths from this positions are explored
+        //restore its value so that is can be considered in other subsequent paths
+        grid[x][y] = 1;
+        return min;
+    }
+
     public static void printGrid(int[][] grid) {
         for (int i = 0; i < grid.length; ++i) {
             for (int j = 0; j < grid[0].length; ++j) {
@@ -95,7 +149,8 @@ public class ShortestCellPath {
 
     public static void main(String[] args) {
         int[][] grid = { { 1, 1, 1, 1 }, { 0, 0, 0, 1 }, { 1, 1, 1, 1 } };
-        System.out.println(shortestCellPath(grid, 0, 0, 2, 0));
+        //System.out.println(shortestCellPath(grid, 0, 0, 2, 0));
+        System.out.println(shortestPathIterating(grid, 0, 0, 0, 2, 0));
     }
 
 }
