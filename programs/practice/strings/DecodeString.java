@@ -65,8 +65,9 @@ public class DecodeString {
             }
         }
 		//In case of nested brackets, there will be 1 count at the beginning which will
-		//dictate final repeat count or there can be multiple string separately controlled
-		// by their individual counts
+		//dictate final repeat count leading to only 1 string at the top of the stack
+		//or there can be multiple string separately controlled by their individual counts
+		//hence multiple strings in the stack which will have to be put together to form final string
         return track.size() == 1 ? track.removeFirst() : getResultString(track);
     }
 
