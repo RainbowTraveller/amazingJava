@@ -8,32 +8,28 @@
  */
 public class PaddingDivision {
 
-    private String append(String output, String word) {
-        if(output == null) {
-            output = word;
-        } else {
-            output = output + " " + word;
-        }
-        return output;
+    private void append(StringBuffer output, String word) {
+        output.append(" ");
+        output.append(word);
     }
 
-    private void padAndPrint(String output, int limit) {
+    private void padAndPrint(StringBuffer output, int limit) {
         while(output.length() < limit) {
-            output =  output + " ";
+            output.append(" ");
         }
         System.out.println(output + "*");
     }
 
     public void devideWithPadding(String input, int limit) {
         int remaining = limit;
-        String output = null;
+        StringBuffer output = new StringBuffer();
         String [] words =  input.split(" ");
         for(String word : words) {
             if(remaining < word.length()) {
                 padAndPrint(output, limit);
-                output = null;
+                output.delete(0, output.length());
             }
-            output = append(output, word);
+            append(output, word);
             remaining = limit - output.length();
         }
         if(output != null) {
