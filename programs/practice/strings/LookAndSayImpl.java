@@ -29,36 +29,23 @@ public class LookAndSayImpl {
     }
 
     public String LookAndSay(String numeric) {
-        ArrayList<HashMap<Character, Integer>> tracking = new ArrayList<HashMap<Character, Integer>>();
-        char[] input = numeric.toCharArray();
-        int len = numeric.length();
-
-        int index = 0;
-        char prev = input[0];
+        StringBuffer strBuff = new StringBuffer();
+        char prev = numeric.charAt(0);
         int frequency = 1;
-        for(int i = 1; i < len; ++i) {
-            char curr = input[i];
+        for(int i = 1; i < numeric.length(); ++i) {
+            char curr = numeric.charAt(i);
             if(prev == curr) {
                 frequency++;
             } else {
-                HashMap<Character, Integer> freq = new HashMap<Character,Integer>();
-                freq.put(prev, frequency);
-                tracking.add(freq);
+                strBuff.append(frequency);
+                strBuff.append(prev);
                 prev = curr;
                 frequency = 1;
             }
         }
-
-        HashMap<Character, Integer> freq = new HashMap<Character,Integer>();
-        freq.put(prev, frequency);
-        tracking.add(freq);
-        StringBuffer strBuff = new StringBuffer();
-        for(Map<Character,Integer> eachFreq : tracking) {
-            for(Map.Entry<Character,Integer> entry : eachFreq.entrySet()) {
-                 strBuff.append(Integer.toString(entry.getValue()));
-                 strBuff.append(entry.getKey());
-            }
-        }
+        //Important to handle last number and its frequency
+        strBuff.append(frequency);
+        strBuff.append(prev);
         return strBuff.toString();
     }
 
