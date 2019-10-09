@@ -30,7 +30,13 @@ public class RepeatedDNASequence {
 
             for(int i = 0; i + 10 <= s.length(); ++i) {
                 String current = s.substring(i, i + 10);
-                //System.out.println(current);
+                //This will print without needing extra space
+                if(s.indexOf(current, i + 1) >= 0) {
+                    //Checking for occurrence from
+                    //next index from current start index
+                    //of the current string
+                    System.out.println(current);
+                }
                 int frequency = tracker.getOrDefault(current, 0);
                 tracker.put(current, frequency + 1);
             }
