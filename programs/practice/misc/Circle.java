@@ -58,12 +58,20 @@ public class Circle  {
             double distance = getDistance(c1.centerx, c1.centery, c2.centerx, c2.centery);
             System.out.println("Center Distance : " + distance );
             System.out.println("Radius Sum : " + (double)(c1.radius + c2.radius));
+            // Valid
+            // Touching internally : Mod( r1 - r2 ) = distance between centers
+            // Touching externally : r1 + r2  = distance between centers
+            // Intersecting externally : r1 + r2 > distance
+            //
+            // Invalid
+            // Concentric : Mod ( r1 - r2 ) > distance between centers
+            // Not Touching internally : Mod (r1 - r2) < distance
+            // Not Touching externally : r1 + r2 < distance
+            //
+            // Final : if(Mod ( r1 - r2 ) == distance || r1 + r2 >= distance)
 
-            //Handling internally non intersecting
-            if (distance < Math.abs( c1.radius - c2.radius )) {
-                return false;
             //Internally intersecting or external circles
-            } else if( distance == Math.abs( c1.radius - c2.radius ) || (distance <= (double)(c1.radius + c2.radius))) {
+            if( distance == Math.abs( c1.radius - c2.radius ) || (distance <= (double)(c1.radius + c2.radius))) {
                 return true;
             }
         }
