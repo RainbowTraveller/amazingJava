@@ -192,6 +192,6 @@ public class WordLadder {
             }
             level++;
         }
-        System.out.println("Shortest length : " + 0);
+        System.out.println("Shortest length : " + level);
     }
 }
