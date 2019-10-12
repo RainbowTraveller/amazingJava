@@ -1,3 +1,6 @@
+/*
+ * Logic works only for DAG and not for cyclic graphs
+ */
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
