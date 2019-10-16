@@ -21,7 +21,7 @@ public class CountTwos {
 
 
 	public int countTwosByRounding(int number, int d) {
-		int powerOf10 = (int)Math.poGGw( 10, d );
+		int powerOf10 = (int)Math.pow( 10, d );
 		int nextPowerOf10 = powerOf10 * 10;
 		int right = number % powerOf10;
 		System.out.println( "P10 : " + powerOf10 + " NextP10: " + nextPowerOf10 + " right : " + right);
