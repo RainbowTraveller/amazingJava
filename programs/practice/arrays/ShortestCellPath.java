@@ -92,7 +92,7 @@ public class ShortestCellPath {
         //if value is 0 meaning water, can not be cross
         //if -1 in case already visited in this iteration
         if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length || grid[x][y] == 0 || grid[x][y] == -1 ){
-            return -1;
+            return Integer.MAX_VALUE;
         }
 
         if(x == dx && y == dy) {
@@ -108,28 +108,7 @@ public class ShortestCellPath {
         int four  = shortestPathIterating(grid, x, y + 1, len + 1, dx, dy);
 
         //Get the minimum path so far
-        int min = -1;
-        if( one > 0 ) {
-            min = one;
-        }
-
-        if( two > 0) {
-            if( min < 0 || (min > 0 && two < min )) {
-                min = two;
-            }
-        }
-
-        if( three > 0) {
-            if( min < 0 || (min > 0 && three < min )) {
-                min = three;
-            }
-        }
-
-        if( four > 0) {
-            if( min < 0 || (min > 0 && four < min )) {
-                min = four;
-            }
-        }
+        int min = Math.min(Math.min(one, two), Math.min(three, four));
 
         //System.out.println("1 : " + one + " 2 : " + two + " 3 " + three + " 4 " + four + " Min : " + min);
         //All possible paths from this positions are explored
