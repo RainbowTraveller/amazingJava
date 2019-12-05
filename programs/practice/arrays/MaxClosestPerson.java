@@ -26,9 +26,14 @@
 public class MaxClosestPerson {
     public static void main(String[] args) {
         int[] input = { 1, 0, 0, 0, 1, 0, 1 };
-        System.out.println("Max distance between closest people : " + maxDistToClosest(input));
+        System.out.println("Max distance between closest people : " + maxDistToClosest(input) + " Simple : " + maxDistToClosestSimple(input));
         int[] input1 = { 1, 0, 0, 0 };
-        System.out.println("Max distance between closest people : " + maxDistToClosest(input1));
+        System.out.println("Max distance between closest people : " + maxDistToClosest(input1) + " Simple : " + maxDistToClosestSimple(input1));
+        //int[] input2 = { 1, 0, 0, 0, 0 , 0 ,0 ,0 ,0 ,0, 1, 0 , 1 };
+        int[] input2 = { 1, 0, 0, 1, 0, 0 ,0 ,0 ,0 ,0, 0, 0 , 0 };
+        System.out.println("Max distance between closest people : " + maxDistToClosest(input2) + " Simple : " + maxDistToClosestSimple(input2));
+        int[] input3 = { 0, 0, 0, 1 };
+        System.out.println("Max distance between closest people : " + maxDistToClosest(input3) + " Simple : " + maxDistToClosestSimple(input3));
     }
 
     public static int maxDistToClosest(int[] seats) {
@@ -46,12 +51,41 @@ public class MaxClosestPerson {
                 }
             }
             if (first == last) {
-                max_distance = Math.max(Math.abs(max_distance - 0), Math.abs(seats.length - 1 - max_distance));
+                max_distance = Math.max(Math.abs(first - 0), Math.abs(seats.length - first - 1));
             } else {
                 // System.out.println(max_distance);
                 max_distance = Math.max(max_distance / 2, first);
                 max_distance = Math.max(max_distance, seats.length - 1 - last);
             }
+        }
+        return max_distance;
+    }
+
+    public static int maxDistToClosestSimple(int[] seats) {
+        int max_distance = Integer.MIN_VALUE;
+        if (seats != null && seats.length > 0) {
+            int start  = -1;
+            for (int i = 0; i < seats.length; ++i) {
+                if (seats[i] == 1) {
+                    if (start < 0) {
+                        //First occurrence of 1
+                        max_distance = i;
+                    } else {
+                        //For subsequence occurrences the distance will be half the distance between
+                        //2, 1s.
+                        max_distance = Math.max(max_distance, Math.abs(i - start) / 2);
+                    }
+                    //Record the current 1 location as starting point
+                    //for calculating the distance
+                    start = i;
+                    //System.out.println("Start : " + start);
+                }
+            }
+
+            //At last, calculate the distance between last 1 and end of the array
+            //and compare it with max distance observed so far
+            max_distance = Math.max(max_distance, Math.abs(seats.length  - start - 1));
+            //System.out.println("Max : " + max_distance);
         }
         return max_distance;
     }
