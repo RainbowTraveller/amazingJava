@@ -33,11 +33,11 @@ public class TripletNearestSum {
 					while(start < end ) {
 						int sum = nums[start] + nums[end] + nums[i];
 						int diff = Math.abs(target - sum);// Critical : check always absolute diff
-						if( diff < closestDiff ) { //if smaller diff update desired value
+ 						if(diff == 0) { // if diff is zero then we found target sum, so return it
+							return target;
+						} else if( diff < closestDiff ) { //if smaller diff update desired value
 							closestDiff = diff;
 							closestSum = sum;
-						} else if (diff == 0) { // if diff is zero then we found target sum, so return it
-							return target;
 						} else if ( sum > target ) {//Critical : check sum with target and adjust the direction to go
 							end--;
 						} else {
