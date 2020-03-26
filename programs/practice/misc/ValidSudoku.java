@@ -10,34 +10,33 @@ public class ValidSudoku {
 
     }
 
-	public boolean isValidSudoku(char[][] board) {
+    public boolean isValidSudoku(char[][] board) {
 
-       Set<Integer> [] rowset = new HashSet[9];
-       Set<Integer> [] colset = new HashSet[9];
-       Set<Integer> [] boxset = new HashSet[9];
+        Set<Integer>[] rowset = new HashSet[9];
+        Set<Integer>[] colset = new HashSet[9];
+        Set<Integer>[] boxset = new HashSet[9];
 
-      for(int i = 0; i < board.length; ++i) {
-          rowset[i] = new HashSet<Integer>();
-          colset[i] = new HashSet<Integer>();
-          boxset[i] = new HashSet<Integer>();
-      }
+        for (int i = 0; i < board.length; ++i) {
+            rowset[i] = new HashSet<Integer>();
+            colset[i] = new HashSet<Integer>();
+            boxset[i] = new HashSet<Integer>();
+        }
 
-      for(int i = 0; i < board.length; ++i) {
-          for(int j = 0; j < board[0].length; ++j) {
-              char curr = board[i][j];
-              if( curr != '.') {
-                  int num = (int) curr;
-                  int boxIndex = (i / 3 ) * 3 + j / 3; // This is the only tricky part to identify
-                  if(rowset[i].contains(num) || colset[j].contains(num) || boxset[boxIndex].contains(num)) {
-                      return false;
-                  }
-                  rowset[i].add(num);
-                  colset[j].add(num);
-                  boxset[boxIndex].add(num);
-              }
-          }
-      }
-      return true;
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
+                char curr = board[i][j];
+                if (curr != '.') {
+                    int num = (int) curr;
+                    int boxIndex = (i / 3) * 3 + j / 3; // This is the only tricky part to identify
+                    if (rowset[i].contains(num) || colset[j].contains(num) || boxset[boxIndex].contains(num)) {
+                        return false;
+                    }
+                    rowset[i].add(num);
+                    colset[j].add(num);
+                    boxset[boxIndex].add(num);
+                }
+            }
+        }
+        return true;
     }
 }
-
