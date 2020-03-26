@@ -39,7 +39,7 @@ public class LongestSubStringwithUniqueChars {
         int maxLen = -1;
         int len = 0;
         if (s != null) {
-            maxLen = 1;//min length is 1 char
+            maxLen = 1;// min length is 1 char
             len = s.length();
             for (int i = 0; i < len; ++i) {
                 for (int j = i + 1; j < len; ++j) {
@@ -55,7 +55,7 @@ public class LongestSubStringwithUniqueChars {
 
     public static boolean hasUniqueChars(String s, int i, int j) {
         Set<Character> charSet = new HashSet<Character>();
-        while (i <= j) {//Need to compare all characters so <=
+        while (i <= j) {// Need to compare all characters so <=
             char curr = s.charAt(i);
             if (charSet.contains(curr)) {
                 return false;
@@ -90,11 +90,11 @@ public class LongestSubStringwithUniqueChars {
 
     /*
      * This involves no set. We just play with the indexes. We again have a starting
-     * index and current index. Initially both start with 0.
-     * If char at curr index is found between starting and curr index,
-     * then it is repeating one. So we increment starting index to 1 more than this
-     * found occurrence of the char. And continue. When not found we record the
-     * length of the string obtained so far
+     * index and current index. Initially both start with 0. If char at curr index
+     * is found between starting and curr index, then it is repeating one. So we
+     * increment starting index to 1 more than this found occurrence of the char.
+     * And continue. When not found we record the length of the string obtained so
+     * far
      */
     public static int lengthOfLongestSubstringLinearIndex(String s) {
         int start = 0;
