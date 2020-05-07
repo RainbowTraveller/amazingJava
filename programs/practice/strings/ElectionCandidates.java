@@ -49,5 +49,9 @@ public class ElectionCandidates {
 
 		Map.Entry<String, Integer> entry = listOfVoting.get(0);
 		return entry.getKey();
-	}
+
+        /* OR CAN BE REPLACED BY
+            return Collections.max(tracker.entrySet(), Map.Entry.comparingByValue()).getKey();
+        */
+    }
 }
