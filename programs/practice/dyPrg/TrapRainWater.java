@@ -93,7 +93,7 @@ public class TrapRainWater {
         int left  = 0, right = height.length - 1;
 
         while(left < right) {
-            if(height[left] < height[right]) {
+            if(height[left] <= height[right]) {
                 height[left] >= leftMax ? leftMax = height[left] : water += leftMax - height[left];
                 left++;
             } else {
