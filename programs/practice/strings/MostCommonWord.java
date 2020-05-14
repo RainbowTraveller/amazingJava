@@ -27,7 +27,10 @@ import java.util.Collections;
 
 public class MostCommonWord {
     public static void main(String[] args) {
-
+        MostCommonWord mcw = new MostCommonWord();
+        String para = "Bob hit a ball, the hit BALL flew far after it was hit.";
+        String[] banned = {"hit"};
+        System.out.println("Most Common Unbanned word :" + mcw.mostCommonWord(para, banned));
     }
 
 
