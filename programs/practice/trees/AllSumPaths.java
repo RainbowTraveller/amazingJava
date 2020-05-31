@@ -53,15 +53,12 @@ public class AllSumPaths {
                 //Add current path to list of paths
                 //remember to allocate new list or original list will get modified
                 paths.add(new LinkedList<Integer>(currentPath));
-                //Remove last element
-                if (currentPath.size() > 0) {
-                    currentPath.remove(currentPath.size() - 1);
-                }
-                return;
+            } else {
+                // Trace left and right path with root already added to list
+                helper(paths, currentPath, root.left, sum);
+                helper(paths, currentPath, root.right, sum);
             }
             // Trace left and right path with root already added to list
-            helper(paths, currentPath, root.left, sum);
-            helper(paths, currentPath, root.right, sum);
             //don't forget to remove node before returning to previous node
             if (currentPath.size() > 0) {
                 currentPath.remove(currentPath.size() - 1);
