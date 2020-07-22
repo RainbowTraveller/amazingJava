@@ -216,7 +216,7 @@ class ValidParenthesis {
 
     /**
      *  FOLLOWING LOGIC IS APPLICABLE FOR FINDING ONLY ONE SUCH VALID STRING BY REMOVING MIN POSSIBLE BRACKETS
-     *//
+     */
 
     /*
      * Approach to get single valid string by removing invalid parenthesis. This is
