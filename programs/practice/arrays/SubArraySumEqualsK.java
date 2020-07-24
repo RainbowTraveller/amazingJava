@@ -6,6 +6,8 @@
  * Output: 2
  */
 
+import java.util.HashMap;
+
 public class SubArraySumEqualsK {
     public static void main(String[] args) {
         int[] input = { 1, 1, 1};
@@ -28,6 +30,8 @@ public class SubArraySumEqualsK {
                 sum += nums[j];
                 if(sum == k) {
                     arrs++;
+                    //no break as there can be -ve values
+                    //and sum can reoccur
                 }
             }
         }
@@ -43,8 +47,11 @@ i.e. if sum[i] - sum[j] = k, the sum of elements lying between indices i and j i
 
 Based on these thoughts, we make use of a hashmap which is used to store the cumulative sum upto all the indices possible along with the number of times the same sum occurs. We store the data in the form:
 (sum_i, no. of occurrences of sum_i). We traverse over the array nums and keep on finding the cumulative sum. Every time we encounter a new sum, we make a new entry in the hashmap corresponding to that sum.
-If the same sum occurs again, we increment the count corresponding to that sum in the hashmap. Further, for every sum encountered, we also determine the number of times the sum sum-ksum−k has occured already,
-since it will determine the number of times a subarray with sum kk has occured upto the current index. We increment the count by the same amount.
+If the same sum occurs again, we increment the count corresponding to that sum in the hashmap. Further, for every sum encountered, we also determine the number of times the value (sum-k) has occured already,
+since it will determine the number of times a subarray with sum k has occured upto the current index. We increment the count by the same amount.
+            0         k
+e.g. sum1.......sum1......sum2
+as sum1 occurs 2 times, distance between sum2 and sum1 is k. So k occurs twice as well.
 
 After the complete array has been traversed, the count gives the required result.
 */
