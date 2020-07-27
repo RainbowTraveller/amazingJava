@@ -1,6 +1,5 @@
-
 /*
- *  Minimum Windowing Substring problem
+ *  Minimum Window Substring problem
  *  Given a string S and a string T, find the minimum window in S which will contain all the characters in T in complexity O(n).
  *
  *   Example:
@@ -31,7 +30,7 @@ public class SmallestPatternSubSet {
         getMinWindowSubstring(input, pattern);
 
         // Smarter
-        smallestSubSet = findSmallestContainerSubStringSimpler(input, pattern);
+        String smallestSubSet = findSmallestContainerSubStringSimpler(input, pattern);
         System.out.println("Smallest Container Found : " + smallestSubSet);
     }
 
