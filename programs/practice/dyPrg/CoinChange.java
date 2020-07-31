@@ -70,7 +70,7 @@ public class CoinChange {
 
 
     /* The recursion goes like this. For each coin denomination we try all possible values ( remember we have supply of infinite coins ) starting from 0
-     * for each value of one denomination we try all possible values from 0 of anther coin and so and so forth. Each time we consider a denomination we
+     * for each value of one denomination we try all possible values from 0 of another coin and so and so forth. Each time we consider a denomination we
      * initialize a min coin coin to MAX_VALUE. So for a particular coin we calculate min number of coins required to form amount using all possible
      * variations of subsequent coins and then choose least, and pass it to previous iteration.
      */
