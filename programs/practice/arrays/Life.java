@@ -16,81 +16,71 @@ public class Life {
     public static void main(String[] args) {
 
         Life l = new Life();
-        int [][] board = {
-			  {0,1,0},
-			  {0,0,1},
-			  {1,1,1},
-			  {0,0,0}
-        };
+        int[][] board = { { 0, 1, 0 }, { 0, 0, 1 }, { 1, 1, 1 }, { 0, 0, 0 } };
 
-		l.gameOfLife(board);
-		for(int i = 0; i< board.length; ++i) {
-		  for(int j = 0; j < board[0].length; ++j) {
-			System.out.print(board[i][j] + " ");
-		  }
-		  System.out.println();
-		}
+        l.gameOfLife(board);
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
+                System.out.print(board[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 
-	/* This is in place logic, when we modify a cell, we mark it either 2 if it changes from 0 to 1
-	 * or mark it -2 if it changes from 1 to 0. This value is also checked in the helper function
-	 * so that we can apply logic to all cells depending on there original neighbors and not after
-	 * modification.
-	 *
-	 * Running : O(m * n)
-	 * Space : O(1)
-	 */
+    /*
+     * This is in place logic, when we modify a cell, we mark it either 2 if it
+     * changes from 0 to 1 or mark it -2 if it changes from 1 to 0. This value is
+     * also checked in the helper function so that we can apply logic to all cells
+     * depending on there original neighbors and not after modification.
+     *
+     * Running : O(m * n) Space : O(1)
+     */
     public void gameOfLife(int[][] board) {
-        for(int i = 0; i< board.length; ++i) {
-             for(int j = 0; j < board[0].length; ++j) {
-                 if(board[i][j] == 0) {
-                     if(getLiveNeighbors(i, j, board) == 3) {
-                         board[i][j] = 2;
-                     }
-                 } else if(board[i][j] == 1) {
-                     int liveCount = getLiveNeighbors(i, j, board);
-                     //System.out.println("Count : " + liveCount);
-                     if( liveCount < 2 || liveCount  > 3 ){
-                         board[i][j] = -2;
-                     }
-                 }
-             }
-         }
-
-         for(int i = 0; i< board.length; ++i) {
-              for(int j = 0; j < board[0].length; ++j) {
-                  if(board[i][j] == -2) {
-                      board[i][j] = 0;
-                  } else if (board[i][j] == 2) {
-                      board[i][j] = 1;
-                  }
-             }
-         }
-    }
-
-	/* Get all the neighbors with having positive value
-	 * or are alive
-	 */
-    private int getLiveNeighbors(int x, int y, int[][] board) {
-        int cnt = 0;
-		/* Handy logic to visit all 8 neighbors
-		 */
-        for(int i = -1; i < 2; ++i) {
-            for(int j = -1; j < 2; ++j) {
-				//Check it not out of bound
-                if(x + i >= 0 && x + i < board.length && y + j >= 0 && y + j < board[0].length) {
-                      if(board[x + i][ y +  j] == 1 || board[x + i][ y +  j] == -2) {
-                            cnt++;
-                        }
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
+                int liveCount = getLiveNeighbors(i, j, board);
+                if (board[i][j] == 0 && liveCount == 3) {
+                    board[i][j] = 2;
+                } else if (board[i][j] == 1 && (liveCount < 2 || liveCount > 3)) {
+                    board[i][j] = -2;
                 }
             }
         }
 
-		//This is counted as well so decrement count by 1
-        if(board[x][y] == 1) {
+        for (int i = 0; i < board.length; ++i) {
+            for (int j = 0; j < board[0].length; ++j) {
+                if (board[i][j] == -2) {
+                    board[i][j] = 0;
+                } else if (board[i][j] == 2) {
+                    board[i][j] = 1;
+                }
+            }
+        }
+    }
+
+    /*
+     * Get all the neighbors with having positive value or are alive
+     */
+    private int getLiveNeighbors(int x, int y, int[][] board) {
+        int cnt = 0;
+        /*
+         * Handy logic to visit all 8 neighbors
+         */
+        for (int i = -1; i < 2; ++i) {
+            for (int j = -1; j < 2; ++j) {
+                // Check it not out of bound
+                if (x + i >= 0 && x + i < board.length && y + j >= 0 && y + j < board[0].length) {
+                    if (board[x + i][y + j] == 1 || board[x + i][y + j] == -2) {
+                        cnt++;
+                    }
+                }
+            }
+        }
+
+        // This is counted as well so decrement count by 1
+        if (board[x][y] == 1) {
             cnt -= 1;
         }
         return cnt;
     }
 }
-

@@ -53,14 +53,18 @@ public class IntervalsFreeTime {
             //and then now current end becomes new end,which indicates the end of the current interval
             if (end < curr.start) {
                 free.add(new Interval(end, curr.start));
-                end = curr.end;
+                //end = curr.end;
             } else {
                 // The intervals are sorted based on start and then time.
                 // so either 2 starts are equal or curr.start > previous start
                 // here an interval may start later than previous end but also end after previous end...so we need to
                 // update end value with max of end times noticed so far
-                end = Math.max(end, curr.end);
+                //end = Math.max(end, curr.end);
             }
+            //Actually this can be common step as we have sorted the busy intervals based on start or if they are equal based on end times
+            //1. start times are equal : end <= curr.end [4,5] [4,5], [4,7]
+            //2. start times are not equal : end can be >, < or = but we need to consider max. [1,3], [4,5] or [1,6], [4,5] or [1, 6], [4,6]
+            end = Math.max(end, curr.end);
         }
         return free;
     }
