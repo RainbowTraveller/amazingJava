@@ -1,4 +1,5 @@
 import java.lang.Math;
+import java.util.Arrays;
 
 /*
  * Longest increasing subsequence ( this is not continuous, hence not substring)
@@ -18,10 +19,13 @@ public class LongestIncreasingSequence {
                 for (int j = i + 1; j < arr.length; ++j) {
                     if (arr[j] > arr[i]) {
                         if (currMaxNumber < arr[j]) {
-                            //2, 6 ,4 : here 6 and 4 are greater than 2 but 6 which is currentMax > a[j] which is 4
-                            //here we found smaller no. greater than candidate which is 2 so probability of getting
-                            //longer sequence is more so make it currMax but that is not adding to our increase in the length
-                            //so don't increment
+                            // 2, 6 ,4 : here 6 and 4 are greater than 2 but 6 which is currentMax > a[j]
+                            // which is 4
+                            // here we found smaller no. greater than candidate which is 2 so probability of
+                            // getting
+                            // longer sequence is more so make it currMax but that is not adding to our
+                            // increase in the length
+                            // so don't increment
                             currMaxLength++;
                         }
                         currMaxNumber = arr[j];
@@ -93,6 +97,55 @@ public class LongestIncreasingSequence {
         }
     }
 
+    public static int LISRecursive(int[] arr) {
+        return LISRecursiveHelper(arr, Integer.MIN_VALUE, 0);
+    }
+
+    /**
+     * Consider taken and not taken scenario. We consider each elements and then
+     * first take it and see if it is greater than previous one and modify seq.
+     * length In not taken scene we don't care if it matches criteria or not At each
+     * step we have 2 choices and there are n such cases to consider to we have 2^n
+     * running time
+     */
+    public static int LISRecursiveHelper(int[] arr, int prevMax, int index) {
+        if (index == arr.length) {
+            return 0;
+        }
+
+        int taken = 0;
+        if (prevMax < arr[index]) {
+            taken = 1 + LISRecursiveHelper(arr, arr[index], index + 1);
+        }
+        int notTaken = LISRecursiveHelper(arr, prevMax, index + 1);
+        return Math.max(notTaken, taken);
+    }
+
+    public static int LISRecursiveMemo(int[] arr) {
+        int[][] memo = new int[arr.length + 1][arr.length];
+        for (int[] row : memo) {
+            Arrays.fill(row, -1);
+        }
+        return LISRecursiveMemoHelper(arr, -1, 0, memo);
+    }
+
+    public static int LISRecursiveMemoHelper(int[] arr, int prevIndex, int currIndex, int[][] memo) {
+        if (currIndex == arr.length) {
+            return 0;
+        }
+        if (memo[prevIndex + 1][currIndex] > 0) {
+            return memo[prevIndex + 1][currIndex];
+        }
+
+        int taken = 0;
+        if (prevIndex == -1 || arr[prevIndex] < arr[currIndex]) {
+            taken = 1 + LISRecursiveMemoHelper(arr, currIndex, currIndex + 1, memo);
+        }
+        int notTaken = LISRecursiveMemoHelper(arr, prevIndex, currIndex + 1, memo);
+        memo[prevIndex + 1][currIndex] = Math.max(taken, notTaken);
+        return memo[prevIndex + 1][currIndex];
+    }
+
     public static void main(String[] args) {
         // int [] input = {10, 11, 0 , 0, 1 ,2, 3, -1, 2 ,3, 14, 5, 6, 7};
         int[] input = { 10, 22, 9, 33, 21, 50, 41, 60 };
@@ -100,5 +153,8 @@ public class LongestIncreasingSequence {
         longestIncreasingSequnce(input);
         longestIncreasingSequnceNoDyn(input);
         longestContinuousIncreasingSequnce(input);
+        System.out.println("Recursive : " + LISRecursive(input));
+        System.out.println("Recursive Memo : " + LISRecursiveMemo(input));
+
     }
 }
