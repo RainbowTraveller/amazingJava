@@ -36,6 +36,9 @@ public class TripletNearestSum {
  						if(diff == 0) { // if diff is zero then we found target sum, so return it
 							return target;
 						} else if( diff < closestDiff ) { //if smaller diff update desired value
+                            //Now that a better diff is found there is not need to just go in one direction
+                            //that will definitely increase the distance from the target,so when this is found
+                            //we narrow from start and end, instead of proceeding in only one direction
 							closestDiff = diff;
 							closestSum = sum;
 						} else if ( sum > target ) {//Critical : check sum with target and adjust the direction to go
