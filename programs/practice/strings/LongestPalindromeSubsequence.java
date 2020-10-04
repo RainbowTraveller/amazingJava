@@ -79,11 +79,11 @@ public class LongestPalindromeSubsequence {
 
             //Let's consider now strings of length from 2 character long
             //to length of entire string
-            for(int i = 2; i <= length; ++i) {
-                for(int j = 0; j < length; ++j) {
+            for(int i = 2; i <= length; ++i) {//length of the string to consider
+                for(int j = 0; j < length; ++j) {//starting point in the string
                     // start + length - 1 = 0 + 2 - 1 = (0,1)
-                    int index = i + j - 1;
-                    if(index < length) {
+                    int index = j + i - 1;
+                    if(index < length) {//Check if index is beyond length
                         if(input.charAt(j) == input.charAt(index) ) {
                             System.out.println("Matched : " + input.charAt(j) + " and " + input.charAt(index));
                             tracker[j][index] =  2 + tracker[ j + 1 ][ index - 1 ];
