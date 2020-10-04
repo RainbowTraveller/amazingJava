@@ -2,10 +2,12 @@
 *.classpath
 *.project
 *.swp
+*.DS_Store
 
 
 **/target
 **/.settings
+**/.idea
 # Package Files #
 *.jar
 *.war
