@@ -35,15 +35,21 @@ public class LongestSubStringWithAtMostNDistictChars {
             Map<Character, Integer> track = new HashMap<>();
             while (right < s.length()) {
                 if (track.size() < 3) {
+                    //update char and its index in the map
+                    //so this will contain latest index of any character
                     track.put(s.charAt(right), right);
                 }
                 if (track.size() == 3) {
+                    //There are now 3 distinct chars that are found
+                    //Get the smallest index from the map which indicates one of the 2 chars
+                    //already found, Remove it
                     int index = Collections.min(track.values());
                     track.remove(s.charAt(index));
                     left = index + 1;
                 }
                 right++;
                 // System.out.println(" " + left + " :::: " + right + " ");
+                //Calculate length every time
                 len = Math.max(len, right - left);
             }
         }
