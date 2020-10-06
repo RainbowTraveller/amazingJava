@@ -1,7 +1,15 @@
 package com.prep;
 
-import com.extern.RedisLikeClient;
+import com.extern.impl.RedisClientImpl;
+import com.extern.impl.RedisLikeFactory;
+
+import java.util.Properties;
 
 public class Wrapper {
-    RedisLikeClient
+    private RedisClientImpl client;
+
+    public Wrapper(Properties properties) {
+        RedisLikeFactory.create(properties);
+
+    }
 }
