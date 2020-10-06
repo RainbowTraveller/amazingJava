@@ -98,6 +98,7 @@ public class TrapRainWater {
                 left++;
             } else {
                 height[right] >= rightMax ? rightMax = height[right] : water += rightMax - height[right];
+                right--;
             }
         }
         return water;
