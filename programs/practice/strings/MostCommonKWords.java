@@ -9,7 +9,7 @@ public class MostCommonKWords {
     public static void main(String[] args) {
 
         MostCommonKWords mckw = new MostCommonKWords();
-        String[] words = { "the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is" };
+        String[] words = { "the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is", "a", "a", "a", "a", "a", "a", "b", "b", "b" };
         int n = 4;
         System.out.println("Top  " + n + " frequent words : " + mckw.topKFrequent(words, 4));
         System.out.println("Top  " + n + " frequent words : " + mckw.topKFrequentHeap(words, 4));
@@ -58,17 +58,19 @@ public class MostCommonKWords {
             //The order of w1 and w2 is important here while calling compare to and taking count diff
             //as it avoid extra reverse sorting step down the line while returning the list
             PriorityQueue<String> heap = new PriorityQueue<>((w1,
-                    w2) -> tracker.get(w1) == tracker.get(w2) ? w1.compareTo(w2) : tracker.get(w2) - tracker.get(w1));
+                    w2) -> tracker.get(w1) == tracker.get(w2) ? w1.compareTo(w2) : tracker.get(w1) - tracker.get(w2));
+            //System.out.println(tracker);
             for (String word : tracker.keySet()) {
                 heap.offer(word);
                 if (heap.size() > k) {
                     heap.poll();
                 }
+            //System.out.println("Queue : " + heap);
             }
 
             //System.out.println("Queue : " + heap);
             while(!heap.isEmpty()) {
-                ans.add(heap.poll());
+                ans.add(0, heap.poll());
             }
             // System.out.println("List  : " + ans);
         }
