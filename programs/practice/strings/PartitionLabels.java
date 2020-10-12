@@ -28,6 +28,8 @@ public class PartitionLabels {
     public static List<Integer> partitionLabels(String S) {
         List<Integer> ans = new LinkedList<>();
         if (S != null) {
+            //Create Map of all unique characters in the string to their last index
+            //in the string
             Map<Character, Integer> lastIndex = new LinkedHashMap<>();
             for (int i = 0; i < S.length(); ++i) {
                 lastIndex.put(S.charAt(i), S.lastIndexOf(S.charAt(i)));
@@ -36,8 +38,16 @@ public class PartitionLabels {
             int boundary = 0;
             int start = 0;
 
+            //Sliding window bounded by start and boundary
             for (int i = 0; i < S.length(); ++i) {
+                //if current char's last index is greater than boundary then that is our
+                //current boundary. i.e. We need to go a least to that index so that this
+                //char does not appear again so it will be part of only one sub string
                 boundary = Math.max(lastIndex.get(S.charAt(i)), boundary);
+                //if boundary is equal to current index : We have reached a point
+                //where not other character encountered so far has index greater than boundary or i
+                //which means they won't appear in later part of the string. So include this string
+                //and continue same logic:w
                 if (boundary == i) {
                     ans.add(boundary - start + 1);
                     start = i + 1;
