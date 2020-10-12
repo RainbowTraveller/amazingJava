@@ -36,7 +36,7 @@ public class Base62Encoding {
             buf.append("0");
         }
 
-        System.out.println("Encoded : " + buf.toString());
+        System.out.println("Encoded : " + buf.reverse().toString());
     }
 }
 
