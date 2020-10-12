@@ -1,66 +1,9 @@
 //Requires Java 11 to run this program
 
-import java.io.*;
-import java.util.*;
-
-public class TableAsArray {
-    public static void main(String[] args) {
-
-        final List<Map<Character, Integer>> table1 = List.of(Map.of('a', 1), Map.of('a', 2), Map.of('a', 3));
-
-        final List<Map<Character, Integer>> table2 = List.of(Map.of('a', 1, 'b', -2), Map.of('a', 2, 'b', 1),
-                Map.of('a', 3));
-
-        final List<Map<Character, Integer>> table3 = List.of(Map.of('a', 1, 'b', -2), Map.of('a', 3));
-        // System.out.println(Solution.minByColumn(table1, 'b'));
-        // System.out.println(Solution.minByColumn(table2, 'b'));
-        System.out.println(Solution.minByColumn(table3, 'b'));
-
-    }
-
-    public static Map<Character, Integer> minByColumn(List<Map<Character, Integer>> table, char column) {
-        Map<Character, Integer> row = null;
-        int minVal = Integer.MAX_VALUE;
-
-        for (Map<Character, Integer> currRow : table) {
-            int currValue = currRow.getOrDefault(column, 0);
-            if (currValue < minVal) {
-                minVal = currValue;
-                row = currRow;
-            }
-        }
-        return row;
-    }
-
-    public static Map<Character, Integer> minByOrder(List<Map<Character, Integer>> table, char[] columns) {
-        Map<Character, Integer> row = null;
-        int minVal = Integer.MAX_VALUE;
-
-        for (Map<Character, Integer> currRow : table) {
-            int currValue = currRow.getOrDefault(columns[0], 0);
-            if (currValue < minVal) {
-                minVal = currValue;
-                row = currRow;
-            } else if (currValue == minVal) {
-
-                for (int i = 1; i < columns.length; ++i) {
-                    char currCol = columns[i];
-                    if (row.get(currCol) > currRow.get(currCol)) {
-                        row = currRow;
-                        break;
-                    }
-                }
-            }
-        }
-        return row;
-
-    }
-}
-
 /*
- * Your previous Plain Text content is preserved below:
  *
- * For this interview, imagine that we are working with a simple database. Each
+ *
+ * imagine that we are working with a simple database. Each
  * row associates column names (strings) with integer values (for example: 5, 0,
  * -3, and so on). Here's a table with three rows:
  *
@@ -95,6 +38,36 @@ public class TableAsArray {
  * {"a": 1, "b": -2}
  *
  */
+import java.io.*;
+import java.util.*;
+
+public class TableAsArray {
+    public static void main(String[] args) {
+
+        final List<Map<Character, Integer>> table1 = List.of(Map.of('a', 1), Map.of('a', 2), Map.of('a', 3));
+        final List<Map<Character, Integer>> table2 = List.of(Map.of('a', 1, 'b', -2), Map.of('a', 2, 'b', 1),
+                Map.of('a', 3));
+        final List<Map<Character, Integer>> table3 = List.of(Map.of('a', 1, 'b', -2), Map.of('a', 3));
+        // System.out.println(Solution.minByColumn(table1, 'b'));
+        // System.out.println(Solution.minByColumn(table2, 'b'));
+        System.out.println(Solution.minByColumn(table3, 'b'));
+
+    }
+
+    public static Map<Character, Integer> minByColumn(List<Map<Character, Integer>> table, char column) {
+        Map<Character, Integer> row = table.get(0);
+        int minVal = row.getOrDefault(columns,0);
+
+        for (Map<Character, Integer> currRow : table) {
+            int currValue = currRow.getOrDefault(column, 0);
+            if (currValue < minVal) {
+                minVal = currValue;
+                row = currRow;
+            }
+        }
+        return row;
+    }
+
 
 // In part 1 you may have noticed that it's possible for two rows to be "tied",
 // meaning that either would be an acceptable return value from minByColumn.
@@ -164,3 +137,33 @@ public class TableAsArray {
 // {"x": 2, "y": 2, "z": 2}
 // ]
 // minByOrder(table8, ["x", "y", "z"]) returns {"x": 1, "y": 2, "z": 3}
+    public static Map<Character, Integer> minByColumn(List<Map<Character, Integer>> table, List<Character> cols) {
+        Map<Character, Integer> row = table.get(0);
+        int minVal = row.getOrDefault(cols.get(0),0);
+
+        for (Map<Character, Integer> currRow : table) {
+            int currValue = currRow.getOrDefault(cols.get(0), 0);
+            if (currValue < minVal) {
+                minVal = currValue;
+                row = currRow;
+            } else if (currValue == minVal) {
+                row = getMinRow(row, currRow, cols);
+            }
+        }
+        return row;
+    }
+
+  public static Map<Character, Integer> getMinRow(Map<Character, Integer> row, Map<Character, Integer> currRow, List<Character> cols) {
+    for(int colIndex = 1; colIndex < cols.size(); ++colIndex) {
+      char keyChar = cols.get(colIndex);
+      int rowVal = row.getOrDefault(keyChar,0);
+      int currRowVal = currRow.getOrDefault(keyChar,0);
+      if(rowVal != currRowVal) {
+        return rowVal > currRowVal ? currRow : row;
+      }
+    }
+    return row;
+  }
+}
+
+
