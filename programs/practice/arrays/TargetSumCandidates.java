@@ -73,3 +73,111 @@ public class TargetSumCandidates {
     }
 }
 
+
+
+import java.io.*;
+import java.util.*;
+
+/*
+A group of friends went to a small restaurant for dinner. They split the bill with a bunch of credit cards after the dinner. Unfortunately some of these cards were rejected. Even more unfortunately the small restaurant uses a very poor point of sale, outputting very limited information. It only reports the number of rejected tenders and the total rejected amount. The cashier has already known how much should be charged on each card. Could you help the cashier figure out which cards are rejected?
+
+Example:
+Tenders: {1, $18}, {2, $14}, {3, $21}, {4, $10}, {5, $32}
+Num of rejected cards : 2
+Rejected amount : $50
+
+Expected Output: <1, 5>
+
+start with each card
+    decrese amount and card no.
+
+       card no. 0 and amount is remaining
+       card and amount is 0 : found a solution
+
+   10,14,18,21,32
+
+1 : 40 1
+        26 0
+        28 0
+        19 0
+        32 0
+2 : 36 1
+    18 0
+3 : 29 1
+
+
+ */
+
+class Solution {
+  public static void main(String[] args) {
+
+    Map<Integer, Integer> data = new HashMap<>();
+    data.put(1, 18);
+    data.put(2, 14);
+    data.put(3, 21);
+    data.put(4, 10);
+    data.put(5, 32);
+
+    findCards(data,2,50);
+
+  }
+
+  public static void findCards(Map<Integer, Integer> cardAmounts, int noOfCards, int balance) {
+
+    List<Map.Entry<Integer, Integer>> cardEntries = new LinkedList<>(cardAmounts.entrySet());
+    Collections.sort(cardEntries, (e1, e2) -> e1.getValue() - e2.getValue());
+    //System.out.println(cardEntries);
+
+    List<Map.Entry<Integer, Integer>> foundCards = new LinkedList<>();
+    for(int i = 0; i < cardEntries.size(); ++i) {
+      Map.Entry<Integer, Integer> currCard = cardEntries.get(i);
+      foundCards.add(currCard);
+      boolean found = findCardHelper(i + 1, noOfCards - 1, balance - currCard.getValue(), foundCards,  cardEntries, noOfCards);
+      if (found) {
+        break;
+      }
+      foundCards.clear();
+    }
+
+    System.out.println(foundCards);
+  }
+
+
+  /*
+   10  40 26
+       14 18 21
+
+  */
+
+
+  public static boolean findCardHelper(int index, int noOfCards, int balance, List<Map.Entry<Integer, Integer>> foundCards, List<Map.Entry<Integer, Integer>> cardEntries, int TotalNoOfCards) {
+
+    boolean result = false ;
+    for( int i = index; i < cardEntries.size(); ++i) {
+
+      Map.Entry<Integer, Integer> currCard = cardEntries.get(i);
+
+      if(noOfCards == 1 && balance - currCard.getValue() == 0 ) {
+        foundCards.add(currCard);
+        return true;
+      }
+
+      if( balance < currCard.getValue() || (noOfCards == 0 && balance != 0) ) {
+        foundCards.clear();
+        break;
+      }
+
+      foundCards.add(currCard);
+      result = findCardHelper(index + 1, noOfCards - 1, balance - currCard.getValue(), foundCards,  cardEntries,TotalNoOfCards);
+
+      if( !result && !foundCards.isEmpty()) {
+        foundCards.remove(foundCards.size() - 1);
+        System.out.println("Removed : " + foundCards);
+      }
+    }
+    return result;
+  }
+
+
+}
+
