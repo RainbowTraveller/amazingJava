@@ -23,8 +23,7 @@ public class QueuedTasksWithFutures {
 
 //class Producer implements Runnable {
 class Producer {
-    String[] events = { "Visit", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Conversion", "Visit", "Visit",
-            "Jupiter", "Saturn", "Neptune", "Jupiter", "Saturn", "Neptune", "finish" };
+    String[] events = { "Visit", "Conversion", "Earth", "Venus", "Jupiter", "Saturn", "Neptune", "Pluto", "Mars", "Mercury", "finish" };
     Consumer eventConsumer;
 
     public Producer(Consumer consumer) {
@@ -62,14 +61,14 @@ class Consumer {
         System.out.println("Word Received : " + word);
         try {
              if(queue.offer(word, 1, TimeUnit.SECONDS) == true && inflight.size() < 4) {
-                System.out.println("Queue : " + queue);
+                System.out.println("Available Queue : " + queue);
                 CompletableFuture.runAsync(() -> process(), service)
                     .thenAccept(data -> {
                         inflight.remove(data);
                         System.out.println("After Set : " + queue);
                     });
             }
-            System.out.println("SUBMITTED");
+            //System.out.println("SUBMITTED");
         } catch(InterruptedException ie) {
             System.out.println("Offer interrupted");
         }
@@ -77,14 +76,16 @@ class Consumer {
 
     private String process() {
         try {
-                System.out.println("Pre Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
+            synchronized(queue) {
+                //System.out.println("Pre Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
                 String curr = queue.poll(5, TimeUnit.SECONDS);
                 System.out.println("Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
                 inflight.add(curr);
-                System.out.println("Before Set : " + queue);
+                //System.out.println("Before Set : " + queue);
                 consume(curr);
                 return curr;
-        } catch (Exception ie) {
+            }
+         }catch (Exception ie) {
             throw new RuntimeException(ie);
         }
     }
