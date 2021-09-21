@@ -1,15 +1,19 @@
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.Map;
-import java.util.Set;
 import java.util.HashSet;
-import java.util.HashMap;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+/*
+Program to demonstrate the pipleline supplying continuous data and then data being process in async manner
+This leverages producer consumer paradigm.
+Procuder : it just supplies the data to consumer by calling desired method on the consumer
+Consumer : It maintains a blocking queue of the data with set capacity
+ */
 public class QueuedTasksWithFutures {
     public static void main(String[] args) {
         Consumer eventConsumer = new Consumer();
@@ -23,7 +27,7 @@ public class QueuedTasksWithFutures {
 
 //class Producer implements Runnable {
 class Producer {
-    String[] events = { "Visit", "Conversion", "Earth", "Venus", "Jupiter", "Saturn", "Neptune", "Pluto", "Mars", "Mercury", "finish" };
+    String[] events = {"Visit", "Conversion", "Earth", "Venus", "Jupiter", "Saturn", "Neptune", "Pluto", "Mars", "Mercury", "finish"};
     Consumer eventConsumer;
 
     public Producer(Consumer consumer) {
@@ -32,13 +36,14 @@ class Producer {
 
     public void run() {
         try {
-            for(int i = 0; i < events.length; i++) {
+            for (int i = 0; i < events.length; i++) {
                 //Random r = new Random();
                 //int randomInt = r.nextInt(events.length);
                 //System.out.println("index : " + i + " ::: Value : " + events[randomInt] );
                 eventConsumer.input(events[i]);
             }
             eventConsumer.shutdown();
+            //eventConsumer.awaitTermination(5, TimeUnit.MINUTES);
         } catch (Exception ie) {
             throw new RuntimeException(ie);
         }
@@ -60,32 +65,38 @@ class Consumer {
     public void input(String word) {
         System.out.println("Word Received : " + word);
         try {
-             if(queue.offer(word, 1, TimeUnit.SECONDS) == true && inflight.size() < 4) {
-                System.out.println("Available Queue : " + queue);
-                CompletableFuture.runAsync(() -> process(), service)
-                    .thenAccept(data -> {
-                        inflight.remove(data);
-                        System.out.println("After Set : " + queue);
-                    });
-            }
-            //System.out.println("SUBMITTED");
-        } catch(InterruptedException ie) {
+            long start = System.currentTimeMillis();
+            queue.offer(word, 60, TimeUnit.SECONDS);
+            long end = System.currentTimeMillis();
+            System.out.println("Blocked for : " + (end - start) / 1000L + " seconds");
+            //while(inflight.size()  4){
+            System.out.println("Available Queue ==> " + queue);
+            CompletableFuture.runAsync(() -> process(), service);
+            //}
+        } catch (InterruptedException ie) {
             System.out.println("Offer interrupted");
+            Thread.currentThread().interrupt();
         }
     }
 
-    private String process() {
+    private void insert(String word) {
         try {
-            synchronized(queue) {
-                //System.out.println("Pre Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
-                String curr = queue.poll(5, TimeUnit.SECONDS);
-                System.out.println("Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
-                inflight.add(curr);
-                //System.out.println("Before Set : " + queue);
-                consume(curr);
-                return curr;
-            }
-         }catch (Exception ie) {
+            queue.offer(word, 1, TimeUnit.SECONDS);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    private void process() {
+        try {
+            System.out.println("Pre Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
+            String curr = queue.poll(60, TimeUnit.SECONDS);
+            System.out.println("Polled Queue :::: " + queue + " :: " + Thread.currentThread().getName());
+            inflight.add(curr);
+            System.out.println("Before Set : " + inflight);
+            consume(curr);
+            inflight.remove(curr);
+        } catch (Exception ie) {
             throw new RuntimeException(ie);
         }
     }
@@ -94,9 +105,9 @@ class Consumer {
         Random r = new Random();
         int randomInt = r.nextInt(5);
         try {
-            Thread.sleep(randomInt);
-            System.out.println("Event :::::::  " + event  + " Consume : " + Thread.currentThread().getName());
-        } catch(InterruptedException ie) {
+            Thread.sleep(randomInt * 5000);
+            System.out.println("Event :::::::  " + event + " Consume : " + Thread.currentThread().getName());
+        } catch (InterruptedException ie) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(ie);
         }
