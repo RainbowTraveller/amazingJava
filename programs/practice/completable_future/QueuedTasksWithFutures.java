@@ -71,7 +71,16 @@ class Consumer {
             System.out.println("Blocked for : " + (end - start) / 1000L + " seconds");
             //while(inflight.size()  4){
             System.out.println("Available Queue ==> " + queue);
-            CompletableFuture.runAsync(() -> process(), service);
+            CompletableFuture.runAsync(() -> process(), service)
+                .thenAccept(result -> (System.out.println("Result")))
+                .handle((msg,ex) -> {
+                    if (ex != null) {
+                        throw ex;
+                    } else {
+                        System.out.println("Result");
+                    }
+                });
+
             //}
         } catch (InterruptedException ie) {
             System.out.println("Offer interrupted");
