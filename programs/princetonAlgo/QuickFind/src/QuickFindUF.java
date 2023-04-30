@@ -1,8 +1,15 @@
 import edu.princeton.cs.algs4.StdIn;
 import edu.princeton.cs.algs4.StdOut;
 
-// Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+/**
+ * Part 1 on the Union Find discussion in terms of dynamic connectivity
+ * Given a set of N objects.
+ * ・Union command: connect two objects.
+ * ・Find/connected query: is there a path connecting the two objects?
+ *
+ * This is greedy or eager approach, where the invariant is as follows
+ * If two nodes are connected to each other the values at that index in the backup array DS is same
+ */
 public class QuickFindUF {
     // Data structure mapping the nodes. This is array of n nodes which is indexed from 0 to n - 1
     int [] nodes;
@@ -46,8 +53,12 @@ public class QuickFindUF {
     /**
      * Makes sure point from is connected to point to. This is achieved by replacing all the node values in the backing
      * DS with value of to maintaining invariant that all connected nodes have same value in the backed up array DS
-     * @param from
-     * @param to
+     *
+     * Running complexity : As can be seen, the algorithm is named Quick Find, indicating the find operation is faster
+     * The union on the other hand needs entire array access for establishing invariant. So for N union commands, one
+     * for each node, N array scans are required, leading to N * N complexity
+     * @param from index of the source node
+     * @param to index of the destination node
      */
     public void union(int from, int to) {
         if(nodes[from] != nodes[to]) {
