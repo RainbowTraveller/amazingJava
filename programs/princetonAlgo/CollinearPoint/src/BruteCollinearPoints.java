@@ -1,32 +1,61 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
 
+import java.util.Arrays;
+
 
 // Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class BruteCollinearPoints {
-    Point[] points;
-    LineSegment[] segments;
-    Point[][] ends;
-    int noOfSegments;
+    private Point[] points;
+    private LineSegment[] segments;
+    private Point[][] ends;
+    private int noOfSegments;
 
 
     // finds all line segments containing 4 points
     public BruteCollinearPoints(Point[] points) {
-        this.points = points;
+        validate(points);
+        this.points = Arrays.copyOf(points, points.length);
         noOfSegments = 0;
         segments = new LineSegment[10];
         ends = new Point[10][2];
         findSegments();
     }
 
+    private void validate(Point[] p) {
+        if (p == null) {
+            throw new IllegalArgumentException("The input array is null");
+        }
+        Arrays.sort(p);
+        for (int i = 0; i < p.length; ++i) {
+            if (p[i] == null) {
+                throw new IllegalArgumentException("Point can not be null");
+            }
+            if (i < p.length - 1) {
+                if (p[i].compareTo(p[i + 1]) == 0) {
+                    throw new IllegalArgumentException("Duplicate points in the input");
+                }
+            }
+        }
+    }
+
     // the number of line segments
     public int numberOfSegments() {
+        noOfSegments = segments().length;
         return noOfSegments;
     }
 
     public LineSegment[] segments() {
-        return segments;
+        int length = 0;
+        for (LineSegment segment : segments) {
+            if (segment != null) {
+                length++;
+            }
+        }
+        LineSegment[] temp = Arrays.copyOf(segments, length);
+        segments = temp;
+        return Arrays.copyOf(segments, segments.length);
     }                // the line segments
 
     private void findSegments() {
@@ -57,7 +86,7 @@ public class BruteCollinearPoints {
                                 if (first.compareTo(forth) != 0 && second.compareTo(forth) != 0 &&
                                         third.compareTo(forth) != 0 &&
                                         first.slopeOrder().compare(third, forth) == 0 &&
-                                second.slopeOrder().compare(third, forth) == 0) {
+                                        second.slopeOrder().compare(third, forth) == 0) {
                                     foundForth = true;
                                     //Update the start and end by looking at the point coordinates now that the forth point is found
                                     if (start.compareTo(forth) > 0) {
