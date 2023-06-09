@@ -3,11 +3,13 @@ import edu.princeton.cs.algs4.StdOut;
 
 import java.util.Arrays;
 
-
-// Press ⇧ twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+/*
+Given a set of n distinct points in the plane, find every (maximal) line segment that connects a subset of 4 or more of the points.
+ */
 public class BruteCollinearPoints {
+    // Tracks points given
     private Point[] points;
+    //
     private LineSegment[] segments;
     private Point[][] ends;
     private int noOfSegments;
