@@ -11,7 +11,7 @@ public class PointSET {
     private TreeSet<Point2D> pointSet;
     // construct an empty set of points
     public PointSET() {
-        pointSet = new TreeSet<>(Point2D.Y_ORDER);
+        pointSet = new TreeSet<>(Point2D.R_ORDER);
     }
 
     // is the set empty?

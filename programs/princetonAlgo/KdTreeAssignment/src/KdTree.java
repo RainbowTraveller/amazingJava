@@ -1,4 +1,7 @@
-import edu.princeton.cs.algs4.*;
+import edu.princeton.cs.algs4.In;
+import edu.princeton.cs.algs4.Point2D;
+import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.StdDraw;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,7 +29,7 @@ public class KdTree {
         }
     }
 
-    dTreeNode root;
+    private dTreeNode root;
 
     // construct an empty set of points
     public KdTree() {
