@@ -30,10 +30,12 @@ public class KdTree {
     }
 
     private dTreeNode root;
+    private int size;
 
     // construct an empty set of points
     public KdTree() {
         root = null;
+        size = 0;
     }
 
     // is the set empty?
@@ -43,7 +45,8 @@ public class KdTree {
 
     // number of points in the set
     public int size() {
-        return inorderSize(root, 0);
+//        return inorderSize(root, 0);
+        return this.size;
     }
 
     private int inorderSize(dTreeNode node, int size) {
@@ -60,6 +63,7 @@ public class KdTree {
         if (p == null) throw new IllegalArgumentException("Can not insert null point");
         if (isEmpty()) {
             root = new dTreeNode(p);
+            size++;
         } else {
             dTreeNode curr = root;
             boolean isHorizontal = false;
@@ -71,6 +75,7 @@ public class KdTree {
                         if (p.y() < curr.point.y()) {
                             if (curr.left == null) {
                                 curr.left = new dTreeNode(p);
+                                size++;
                                 curr = null;
                             } else {
                                 curr = curr.left;
@@ -78,6 +83,7 @@ public class KdTree {
                         } else {
                             if (curr.right == null) {
                                 curr.right = new dTreeNode(p);
+                                size++;
                                 curr = null;
                             } else {
                                 curr = curr.right;
@@ -89,6 +95,7 @@ public class KdTree {
                         if (p.x() < curr.point.x()) {
                             if (curr.left == null) {
                                 curr.left = new dTreeNode(p);
+                                size++;
                                 curr = null;
                             } else {
                                 curr = curr.left;
@@ -96,6 +103,7 @@ public class KdTree {
                         } else {
                             if (curr.right == null) {
                                 curr.right = new dTreeNode(p);
+                                size++;
                                 curr = null;
                             } else {
                                 curr = curr.right;
@@ -183,8 +191,8 @@ public class KdTree {
                         }
                         //else {
 
-                        range(curr.left, left, right, top, bottom, points, !isHorizontal);
-                        range(curr.right, left, right, top, bottom, points, !isHorizontal);
+                        if(curr.left != null) range(curr.left, left, right, top, bottom, points, !isHorizontal);
+                        if(curr.right != null) range(curr.right, left, right, top, bottom, points, !isHorizontal);
                         //}
                     } else {
                         range(curr.left, left, right, top, bottom, points, !isHorizontal);
@@ -199,8 +207,8 @@ public class KdTree {
                             points.add(curr.point);
                         }
                         //else {
-                        range(curr.left, left, right, top, bottom, points, !isHorizontal);
-                        range(curr.right, left, right, top, bottom, points, !isHorizontal);
+                        if(curr.left != null) range(curr.left, left, right, top, bottom, points, !isHorizontal);
+                        if(curr.right != null) range(curr.right, left, right, top, bottom, points, !isHorizontal);
                         //}
                     } else {
                         range(curr.left, left, right, top, bottom, points, !isHorizontal);
