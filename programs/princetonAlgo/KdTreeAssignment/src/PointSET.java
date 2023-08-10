@@ -11,7 +11,7 @@ public class PointSET {
     private TreeSet<Point2D> pointSet;
     // construct an empty set of points
     public PointSET() {
-        pointSet = new TreeSet<>(Point2D.R_ORDER);
+        pointSet = new TreeSet<>();
     }
 
     // is the set empty?
@@ -66,10 +66,10 @@ public class PointSET {
         if(p == null) {
             throw new IllegalArgumentException("Can not find nearest for null point");
         }
-        double distance = Double.MAX_VALUE;
+        double distance = Double.POSITIVE_INFINITY;
         Point2D nearest = null;
         for(Point2D point : pointSet) {
-            double currDistance = p.distanceTo(point);
+            double currDistance = p.distanceSquaredTo(point);
             if(currDistance < distance) {
                distance = currDistance;
                nearest = point;
