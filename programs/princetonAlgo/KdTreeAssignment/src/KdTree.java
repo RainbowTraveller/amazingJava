@@ -7,14 +7,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class KdTree {
-    private static class dTreeNode {
+    private static class TwoDTreeNode {
         private Point2D point;
-        private dTreeNode left;
-        private dTreeNode right;
+        private TwoDTreeNode left;
+        private TwoDTreeNode right;
 
         private RectHV axisAlignedRect;
 
-        public dTreeNode(Point2D point, RectHV axisAlignedRect) {
+        public TwoDTreeNode(Point2D point, RectHV axisAlignedRect) {
             this.left = null;
             this.right = null;
             this.point = point;
@@ -24,15 +24,15 @@ public class KdTree {
         @Override
         public boolean equals(Object obj) {
             if (obj == this) return true;
-            if (obj instanceof dTreeNode) {
-                dTreeNode curr = (dTreeNode) obj;
+            if (obj instanceof TwoDTreeNode) {
+                TwoDTreeNode curr = (TwoDTreeNode) obj;
                 return curr.point.equals(this.point);
             }
             return false;
         }
     }
 
-    private dTreeNode root;
+    private TwoDTreeNode root;
     private int size;
 
     // construct an empty set of points
@@ -52,9 +52,9 @@ public class KdTree {
         return this.size;
     }
 
-    private int inorderSize(dTreeNode node, int size) {
+    private int inorderSize(TwoDTreeNode node, int treeSize) {
         if (node != null) {
-            size = inorderSize(node.left, size);
+            size = inorderSize(node.left, treeSize);
             size++;
             size = inorderSize(node.right, size);
         }
@@ -83,7 +83,7 @@ public class KdTree {
      * @return variable of the type RectHV containing the point which either lies on the left/ right or up/down of the
      * parent point
      */
-    private RectHV getAxisAngledRectangle(dTreeNode parent, boolean isHorizontal, boolean isLeft, boolean isAbove) {
+    private RectHV getAxisAngledRectangle(TwoDTreeNode parent, boolean isHorizontal, boolean isLeft, boolean isAbove) {
         RectHV currRect = parent.axisAlignedRect;
         double parentRectXmin = currRect.xmin();
         double parentRectYmin = currRect.ymin();
@@ -113,10 +113,10 @@ public class KdTree {
     public void insert(Point2D p) {
         if (p == null) throw new IllegalArgumentException("Can not insert null point");
         if (isEmpty()) {
-            root = new dTreeNode(p, new RectHV(0, 0, 1, 1));
+            root = new TwoDTreeNode(p, new RectHV(0, 0, 1, 1));
             size++;
         } else {
-            dTreeNode curr = root;
+            TwoDTreeNode curr = root;
             boolean isHorizontal = false;
             while (curr != null) {
                 if (!curr.point.equals(p)) { // maintaining set invariant where the duplicates are not allowed
@@ -127,7 +127,7 @@ public class KdTree {
                             // point belongs to lower part of the horizontal line containing current point
                             if (curr.right == null) {
                                 // in case the right subtree is empty, insert the candidate point
-                                curr.right = new dTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
+                                curr.right = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
                                 size++;
                                 curr = null;
                             } else {
@@ -138,7 +138,7 @@ public class KdTree {
                             // point belongs to upper part of the horizontal line containing current point
                             if (curr.left == null) {
                                 // in case the left subtree is empty, insert the candidate point
-                                curr.left = new dTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, true));
+                                curr.left = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, true));
                                 size++;
                                 curr = null;
                             } else {
@@ -153,7 +153,7 @@ public class KdTree {
                             // point belongs to the left side of the vertical line containing the current point
                             if (curr.left == null) {
                                 // in case of empty left subtree, insert the candidate node
-                                curr.left = new dTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, true, false));
+                                curr.left = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, true, false));
                                 size++;
                                 curr = null;
                             } else {
@@ -164,7 +164,7 @@ public class KdTree {
                             // point belongs to the right side of the vertical line containing the current point
                             if (curr.right == null) {
                                 // in case of empty right subtree, insert the candidate node
-                                curr.right = new dTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
+                                curr.right = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
                                 size++;
                                 curr = null;
                             } else {
@@ -183,7 +183,7 @@ public class KdTree {
     public boolean contains(Point2D p) {
 
         if (p == null) throw new IllegalArgumentException("Can not find null point");
-        dTreeNode curr = root;
+        TwoDTreeNode curr = root;
         boolean isHorizontal = false;
         while (curr != null) {
             if (curr.point.equals(p)) {
@@ -214,15 +214,25 @@ public class KdTree {
 
     // draw all points to standard draw
     public void draw() {
-        dTreeNode curr = root;
-        printTreeInorder(curr);
+        TwoDTreeNode curr = root;
+        printTreeInorder(curr, false);
     }
 
-    private void printTreeInorder(dTreeNode curr) {
+    private void printTreeInorder(TwoDTreeNode curr, boolean isHorizontal) {
         if (curr == null) return;
+        StdDraw.setPenRadius(0.001);
+        if(isHorizontal) {
+            StdDraw.setPenColor(StdDraw.BLUE);
+            StdDraw.line(curr.axisAlignedRect.xmin(),curr.point.y(), curr.axisAlignedRect.xmax(), curr.point.y());
+        } else {
+            StdDraw.setPenColor(StdDraw.RED);
+            StdDraw.line(curr.point.x(),curr.axisAlignedRect.ymin(), curr.point.x(), curr.axisAlignedRect.ymax());
+        }
+        StdDraw.setPenRadius(0.01);
+        StdDraw.setPenColor(StdDraw.BLACK);
         curr.point.draw();
-        printTreeInorder(curr.left);
-        printTreeInorder(curr.right);
+        printTreeInorder(curr.left, !isHorizontal);
+        printTreeInorder(curr.right, !isHorizontal);
     }
 
     // all points that are inside the rectangle (or on the boundary)
@@ -235,7 +245,7 @@ public class KdTree {
         double left = rect.xmin();
         double right = rect.xmax();
 
-        dTreeNode curr = root;
+        TwoDTreeNode curr = root;
         boolean isHorizontal = false;
         List<Point2D> innerPoints = new LinkedList<>();
 //        range(curr, left, right, top, bottom, innerPoints, isHorizontal);
@@ -243,7 +253,7 @@ public class KdTree {
         return innerPoints;
     }
 
-    private void range(dTreeNode curr, RectHV enclosingRect, List<Point2D> points) {
+    private void range(TwoDTreeNode curr, RectHV enclosingRect, List<Point2D> points) {
         if (curr != null) {
             if (curr.axisAlignedRect.intersects(enclosingRect)) {
                 if (enclosingRect.contains(curr.point)) {
@@ -265,13 +275,13 @@ public class KdTree {
     public Point2D nearest(Point2D p) {
 
         if (p == null) throw new IllegalArgumentException("Can not find nearest from a null point");
-        dTreeNode curr = root;
+        TwoDTreeNode curr = root;
         double distance = Double.MAX_VALUE;
         Point2D nearest = findNearest(p, curr, distance, null);
         return nearest;
     }
 
-    private Point2D findNearest(Point2D candidate, dTreeNode currNode, double nearestDistance, Point2D nearest) {
+    private Point2D findNearest(Point2D candidate, TwoDTreeNode currNode, double nearestDistance, Point2D nearest) {
         if (currNode != null) {// only if the current node is not null
             Point2D currPoint = currNode.point;//Extract point
             double currDistance = currPoint.distanceTo(candidate);
@@ -294,83 +304,6 @@ public class KdTree {
 
     public static void main(String[] args) {
         // initialize the data structures from file
-//        String filename = args[0];
-//        In in = new In(filename);
-//        KdTree kdtree = new KdTree();
-//        while (!in.isEmpty()) {
-//            double x = in.readDouble();
-//            double y = in.readDouble();
-//            Point2D p = new Point2D(x, y);
-//            kdtree.insert(p);
-//        }
-//
-//        double x0 = 0.0, y0 = 0.0;      // initial endpoint of rectangle
-//        double x1 = 0.0, y1 = 0.0;      // current location of mouse
-//        boolean isDragging = false;     // is the user dragging a rectangle
-//
-////        RectHV rectHV = new RectHV(0.1, 0.1, 0.9, 0.9);
-////        for (Point2D point2D : kdtree.range(rectHV)) {
-////            System.out.println(point2D);
-////        }
-//
-//        // draw the points
-//        StdDraw.clear();
-//        StdDraw.setPenColor(StdDraw.BLACK);
-//        StdDraw.setPenRadius(0.01);
-//        kdtree.draw();
-//        StdDraw.show();
-
-//        // process range search queries
-//        StdDraw.enableDoubleBuffering();
-//        while (true) {
-//
-//            // user starts to drag a rectangle
-//            if (StdDraw.isMousePressed() && !isDragging) {
-//                x0 = x1 = StdDraw.mouseX();
-//                y0 = y1 = StdDraw.mouseY();
-//                isDragging = true;
-//            }
-//
-//            // user is dragging a rectangle
-//            else if (StdDraw.isMousePressed() && isDragging) {
-//                x1 = StdDraw.mouseX();
-//                y1 = StdDraw.mouseY();
-//            }
-//
-//            // user stops dragging rectangle
-//            else if (!StdDraw.isMousePressed() && isDragging) {
-//                isDragging = false;
-//            }
-//
-//            // draw the points
-//            StdDraw.clear();
-//            StdDraw.setPenColor(StdDraw.BLACK);
-//            StdDraw.setPenRadius(0.01);
-//            kdtree.draw();
-//
-//            // draw the rectangle
-//            RectHV rect = new RectHV(Math.min(x0, x1), Math.min(y0, y1),
-//                    Math.max(x0, x1), Math.max(y0, y1));
-//            StdDraw.setPenColor(StdDraw.BLACK);
-//            StdDraw.setPenRadius();
-//            rect.draw();
-//
-//            // draw the range search results for kd-tree in blue
-//            StdDraw.setPenRadius(0.02);
-//            StdDraw.setPenColor(StdDraw.BLUE);
-//            for (Point2D p : kdtree.range(rect)) {
-//                System.out.println(p);
-//                p.draw();
-//            }
-//
-//            StdDraw.show();
-//            StdDraw.pause(20);
-//        }
-
-
-        //Nearest neighbor
-
-        // initialize the two data structures with point from file
         String filename = args[0];
         In in = new In(filename);
         KdTree kdtree = new KdTree();
@@ -381,26 +314,103 @@ public class KdTree {
             kdtree.insert(p);
         }
 
-        // process nearest neighbor queries
+        double x0 = 0.0, y0 = 0.0;      // initial endpoint of rectangle
+        double x1 = 0.0, y1 = 0.0;      // current location of mouse
+        boolean isDragging = false;     // is the user dragging a rectangle
+
+//        RectHV rectHV = new RectHV(0.1, 0.1, 0.9, 0.9);
+//        for (Point2D point2D : kdtree.range(rectHV)) {
+//            System.out.println(point2D);
+//        }
+
+        // draw the points
+        StdDraw.clear();
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.setPenRadius(0.01);
+        kdtree.draw();
+        StdDraw.show();
+
+        // process range search queries
         StdDraw.enableDoubleBuffering();
         while (true) {
 
-            // the location (x, y) of the mouse
-            double x = StdDraw.mouseX();
-            double y = StdDraw.mouseY();
-            Point2D query = new Point2D(x, y);
+            // user starts to drag a rectangle
+            if (StdDraw.isMousePressed() && !isDragging) {
+                x0 = x1 = StdDraw.mouseX();
+                y0 = y1 = StdDraw.mouseY();
+                isDragging = true;
+            }
 
-            // draw all of the points
+            // user is dragging a rectangle
+            else if (StdDraw.isMousePressed() && isDragging) {
+                x1 = StdDraw.mouseX();
+                y1 = StdDraw.mouseY();
+            }
+
+            // user stops dragging rectangle
+            else if (!StdDraw.isMousePressed() && isDragging) {
+                isDragging = false;
+            }
+
+            // draw the points
             StdDraw.clear();
             StdDraw.setPenColor(StdDraw.BLACK);
-            StdDraw.setPenRadius(0.02);
+            StdDraw.setPenRadius(0.01);
             kdtree.draw();
 
-            // draw in blue the nearest neighbor (using kd-tree algorithm)
+            // draw the rectangle
+            RectHV rect = new RectHV(Math.min(x0, x1), Math.min(y0, y1),
+                    Math.max(x0, x1), Math.max(y0, y1));
+            StdDraw.setPenColor(StdDraw.BLACK);
+            StdDraw.setPenRadius();
+            rect.draw();
+
+            // draw the range search results for kd-tree in blue
+            StdDraw.setPenRadius(0.02);
             StdDraw.setPenColor(StdDraw.BLUE);
-            kdtree.nearest(query).draw();
+            for (Point2D p : kdtree.range(rect)) {
+                System.out.println(p);
+                p.draw();
+            }
+
             StdDraw.show();
-            StdDraw.pause(40);
+            StdDraw.pause(20);
         }
+
+
+        //Nearest neighbor
+
+        // initialize the two data structures with point from file
+//        String filename = args[0];
+//        In in = new In(filename);
+//        KdTree kdtree = new KdTree();
+//        while (!in.isEmpty()) {
+//            double x = in.readDouble();
+//            double y = in.readDouble();
+//            Point2D p = new Point2D(x, y);
+//            kdtree.insert(p);
+//        }
+//
+//        // process nearest neighbor queries
+//        StdDraw.enableDoubleBuffering();
+//        while (true) {
+//
+//            // the location (x, y) of the mouse
+//            double x = StdDraw.mouseX();
+//            double y = StdDraw.mouseY();
+//            Point2D query = new Point2D(x, y);
+//
+//            // draw all of the points
+//            StdDraw.clear();
+//            StdDraw.setPenColor(StdDraw.BLACK);
+//            StdDraw.setPenRadius(0.02);
+//            kdtree.draw();
+//
+//            // draw in blue the nearest neighbor (using kd-tree algorithm)
+//            StdDraw.setPenColor(StdDraw.BLUE);
+//            kdtree.nearest(query).draw();
+//            StdDraw.show();
+//            StdDraw.pause(40);
+//        }
     }
 }
