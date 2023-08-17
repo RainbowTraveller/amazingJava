@@ -8,6 +8,11 @@ public class GameRunner {
     @Autowired
     private Game game;
 
+    /*
+    This is Dependency Injection of the type : Constructor based
+    Variable is mentioned to be autowired marking the dependency and it is populated using
+    the constructor
+     */
     public GameRunner(Game game) {
         this.game = game;
     }

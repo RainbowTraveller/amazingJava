@@ -1,7 +1,6 @@
 package com.meraie.spring.springup;
 
-import com.meraie.spring.springup.enterprise.example.WebController;
-import com.meraie.spring.springup.game.GameRunner;
+import com.meraie.spring.springup.enterprise.example.web.WebController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
