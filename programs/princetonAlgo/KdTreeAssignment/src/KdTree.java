@@ -35,10 +35,16 @@ public class KdTree {
     private TwoDTreeNode root;
     private int size;
 
+    private int nearestCount;
+    private int rectEncloseCount;
+
+
     // construct an empty set of points
     public KdTree() {
         root = null;
         size = 0;
+        nearestCount = 0;
+        rectEncloseCount = 0;
     }
 
     // is the set empty?
@@ -48,17 +54,7 @@ public class KdTree {
 
     // number of points in the set
     public int size() {
-//        return inorderSize(root, 0);
         return this.size;
-    }
-
-    private int inorderSize(TwoDTreeNode node, int treeSize) {
-        if (node != null) {
-            size = inorderSize(node.left, treeSize);
-            size++;
-            size = inorderSize(node.right, size);
-        }
-        return size;
     }
 
     /**
@@ -109,74 +105,75 @@ public class KdTree {
         }
     }
 
-    // add the point to the set (if it is not already in the set)
+    private RectHV getAxisAngledRectangle(TwoDTreeNode parent, int level, boolean isLeft, boolean isAbove) {
+        RectHV currRect = parent.axisAlignedRect;
+        double parentRectXmin = currRect.xmin();
+        double parentRectYmin = currRect.ymin();
+        double parentRectXmax = currRect.xmax();
+        double parentRectYmax = currRect.ymax();
+        Point2D parentPoint = parent.point;
+        if (level % 2 != 0) {
+            if (isAbove) {
+                // Up : Xmin, y - Xmax, Ymax
+                return new RectHV(parentRectXmin, parentPoint.y(), parentRectXmax, parentRectYmax);
+            } else {
+                // Down : Xmin, Ymin - Xmax, y
+                return new RectHV(parentRectXmin, parentRectYmin, parentRectXmax, parentPoint.y());
+            }
+        } else {
+            if (isLeft) {
+                // Left :Xmin, Ymin - x, Ymax
+                return new RectHV(parentRectXmin, parentRectYmin, parentPoint.x(), parentRectYmax);
+            } else {
+                // Right x,Ymin - Xmax, Ymax
+                return new RectHV(parentPoint.x(), parentRectYmin, parentRectXmax, parentRectYmax);
+            }
+        }
+    }
+
     public void insert(Point2D p) {
         if (p == null) throw new IllegalArgumentException("Can not insert null point");
-        if (isEmpty()) {
-            root = new TwoDTreeNode(p, new RectHV(0, 0, 1, 1));
+        root = insert(p, new RectHV(0, 0, 1, 1), root, 0);
+
+    }
+
+    private TwoDTreeNode insert(Point2D p, RectHV currRect, TwoDTreeNode curr, int level) {
+        if (curr == null) {
+            curr = new TwoDTreeNode(p, currRect);
             size++;
         } else {
-            TwoDTreeNode curr = root;
-            boolean isHorizontal = false;
-            while (curr != null) {
-                if (!curr.point.equals(p)) { // maintaining set invariant where the duplicates are not allowed
-                    // parent is at odd level and hence check for y coordinate
-                    // and split the space horizontally ( up-down )
-                    if (isHorizontal) {
-                        if (p.y() < curr.point.y()) {
-                            // point belongs to lower part of the horizontal line containing current point
-                            if (curr.right == null) {
-                                // in case the right subtree is empty, insert the candidate point
-                                curr.right = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
-                                size++;
-                                curr = null;
-                            } else {
-                                // traverse the right subtree in case it is not empty
-                                curr = curr.right;
-                            }
-                        } else {
-                            // point belongs to upper part of the horizontal line containing current point
-                            if (curr.left == null) {
-                                // in case the left subtree is empty, insert the candidate point
-                                curr.left = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, true));
-                                size++;
-                                curr = null;
-                            } else {
-                                // traverse the left subtree in case it is not empty
-                                curr = curr.left;
-                            }
-                        }
+            if (!curr.point.equals(p)) {
+                RectHV parentRect = curr.axisAlignedRect;
+                double parentRectXmin = parentRect.xmin();
+                double parentRectYmin = parentRect.ymin();
+                double parentRectXmax = parentRect.xmax();
+                double parentRectYmax = parentRect.ymax();
+                Point2D parentPoint = curr.point;
+
+                if (level % 2 == 0) { // Even level : vertical : check x coordinate : less --> left more --> right
+                    if (p.x() < curr.point.x()) {
+                        // Left :Xmin, Ymin - x, Ymax
+                        RectHV leftRect = new RectHV(parentRectXmin, parentRectYmin, parentPoint.x(), parentRectYmax);
+                        curr.left = insert(p, leftRect, curr.left, level + 1);
                     } else {
-                        // parent is at even level and hence check for x coordinate
-                        // and split the space vertically ( left - right )
-                        if (p.x() < curr.point.x()) {
-                            // point belongs to the left side of the vertical line containing the current point
-                            if (curr.left == null) {
-                                // in case of empty left subtree, insert the candidate node
-                                curr.left = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, true, false));
-                                size++;
-                                curr = null;
-                            } else {
-                                // traverse the left subtree
-                                curr = curr.left;
-                            }
-                        } else {
-                            // point belongs to the right side of the vertical line containing the current point
-                            if (curr.right == null) {
-                                // in case of empty right subtree, insert the candidate node
-                                curr.right = new TwoDTreeNode(p, getAxisAngledRectangle(curr, isHorizontal, false, false));
-                                size++;
-                                curr = null;
-                            } else {
-                                // traverse the right subtree
-                                curr = curr.right;
-                            }
-                        }
+                        // Right x,Ymin - Xmax, Ymax
+                        RectHV rightRect = new RectHV(parentPoint.x(), parentRectYmin, parentRectXmax, parentRectYmax);
+                        curr.right = insert(p, rightRect, curr.right, level + 1);
                     }
-                    isHorizontal = !(isHorizontal);
+                } else { // odd level : horizontal : check y coordinate : less --> below more --> above
+                    if (p.y() < curr.point.y()) {
+                        // Down : Xmin, Ymin - Xmax, y
+                        RectHV belowRect = new RectHV(parentRectXmin, parentRectYmin, parentRectXmax, parentPoint.y());
+                        curr.right = insert(p, belowRect, curr.right, level + 1);
+                    } else {
+                        // Up : Xmin, y - Xmax, Ymax
+                        RectHV aboveRect = new RectHV(parentRectXmin, parentPoint.y(), parentRectXmax, parentRectYmax);
+                        curr.left = insert(p, aboveRect, curr.left, level + 1);
+                    }
                 }
             }
         }
+        return curr;
     }
 
     // does the set contain point p?
@@ -193,9 +190,9 @@ public class KdTree {
                 // and split the space horizontally ( up-down )
                 if (isHorizontal) {
                     if (p.y() < curr.point.y()) {
-                        curr = curr.left;
-                    } else {
                         curr = curr.right;
+                    } else {
+                        curr = curr.left;
                     }
                 } else {
                     // parent is add even level and hence check for x coordinate a
@@ -215,24 +212,24 @@ public class KdTree {
     // draw all points to standard draw
     public void draw() {
         TwoDTreeNode curr = root;
-        printTreeInorder(curr, false);
+        printTreeInorder(curr, false, false, null);
     }
 
-    private void printTreeInorder(TwoDTreeNode curr, boolean isHorizontal) {
+    private void printTreeInorder(TwoDTreeNode curr, boolean isHorizontal, boolean left, TwoDTreeNode parent) {
         if (curr == null) return;
         StdDraw.setPenRadius(0.001);
-        if(isHorizontal) {
+        if (isHorizontal) {
             StdDraw.setPenColor(StdDraw.BLUE);
-            StdDraw.line(curr.axisAlignedRect.xmin(),curr.point.y(), curr.axisAlignedRect.xmax(), curr.point.y());
+            StdDraw.line(curr.axisAlignedRect.xmin(), curr.point.y(), curr.axisAlignedRect.xmax(), curr.point.y());
         } else {
             StdDraw.setPenColor(StdDraw.RED);
-            StdDraw.line(curr.point.x(),curr.axisAlignedRect.ymin(), curr.point.x(), curr.axisAlignedRect.ymax());
+            StdDraw.line(curr.point.x(), curr.axisAlignedRect.ymin(), curr.point.x(), curr.axisAlignedRect.ymax());
         }
         StdDraw.setPenRadius(0.01);
         StdDraw.setPenColor(StdDraw.BLACK);
         curr.point.draw();
-        printTreeInorder(curr.left, !isHorizontal);
-        printTreeInorder(curr.right, !isHorizontal);
+        printTreeInorder(curr.left, !isHorizontal, true, curr);
+        printTreeInorder(curr.right, !isHorizontal, false, curr);
     }
 
     // all points that are inside the rectangle (or on the boundary)
@@ -240,15 +237,10 @@ public class KdTree {
         if (rect == null) {
             throw new IllegalArgumentException("Can not find range for null rectangle");
         }
-        double top = rect.ymax();
-        double bottom = rect.ymin();
-        double left = rect.xmin();
-        double right = rect.xmax();
-
         TwoDTreeNode curr = root;
-        boolean isHorizontal = false;
         List<Point2D> innerPoints = new LinkedList<>();
-//        range(curr, left, right, top, bottom, innerPoints, isHorizontal);
+        this.rectEncloseCount++;
+//        System.out.println("RANGE : " + rectEncloseCount);
         range(curr, rect, innerPoints);
         return innerPoints;
     }
@@ -257,18 +249,20 @@ public class KdTree {
         if (curr != null) {
             if (curr.axisAlignedRect.intersects(enclosingRect)) {
                 if (enclosingRect.contains(curr.point)) {
+//                    System.out.println("Contains : " + curr.axisAlignedRect.intersects(enclosingRect));
+//                    System.out.println(enclosingRect + " :::: " + curr.axisAlignedRect);
                     points.add(curr.point);
                 }
                 if (curr.left != null && curr.left.axisAlignedRect.intersects(enclosingRect)) {
+//                    System.out.println("LEFT : " + curr.axisAlignedRect.intersects(enclosingRect));
                     range(curr.left, enclosingRect, points);
                 }
                 if (curr.right != null && curr.right.axisAlignedRect.intersects(enclosingRect)) {
+//                    System.out.println("RIGHT : " + curr.axisAlignedRect.intersects(enclosingRect));
                     range(curr.right, enclosingRect, points);
                 }
-
             }
         }
-
     }
 
     // a nearest neighbor in the set to point p; null if the set is empty
@@ -276,15 +270,16 @@ public class KdTree {
 
         if (p == null) throw new IllegalArgumentException("Can not find nearest from a null point");
         TwoDTreeNode curr = root;
-        double distance = Double.MAX_VALUE;
+        double distance = Double.POSITIVE_INFINITY;
         Point2D nearest = findNearest(p, curr, distance, null);
+        this.nearestCount++;
         return nearest;
     }
 
     private Point2D findNearest(Point2D candidate, TwoDTreeNode currNode, double nearestDistance, Point2D nearest) {
         if (currNode != null) {// only if the current node is not null
             Point2D currPoint = currNode.point;//Extract point
-            double currDistance = currPoint.distanceTo(candidate);
+            double currDistance = currPoint.distanceSquaredTo(candidate);
             if (currDistance < nearestDistance) {
                 nearest = currPoint;
                 nearestDistance = currDistance;
@@ -318,64 +313,74 @@ public class KdTree {
         double x1 = 0.0, y1 = 0.0;      // current location of mouse
         boolean isDragging = false;     // is the user dragging a rectangle
 
-//        RectHV rectHV = new RectHV(0.1, 0.1, 0.9, 0.9);
-//        for (Point2D point2D : kdtree.range(rectHV)) {
-//            System.out.println(point2D);
-//        }
-
-        // draw the points
-        StdDraw.clear();
-        StdDraw.setPenColor(StdDraw.BLACK);
-        StdDraw.setPenRadius(0.01);
-        kdtree.draw();
-        StdDraw.show();
-
-        // process range search queries
-        StdDraw.enableDoubleBuffering();
-        while (true) {
-
-            // user starts to drag a rectangle
-            if (StdDraw.isMousePressed() && !isDragging) {
-                x0 = x1 = StdDraw.mouseX();
-                y0 = y1 = StdDraw.mouseY();
-                isDragging = true;
-            }
-
-            // user is dragging a rectangle
-            else if (StdDraw.isMousePressed() && isDragging) {
-                x1 = StdDraw.mouseX();
-                y1 = StdDraw.mouseY();
-            }
-
-            // user stops dragging rectangle
-            else if (!StdDraw.isMousePressed() && isDragging) {
-                isDragging = false;
-            }
-
-            // draw the points
-            StdDraw.clear();
-            StdDraw.setPenColor(StdDraw.BLACK);
-            StdDraw.setPenRadius(0.01);
-            kdtree.draw();
-
-            // draw the rectangle
-            RectHV rect = new RectHV(Math.min(x0, x1), Math.min(y0, y1),
-                    Math.max(x0, x1), Math.max(y0, y1));
-            StdDraw.setPenColor(StdDraw.BLACK);
-            StdDraw.setPenRadius();
-            rect.draw();
-
-            // draw the range search results for kd-tree in blue
-            StdDraw.setPenRadius(0.02);
-            StdDraw.setPenColor(StdDraw.BLUE);
-            for (Point2D p : kdtree.range(rect)) {
-                System.out.println(p);
-                p.draw();
-            }
-
-            StdDraw.show();
-            StdDraw.pause(20);
+        RectHV rectHV = new RectHV(0.4375, 0.0625, 0.8125, 0.8125);
+        for (Point2D point2D : kdtree.range(rectHV)) {
+            System.out.println("Inside : " + point2D);
         }
+
+//        in = new In(filename);
+//        while (!in.isEmpty()) {
+//            double x = in.readDouble();
+//            double y = in.readDouble();
+//            Point2D p = new Point2D(x, y);
+////            System.out.println(p);
+//            if(kdtree.contains(p)) {
+//                System.out.println(p);
+//            }
+//        }
+//        // draw the points
+//        StdDraw.clear();
+//        StdDraw.setPenColor(StdDraw.BLACK);
+//        StdDraw.setPenRadius(0.01);
+//        kdtree.draw();
+//        StdDraw.show();
+//
+//        // process range search queries
+//        StdDraw.enableDoubleBuffering();
+//        while (true) {
+//
+//            // user starts to drag a rectangle
+//            if (StdDraw.isMousePressed() && !isDragging) {
+//                x0 = x1 = StdDraw.mouseX();
+//                y0 = y1 = StdDraw.mouseY();
+//                isDragging = true;
+//            }
+//
+//            // user is dragging a rectangle
+//            else if (StdDraw.isMousePressed() && isDragging) {
+//                x1 = StdDraw.mouseX();
+//                y1 = StdDraw.mouseY();
+//            }
+//
+//            // user stops dragging rectangle
+//            else if (!StdDraw.isMousePressed() && isDragging) {
+//                isDragging = false;
+//            }
+//
+//            // draw the points
+//            StdDraw.clear();
+//            StdDraw.setPenColor(StdDraw.BLACK);
+//            StdDraw.setPenRadius(0.01);
+//            kdtree.draw();
+//
+//            // draw the rectangle
+//            RectHV rect = new RectHV(Math.min(x0, x1), Math.min(y0, y1),
+//                    Math.max(x0, x1), Math.max(y0, y1));
+//            StdDraw.setPenColor(StdDraw.BLACK);
+//            StdDraw.setPenRadius();
+//            rect.draw();
+//
+//            // draw the range search results for kd-tree in blue
+//            StdDraw.setPenRadius(0.02);
+//            StdDraw.setPenColor(StdDraw.BLUE);
+//            for (Point2D p : kdtree.range(rect)) {
+//                System.out.println(p);
+//                p.draw();
+//            }
+//
+//            StdDraw.show();
+//            StdDraw.pause(20);
+//        }
 
 
         //Nearest neighbor
