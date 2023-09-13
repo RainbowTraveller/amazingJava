@@ -4,7 +4,7 @@
     </head>
     <body>
       <h1 style="border:2px solid Blue;">Welcome To Scheduler</h1>
-      <div>Name : ${name} </div>
+      <hr>
       <div><a href="tasks">Manage</a> your tasks</div>
     </body>
  </html>
