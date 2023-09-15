@@ -5,28 +5,29 @@
       <title>Task List Page</title>
     </head>
     <body>
-      <h1 style="border:2px solid Blue;">Welcome To List of the Tasks</h1>
-      Hello ${name}
-      <table>
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Description</th>
-                    <th>Target Date</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${tasks}" var="task">
+        <div class="container">
+            <h1 style="border:2px solid Blue;">Welcome To List of the Tasks</h1>
+            <table class="table">
+                <thead>
                     <tr>
-                        <td>${task.id}</td>
-                        <td>${task.description}</td>
-                        <td>${task.endDate}</td>
-                        <td>${task.done}</td>
+                        <th>Id</th>
+                        <th>Description</th>
+                        <th>Target Date</th>
+                        <th>Status</th>
                     </tr>
-                </c:forEach>
-            </tbody>
-      </table>
+                </thead>
+                <tbody>
+                    <c:forEach items="${tasks}" var="task">
+                        <tr>
+                            <td>${task.id}</td>
+                            <td>${task.description}</td>
+                            <td>${task.endDate}</td>
+                            <td>${task.done}</td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
       <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
       <script src="webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     </body>
