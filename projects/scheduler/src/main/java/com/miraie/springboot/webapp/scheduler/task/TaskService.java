@@ -12,14 +12,20 @@ public class TaskService {
 
     private static List<Task> taskList = new LinkedList<>();
 
+    private static int count = 0;
     static {
-        taskList.add(new Task(1, "milo", "Learning Go", LocalDate.now().plusMonths(6), false));
-        taskList.add(new Task(2, "pokoyo", "Learning C++", LocalDate.now().plusWeeks(6), false));
-        taskList.add(new Task(3, "milo", "Learning Leetcode", LocalDate.now().plusYears(1), false));
-        taskList.add(new Task(4, "guggul", "Learning REST", LocalDate.now().plusMonths(3), false));
+        taskList.add(new Task(++count, "milo", "Learning Go", LocalDate.now().plusMonths(6), false));
+        taskList.add(new Task(++count, "pokoyo", "Learning C++", LocalDate.now().plusWeeks(6), false));
+        taskList.add(new Task(++count, "milo", "Learning Leetcode", LocalDate.now().plusYears(1), false));
+        taskList.add(new Task(++count, "guggul", "Learning REST", LocalDate.now().plusMonths(3), false));
     }
 
     public List<Task> getByUserName(String userName) {
         return taskList;
+    }
+
+    public void addTask(String userName, String description, LocalDate endDate, boolean status) {
+        Task newTask = new Task(++count, userName, description, endDate, status);
+        taskList.add(newTask);
     }
 }
