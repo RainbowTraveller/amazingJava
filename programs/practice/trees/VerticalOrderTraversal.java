@@ -85,14 +85,12 @@ public class VerticalOrderTraversal {
 
         for (Triplet<Integer, Integer, Integer> triplet : this.nodeList) {
             Integer column = triplet.first, value = triplet.third;
-            if (column == currColumnIndex) {
-                currColumn.add(value);
-            } else {
+            if (column != currColumnIndex) {
                 output.add(currColumn);
                 currColumnIndex = column;
                 currColumn = new ArrayList();
-                currColumn.add(value);
             }
+            currColumn.add(value);
         }
         output.add(currColumn);
 
@@ -117,14 +115,15 @@ class TreeNode {
     TreeNode left;
     TreeNode right;
 
-    TreeNode() {
+    public TreeNode() {
+        this.TreeNode(Integer.MIN_VALUE);
     }
 
-    TreeNode(int val) {
-        this.val = val;
+    public TreeNode(int val) {
+        this.TreeNode(val, null, null);
     }
 
-    TreeNode(int val, TreeNode left, TreeNode right) {
+    public TreeNode(int val, TreeNode left, TreeNode right) {
         this.val = val;
         this.left = left;
         this.right = right;
