@@ -7,6 +7,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import java.time.LocalDate;
@@ -59,6 +60,11 @@ public class TaskController {
         //This is another way binding, whatever is entered in the view will be passed here
         service.addTask(userName, task.getDescription(), LocalDate.now().plusYears(1), false);
         //Redirecting to the list of the tasks : Note : use the url and not jsp page name
+        return "redirect:tasks";
+    }
+    @RequestMapping("deleteTask")
+    public String addTask(@RequestParam int id) {
+        service.deleteTaskAById(id);
         return "redirect:tasks";
     }
 }

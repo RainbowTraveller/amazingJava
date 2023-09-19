@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Predicate;
 
 @Service
 public class TaskService {
@@ -27,5 +28,10 @@ public class TaskService {
     public void addTask(String userName, String description, LocalDate endDate, boolean status) {
         Task newTask = new Task(++count, userName, description, endDate, status);
         taskList.add(newTask);
+    }
+
+    public void deleteTaskAById(int id) {
+        Predicate<? super Task> predicate = task -> task.getId() == id;
+        taskList.removeIf(predicate);
     }
 }
