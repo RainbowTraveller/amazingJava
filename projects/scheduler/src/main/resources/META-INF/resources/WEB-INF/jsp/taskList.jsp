@@ -24,6 +24,7 @@
                             <td>${task.endDate}</td>
                             <td>${task.done}</td>
                             <td><a href="deleteTask?id=${task.id}" class="btn btn-warning">Delete</a></td>
+                            <td><a href="updateTask?id=${task.id}" class="btn btn-success">Update</a></td>
                         </tr>
                     </c:forEach>
                 </tbody>

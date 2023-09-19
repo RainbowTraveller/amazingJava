@@ -51,7 +51,7 @@ public class TaskController {
      */
     @RequestMapping(value = "addTask", method = RequestMethod.POST)
     public String addTask(ModelMap modelMap, @Valid Task task, BindingResult result) {
-        if(result.hasErrors()) {
+        if (result.hasErrors()) {
             // Do not redirect but just be on the same page
             // But needs addition in the jsp page to show errors
             return "task";
@@ -62,9 +62,33 @@ public class TaskController {
         //Redirecting to the list of the tasks : Note : use the url and not jsp page name
         return "redirect:tasks";
     }
+
     @RequestMapping("deleteTask")
     public String addTask(@RequestParam int id) {
         service.deleteTaskAById(id);
+        return "redirect:tasks";
+    }
+
+    @RequestMapping(value = "updateTask", method = RequestMethod.GET)
+    public String updateTask(@RequestParam int id, ModelMap modelMap) {
+        //Get the task using id
+        Task task = service.findTaskById(id);
+        //Populate in the model and redirect to appropriate page for editing
+        modelMap.addAttribute("task", task);
+        return "task";
+    }
+    @RequestMapping(value = "updateTask", method = RequestMethod.POST)
+    public String saveUpdatedTask(ModelMap modelMap, @Valid Task task, BindingResult result) {
+        if (result.hasErrors()) {
+            // Do not redirect but just be on the same page
+            // But needs addition in the jsp page to show errors
+            return "task";
+        }
+        String userName = (String) modelMap.get("name");
+        task.setUserName(userName);
+        //This is another way binding, whatever is entered in the view will be passed here
+        service.updateTask(task);
+        //Redirecting to the list of the tasks : Note : use the url and not jsp page name
         return "redirect:tasks";
     }
 }

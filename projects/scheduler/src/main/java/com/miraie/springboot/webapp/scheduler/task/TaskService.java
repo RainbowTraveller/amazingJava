@@ -34,4 +34,15 @@ public class TaskService {
         Predicate<? super Task> predicate = task -> task.getId() == id;
         taskList.removeIf(predicate);
     }
+
+    public Task findTaskById(int id) {
+        Predicate<? super Task> predicate = task -> task.getId() == id;
+        Task task = taskList.stream().filter(predicate).findFirst().get();
+        return task;
+    }
+
+    public void updateTask(Task task) {
+        deleteTaskAById(task.getId());
+        taskList.add(task);
+    }
 }
