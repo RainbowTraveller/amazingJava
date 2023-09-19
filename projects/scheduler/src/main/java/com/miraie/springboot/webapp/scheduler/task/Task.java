@@ -1,10 +1,13 @@
 package com.miraie.springboot.webapp.scheduler.task;
 
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDate;
 
 public class Task {
     private int id;
     private String userName;
+    @Size(min = 10, message = "Please enter min 10 character message")
     private String description;
     private LocalDate endDate;
     private boolean done;
