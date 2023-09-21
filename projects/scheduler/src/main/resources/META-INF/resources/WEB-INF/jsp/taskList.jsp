@@ -10,7 +10,6 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Id</th>
                         <th>Description</th>
                         <th>Target Date</th>
                         <th>Status</th>
@@ -19,7 +18,6 @@
                 <tbody>
                     <c:forEach items="${tasks}" var="task">
                         <tr>
-                            <td>${task.id}</td>
                             <td>${task.description}</td>
                             <td>${task.endDate}</td>
                             <td>${task.done}</td>

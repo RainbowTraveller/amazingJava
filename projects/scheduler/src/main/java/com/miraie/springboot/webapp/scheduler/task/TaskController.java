@@ -58,7 +58,7 @@ public class TaskController {
         }
         String userName = (String) modelMap.get("name");
         //This is another way binding, whatever is entered in the view will be passed here
-        service.addTask(userName, task.getDescription(), LocalDate.now().plusYears(1), false);
+        service.addTask(userName, task.getDescription(), task.getEndDate(), false);
         //Redirecting to the list of the tasks : Note : use the url and not jsp page name
         return "redirect:tasks";
     }
