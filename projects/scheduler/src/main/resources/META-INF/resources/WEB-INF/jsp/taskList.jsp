@@ -29,7 +29,7 @@
             </table>
             <a href="addTask" class="btn btn-success">Add Task</a>
         </div>
-      <script src="webjars/jquery/3.6.0/jquery.min.js"></script>
+      <script src="webjars/jquery/3.7.1/jquery.min.js"></script>
       <script src="webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
     </body>
     
