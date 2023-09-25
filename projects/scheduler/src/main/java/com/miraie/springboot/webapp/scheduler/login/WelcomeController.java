@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 @Controller
 @SessionAttributes("name")
-public class LoginController {
+public class WelcomeController {
     //Adding logger
     private Logger logger = LoggerFactory.getLogger(getClass());
 
