@@ -13,26 +13,13 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 @Controller
 @SessionAttributes("name")
 public class LoginController {
-    @Autowired
-    private AuthenticationService authenticationService;
     //Adding logger
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    @RequestMapping(value = "login", method = RequestMethod.GET)
-    public String login() {
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String login(ModelMap map) {
         logger.debug("Inside the login method");
-        return "login";
-    }
-
-    @RequestMapping(value = "login", method = RequestMethod.POST)
-    public String welcome(@RequestParam String name, @RequestParam String password, ModelMap model) {
-        logger.debug("Inside the welcome method");
-        if (authenticationService.authenticate(name, password)) {
-            model.put("name", name);
-            return "welcome";
-        }
-
-        model.put("errorMessage", "Invalid Credentials");
-        return "login";
+        map.put("name", "");
+        return "welcome";
     }
 }
