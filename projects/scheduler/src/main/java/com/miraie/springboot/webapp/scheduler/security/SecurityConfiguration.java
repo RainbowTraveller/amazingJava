@@ -13,10 +13,10 @@ import java.util.function.Function;
 @Configuration
 public class SecurityConfiguration {
 
-    Function<String, String> passwordEncoder =
-            input -> passwordEncoder().encode(input);
     @Bean
     public InMemoryUserDetailsManager condigInMemoryUserDetails () {
+        Function<String, String> passwordEncoder =
+                input -> passwordEncoder().encode(input);
         // This was initial implementation, but the method is deprecated
         // UserDetails userDetails = User.withDefaultPasswordEncoder(passwordEncoder)
         // Added new encoder to avoid the above method

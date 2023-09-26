@@ -2,6 +2,8 @@ package com.miraie.springboot.webapp.scheduler.task;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -26,15 +28,20 @@ public class TaskController {
     }
 
     @RequestMapping("tasks")
-    public String tasks(ModelMap model) {
-        List<Task> tasks = service.getByUserName("milo");
-        model.addAttribute("tasks", tasks);
+    public String tasks(ModelMap modelMap) {
+        //This is stored in the session by the welcome controller
+        // But if the floe bypasses the welcome page then we need to get it from security
+        // Hence new method.
+        String userName = getUserName(modelMap);
+        List<Task> tasks = service.getByUserName(userName);
+        modelMap.addAttribute("tasks", tasks);
         return "taskList";
     }
 
+
     @RequestMapping(value = "addTask", method = RequestMethod.GET)
     public String showAddTask(ModelMap modelMap) {
-        String userName = (String) modelMap.get("name");
+        String userName = getUserName(modelMap);
         //This is binding from the Controller to view
         //The "Default Desc" will show up in the view
         Task task = new Task(0, userName, "", LocalDate.now().plusYears(1), false);
@@ -56,7 +63,7 @@ public class TaskController {
             // But needs addition in the jsp page to show errors
             return "task";
         }
-        String userName = (String) modelMap.get("name");
+        String userName = getUserName(modelMap);
         //This is another way binding, whatever is entered in the view will be passed here
         service.addTask(userName, task.getDescription(), task.getEndDate(), false);
         //Redirecting to the list of the tasks : Note : use the url and not jsp page name
@@ -84,11 +91,15 @@ public class TaskController {
             // But needs addition in the jsp page to show errors
             return "task";
         }
-        String userName = (String) modelMap.get("name");
+        String userName = getUserName(modelMap);
         task.setUserName(userName);
         //This is another way binding, whatever is entered in the view will be passed here
         service.updateTask(task);
         //Redirecting to the list of the tasks : Note : use the url and not jsp page name
         return "redirect:tasks";
+    }
+    private String getUserName (ModelMap modelMap) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication.getName();
     }
 }

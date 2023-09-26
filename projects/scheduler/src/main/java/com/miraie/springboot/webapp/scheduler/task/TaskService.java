@@ -22,7 +22,9 @@ public class TaskService {
     }
 
     public List<Task> getByUserName(String userName) {
-        return taskList;
+
+        Predicate<? super Task> predicate = task -> task.getUserName().equalsIgnoreCase(userName);
+        return taskList.stream().filter(predicate).toList();
     }
 
     public void addTask(String userName, String description, LocalDate endDate, boolean status) {
