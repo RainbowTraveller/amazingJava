@@ -15,17 +15,25 @@ public class SecurityConfiguration {
 
     @Bean
     public InMemoryUserDetailsManager condigInMemoryUserDetails () {
+
+        UserDetails newUser1 = createNewUser("milo", "kukkut");
+        UserDetails newUser2 = createNewUser("pokoyo", "thokoyo");
+        UserDetails newUser3 = createNewUser("guggul", "punav");
+        return new InMemoryUserDetailsManager(newUser1,newUser2, newUser3);
+    }
+
+    private UserDetails createNewUser (String username, String password) {
         Function<String, String> passwordEncoder =
                 input -> passwordEncoder().encode(input);
         // This was initial implementation, but the method is deprecated
         // UserDetails userDetails = User.withDefaultPasswordEncoder(passwordEncoder)
         // Added new encoder to avoid the above method
         UserDetails userDetails = User.builder().passwordEncoder(passwordEncoder)
-                .username("milo")
-                .password("kukkut")
+                .username(username)
+                .password(password)
                 .roles("USER", "ADMIN")
                 .build();
-        return new InMemoryUserDetailsManager(userDetails);
+        return userDetails;
     }
 
     @Bean
