@@ -38,7 +38,7 @@ public class IntervalsIntersection {
                 }
                 // Now if A's end is less than B's end then it is already accounted for,
                 // check next interval, but keep B as is, because next A may also be within current B and vice versa
-                if (A[indexA][1] < B[indexB][1]) {
+                if (A[indexA][1] <= B[indexB][1]) {
                     indexA++;
                 } else {
                     indexB++;
