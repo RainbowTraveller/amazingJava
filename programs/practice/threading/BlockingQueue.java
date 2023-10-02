@@ -18,8 +18,8 @@ public class BlockingQueue {
         Consumer eventConsumer = new Consumer(queue, startSignal);
 
         Thread pThread = new Thread(eventProducer);
-        pThread.start();
         Thread cThread = new Thread(eventConsumer);
+        pThread.start();
         cThread.start();
         startSignal.countDown();
     }
