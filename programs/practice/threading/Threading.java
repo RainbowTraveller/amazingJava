@@ -11,12 +11,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.Random;
 
 public class Threading {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         int coreCount = Runtime.getRuntime().availableProcessors();
         //Create thread pool
         ExecutorService service = Executors.newFixedThreadPool(coreCount);
 
-        List<Future> allFutures = new LinkedList<Future>();
+        List<Future<Integer>> allFutures = new LinkedList<Future<Integer>>();
         //Submit task for execution
         for(int i = 0; i < 10; i++) {
             Future<Integer> future = service.submit( new Task() );
@@ -28,12 +28,13 @@ public class Threading {
             try {
                 Future<Integer> future = allFutures.get(i);
                 System.out.println("Result from : " + i  + " + future : " + future.get());
-            } catch(InterruptedException ie) {
-
+            } catch(InterruptedException e) {
+                e.printStackTrace();
             } catch(ExecutionException ee) {
-
+                ee.printStackTrace();
             }
         }
+        return;
     }
 
     static class Task implements Callable<Integer> {
