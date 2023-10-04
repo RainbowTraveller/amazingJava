@@ -18,6 +18,9 @@ public class Task {
     private LocalDate endDate;
     private boolean done;
 
+    public Task() {
+
+    }
     public Task(int id, String userName, String description, LocalDate endDate, boolean done) {
         this.id = id;
         this.userName = userName;
