@@ -1,10 +1,16 @@
 package com.miraie.springboot.webapp.scheduler.task;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
+@Entity
 public class Task {
+    @Id
+    @GeneratedValue
     private int id;
     private String userName;
     @Size(min = 10, message = "Please enter min 10 character message")
