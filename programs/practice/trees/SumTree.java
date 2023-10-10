@@ -20,7 +20,7 @@ import java.util.regex.*;
  *
  **/
 
-public class Solution {
+public class SumTree {
 
     public static void main(String[] args) {
         TreeNode root = new TreeNode(16);
@@ -38,26 +38,29 @@ public class Solution {
 
     public static Level isValidSumTree(TreeNode root) {
         if (root == null) {
+            //If the tree is empty or one of the left or right subtree is empty
             return new Level(true, 0);
         } else {
+            //Check if leaf node, valid node in this case
             if (root.left == null && root.right == null) {
                 return new Level(true, root.val);
             }
+            //Go left and right
             Level leftNode = isValidSumTree(root.left);
             Level rightNode = isValidSumTree(root.right);
 
-            if (leftNode.isValid == false || rightNode.isValid == false) {
+            //Check if any of the following condition is met, then invalid
+            if (leftNode.sum + rightNode.sum != root.val || leftNode.isValid == false || rightNode.isValid == false) {
                 return new Level(false, 0);
             }
-
-            if (leftNode.sum + rightNode.sum == root.val) {
-                return new Level(true, leftNode.sum + rightNode.sum + root.val);
-            }
-
-            return new Level(false, 0);
+            //Looks like valid upto current level, so propagate the result to the parent level
+            return new Level(true, leftNode.sum + rightNode.sum + root.val);
         }
     }
 
+    /**
+      Representing the tree node
+      */
     static class TreeNode {
         public int val;
         public TreeNode left;
@@ -78,7 +81,9 @@ public class Solution {
         }
 
     }
-
+    /**
+      Helper class enabling propagate the status across levels
+      */
     static class Level {
         public boolean isValid;
         public int sum;
