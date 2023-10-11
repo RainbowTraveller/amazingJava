@@ -129,8 +129,9 @@ class ValidParenthesis {
         } else {
             char curr = s.charAt(index);
             int len = b.length();
+
+            // First don't consider current bracket
             if (curr == '(' || curr == ')') {
-                // First don't consider current bracket
                 minRemoved = exhaustiveProcessing(s, b, index + 1, open, close, valid, minRemoved, removed + 1);
             }
 

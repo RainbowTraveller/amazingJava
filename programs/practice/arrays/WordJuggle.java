@@ -165,7 +165,7 @@ public class WordJuggle {
                     return positions;
                 }
             }
-            //Added row, col char which was matching, but did now get the result
+            //Added row, col char which was matching, but did not get the result
             //even after going right and down, so better remove this char as well
             //and return to original list and return it
             if(positions.size() > 0) {

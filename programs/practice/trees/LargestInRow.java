@@ -36,7 +36,10 @@ public class LargestInRow {
             queue.offer(root);
             while (!queue.isEmpty()) {
 
+                int max = Integer.MIN_VALUE;
                 int i = 0;
+                int len = queue.size();
+
                 while (i < len) {
                     TreeNode curr = queue.poll();
                     if (curr.val > max) {

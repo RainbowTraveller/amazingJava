@@ -1,3 +1,8 @@
+    /**
+      Calculate the max sum for a leaf to leaf path
+      The path should start from a leaf and end to a leaf in a given tree
+      find out such a path with max value when the values of the nodes is added
+      */
 public class MaxPathSum {
     int max = Integer.MIN_VALUE;
 

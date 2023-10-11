@@ -46,7 +46,11 @@ public class BSTIterator {
             TreeNode curr = stack.pop();
 			//next least element will be leftmost
 			//element of right child, so ....
-            add(curr.right);
+            // Be careful to add only non null value or
+            // when it will be poped in subsequent iterataion, an attempt to dereference
+            // to get the value will fail with a null pointer exception
+            if(curr.right != null)
+                add(curr.right);
             val = curr.val;
         }
         return val;
