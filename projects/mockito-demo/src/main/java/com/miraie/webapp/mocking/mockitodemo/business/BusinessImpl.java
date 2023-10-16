@@ -10,10 +10,13 @@ public class BusinessImpl {
         this.service = service;
     }
 
-    public int findGreatestNumber() {
+    public Integer findGreatestNumber() {
 
+        Integer largest = null;
         int[] data = service.retrieveAllData();
-        int largest = Arrays.stream(data).max().getAsInt();
+        if(data != null &&  data.length > 0) {
+            largest = Arrays.stream(data).max().getAsInt();
+        }
         return largest;
 
     }
