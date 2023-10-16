@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.miraie.springboot.webapp</groupId>
-    <artifactId>scheduler</artifactId>
+    <artifactId>Scheduler</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>scheduler</name>
     <description>Demo project for Spring Boot</description>
