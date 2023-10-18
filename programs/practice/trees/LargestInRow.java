@@ -1,9 +1,7 @@
 /* Given the root of a binary tree, return an array of the largest value in each row of the tree (0-indexed).
 *
 * iInput: root = [1,3,2,5,3,null,9]
-* Out
-
-    put: root = [1,2,3]
+* Output: root = [1,2,3]
 * Output: [1,3]
 * Example  3:
 *
