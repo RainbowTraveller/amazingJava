@@ -42,6 +42,7 @@ public class LargestInRow {
                     TreeNode curr = queue.poll();
                     if (curr.val > max) {
                         max = curr.val;
+                        // OR max = Math.max(max, curr.val);
                     }
                     if (curr.left != null) {
                         queue.offer(curr.left);
