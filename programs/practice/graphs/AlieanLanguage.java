@@ -69,7 +69,7 @@ public class AlieanLanguage {
             boolean isGraphPossible = bulildGraph(inDegree, graph, words);
             if (isGraphPossible) {
                 return topgraphicalSort(inDegree, graph);
-            }  }
+            }
         }
         return "";
     }
@@ -89,9 +89,9 @@ public class AlieanLanguage {
             String nextWord = words[i + 1];
 
             // Check that nextWord is not a prefix of currWord
-            if (currWord.length() > nextWord.length() || currWord.startsWith(nextWord)) {
-                return false;
-            }
+    //        if (currWord.length() > nextWord.length() || currWord.startsWith(nextWord)) {
+    //            return false;
+    //        }
 
             // comparison is possible only for the length of
             // smaller one
