@@ -1,15 +1,12 @@
 package com.miraie.springboot.restwebapp.survey.hello;
 
-import jakarta.websocket.server.PathParam;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 // @Controller
 @RestController
-public class HelloWorld {
+public class HelloWorldController {
   /**
    * Simple string return.
    * By default, the string parameter is considered to be JSP name.
