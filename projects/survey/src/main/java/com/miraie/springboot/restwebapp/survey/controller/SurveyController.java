@@ -4,9 +4,7 @@ import com.miraie.springboot.restwebapp.survey.data.Question;
 import com.miraie.springboot.restwebapp.survey.data.Survey;
 import com.miraie.springboot.restwebapp.survey.service.SurveyService;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -51,5 +49,10 @@ public class SurveyController {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
     return questionFromSurvey;
+  }
+
+  @RequestMapping(value = "/surveys/{id}/Questions", method = RequestMethod.POST)
+  public void addNewQuestion(@PathVariable String id, @RequestBody Question question) {
+    service.addNewQuestion(id, question);
   }
 }

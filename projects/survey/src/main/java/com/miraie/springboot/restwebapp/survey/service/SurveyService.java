@@ -69,4 +69,9 @@ public class SurveyService {
     }
     return null;
   }
+
+  public void addNewQuestion(String id, Question question) {
+    List<Question> questionsForSurvey = getAllQuestionsForSurvey(id);
+    questionsForSurvey.add(question);
+  }
 }
