@@ -74,7 +74,6 @@ public class ObjectParser {
             this.sizeTracker.put("float", 4);
             this.sizeTracker.put("int", 4);
             this.sizeTracker.put("string", 256);
-
         }
 
         public int getSize (String element) {
@@ -90,7 +89,7 @@ public class ObjectParser {
 //                System.out.println("Curr Size : " + this.sizeTracker.getOrDefault(type, 0));
                 size += this.sizeTracker.getOrDefault(type, 0);
             }
-            System.out.println("Name " + name + "  Size : " + size);
+//            System.out.println("Name " + name + "  Size : " + size);
             sizeTracker.put(name, size);
         }
 
