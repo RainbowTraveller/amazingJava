@@ -96,4 +96,10 @@ public class SurveyService {
         questionsForSurvey.removeIf(question -> questionId.equalsIgnoreCase(question.getId()));
     return removed ? questionId : null;
   }
+
+  public void updateQuestionFromSurvey(String id, String questionId, Question question) {
+    List<Question> questionsForSurvey = getAllQuestionsForSurvey(id);
+    questionsForSurvey.removeIf(q -> questionId.equalsIgnoreCase(question.getId()));
+    questionsForSurvey.add(question);
+  }
 }
