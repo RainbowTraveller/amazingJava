@@ -2,8 +2,11 @@ package com.miraie.springboot.restwebapp.survey.service;
 
 import com.miraie.springboot.restwebapp.survey.data.Question;
 import com.miraie.springboot.restwebapp.survey.data.Survey;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.sql.ClientInfoStatus;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,8 +73,16 @@ public class SurveyService {
     return null;
   }
 
-  public void addNewQuestion(String id, Question question) {
+  public String addNewQuestion(String id, Question question) {
     List<Question> questionsForSurvey = getAllQuestionsForSurvey(id);
+    question.setId(getRandomId());
     questionsForSurvey.add(question);
+    return question.getId();
+  }
+
+  private static String getRandomId() {
+    SecureRandom secureRandom = new SecureRandom();
+    String randomId = new BigInteger(32, secureRandom).toString();
+    return randomId;
   }
 }

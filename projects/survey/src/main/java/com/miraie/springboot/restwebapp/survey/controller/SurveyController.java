@@ -4,9 +4,12 @@ import com.miraie.springboot.restwebapp.survey.data.Question;
 import com.miraie.springboot.restwebapp.survey.data.Survey;
 import com.miraie.springboot.restwebapp.survey.service.SurveyService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -52,7 +55,18 @@ public class SurveyController {
   }
 
   @RequestMapping(value = "/surveys/{id}/Questions", method = RequestMethod.POST)
-  public void addNewQuestion(@PathVariable String id, @RequestBody Question question) {
-    service.addNewQuestion(id, question);
+  public ResponseEntity<Object> addNewQuestion(
+      @PathVariable String id, @RequestBody Question question) {
+    String questionId = service.addNewQuestion(id, question);
+    // This will work as well but as per REST standards when an entity is created then the response
+    // to be returned is 201. We can add the location of the URI as well
+
+    URI location =
+        ServletUriComponentsBuilder.fromCurrentRequest()
+            .path("/{questionId}")
+            .buildAndExpand(questionId)
+            .toUri();
+
+    return ResponseEntity.created(location).build();
   }
 }
