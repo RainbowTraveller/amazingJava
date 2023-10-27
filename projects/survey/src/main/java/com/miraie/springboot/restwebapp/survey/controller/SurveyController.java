@@ -69,4 +69,11 @@ public class SurveyController {
 
     return ResponseEntity.created(location).build();
   }
+
+  @RequestMapping(value = "/surveys/{id}/Questions/{questionId}", method = RequestMethod.DELETE)
+  public ResponseEntity<Object> deleteQuestionFromSurvey(
+      @PathVariable String id, @PathVariable String questionId) {
+    service.deleteQuestionFromSurvey(id, questionId);
+    return ResponseEntity.noContent().build();
+  }
 }
