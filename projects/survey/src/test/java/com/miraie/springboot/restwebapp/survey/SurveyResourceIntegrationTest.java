@@ -1,6 +1,8 @@
 package com.miraie.springboot.restwebapp.survey;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -40,8 +42,106 @@ public class SurveyResourceIntegrationTest {
         """
     {"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
     """;
+
     assertEquals(expectedResponse.trim(), responseEntity.getBody());
     System.out.println(responseEntity.getBody());
     System.out.println(responseEntity.getHeaders());
+  }
+
+  /**
+   * Here we are using JSONAssert module. This enables taking some liberty as far as formatting is
+   * concerned
+   *
+   * @throws JSONException
+   */
+  @Test
+  public void TestGetQuestionFromSurvey_basic_json() throws JSONException {
+
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+    String expectedResponse =
+        """
+                  {"id":"Question1",
+                  "description":"Most Popular Cloud Platform Today",
+                  "options":["AWS","Azure","Google Cloud","Oracle Cloud"],
+                  "correctAnswer":"AWS"}
+        """;
+
+    JSONAssert.assertEquals(expectedResponse.trim(), responseEntity.getBody(), true);
+  }
+
+  /**
+   * Adding extra spaces
+   *
+   * @throws JSONException
+   */
+  @Test
+  public void TestGetQuestionFromSurvey_basic_json_spaces() throws JSONException {
+
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+    String expectedResponse =
+        """
+                  {"id":"Question1",
+
+                  "description":"Most Popular Cloud Platform Today",
+                  "options":["AWS","Azure","Google Cloud","Oracle Cloud"],
+                  "correctAnswer":"AWS"}
+
+        """;
+
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), true);
+  }
+
+  /**
+   * Gives specific message when test fails
+   *
+   * <p>java.lang.AssertionError: Expected: options but none found
+   *
+   * @throws JSONException
+   */
+  @Test
+  public void TestGetQuestionFromSurvey_basic_json_missingField() throws JSONException {
+
+    String actualResponse =
+        """
+                  {"id":"Question1",
+                  "description":"Most Popular Cloud Platform Today",
+                  "correctAnswer":"AWS"}
+        """;
+    String expectedResponse =
+        """
+                  {"id":"Question1",
+                  "description":"Most Popular Cloud Platform Today",
+                  "options":["AWS","Azure","Google Cloud","Oracle Cloud"],
+                  "correctAnswer":"AWS"}
+        """;
+
+    JSONAssert.assertEquals(expectedResponse, actualResponse, true);
+  }
+
+  /**
+   * Non-strict check is also allowed the expected can be subset of the actual response
+   *
+   * @throws JSONException
+   */
+  @Test
+  public void TestGetQuestionFromSurvey_basic_json_missingField_non_strict() throws JSONException {
+
+    String expectedResponse =
+        """
+                  {"id":"Question1",
+                  "description":"Most Popular Cloud Platform Today",
+                  "correctAnswer":"AWS"}
+        """;
+    String actualResponse =
+        """
+                  {"id":"Question1",
+                  "description":"Most Popular Cloud Platform Today",
+                  "options":["AWS","Azure","Google Cloud","Oracle Cloud"],
+                  "correctAnswer":"AWS"}
+        """;
+
+    JSONAssert.assertEquals(expectedResponse, actualResponse, false);
   }
 }
