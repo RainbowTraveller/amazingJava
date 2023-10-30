@@ -24,6 +24,8 @@ public class SurveyResourceIntegrationTest {
   private TestRestTemplate template;
   private static final String SPECIFIC_QUESTION_URL = "/surveys/Survey1/Questions/Question1";
   private static final String GENERIC_ALL_QUESTIONS_URL = "/surveys/Survey1/Questions";
+  private static final String SPECIFIC_SURVEY_URL = "/surveys/Survey1";
+  private static final String GENERIC_ALL_SURVEYS_URL = "/surveys";
 
   String expectedReponse =
       """
@@ -184,6 +186,120 @@ public class SurveyResourceIntegrationTest {
                 {
                   "id": "Question3"
                 }
+            ]
+            """;
+
+    // Check the status code first
+    assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
+    // Check the content type
+    assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
+    // Check body content
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
+  }
+
+  @Test
+  public void TestGetSurvey() throws JSONException {
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(SPECIFIC_SURVEY_URL, String.class);
+    String expectedResponse =
+        """
+        {
+            "id": "Survey1",
+            "title": "My Favorite Survey",
+            "description": "Description of the Survey",
+            "questions": [
+              {
+                "id": "Question1",
+                "description": "Most Popular Cloud Platform Today",
+                "options": [
+                  "AWS",
+                  "Azure",
+                  "Google Cloud",
+                  "Oracle Cloud"
+                ],
+                "correctAnswer": "AWS"
+              },
+              {
+                "id": "Question2",
+                "description": "Fastest Growing Cloud Platform",
+                "options": [
+                    "AWS",
+                    "Azure",
+                    "Google Cloud",
+                    "Oracle Cloud"
+                ],
+                "correctAnswer": "Google Cloud"
+              },
+              {
+                "id": "Question3",
+                "description": "Most Popular DevOps Tool",
+                "options": [
+                  "Kubernetes",
+                  "Docker",
+                  "Terraform",
+                  "Azure DevOps"
+                ],
+                "correctAnswer": "Kubernetes"
+              }
+            ]
+        }
+        """;
+
+    // Check the status code first
+    assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
+    // Check the content type
+    assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
+    // Check body content
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
+  }
+
+  @Test
+  public void TestGetAllSurveys() throws JSONException {
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(GENERIC_ALL_SURVEYS_URL, String.class);
+    String expectedResponse =
+        """
+            [
+              {
+                "id": "Survey1",
+                "title": "My Favorite Survey",
+                "description": "Description of the Survey",
+                "questions": [
+                  {
+                    "id": "Question1",
+                    "description": "Most Popular Cloud Platform Today",
+                    "options": [
+                    "AWS",
+                    "Azure",
+                    "Google Cloud",
+                    "Oracle Cloud"
+                    ],
+                    "correctAnswer": "AWS"
+                  },
+                  {
+                    "id": "Question2",
+                    "description": "Fastest Growing Cloud Platform",
+                    "options": [
+                      "AWS",
+                      "Azure",
+                      "Google Cloud",
+                      "Oracle Cloud"
+                    ],
+                    "correctAnswer": "Google Cloud"
+                  },
+                  {
+                    "id": "Question3",
+                    "description": "Most Popular DevOps Tool",
+                    "options": [
+                      "Kubernetes",
+                      "Docker",
+                      "Terraform",
+                      "Azure DevOps"
+                    ],
+                    "correctAnswer": "Kubernetes"
+                  }
+                ]
+              }
             ]
             """;
 
