@@ -6,6 +6,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 // Annotation creates an Integration Test
 // This enables launching entire Spring Application
 // Enabling to run the application on Random port instead of fixed on for avoiding clash.
@@ -30,10 +32,15 @@ public class SurveyResourceIntegrationTest {
   private TestRestTemplate template;
   private static final String SPECIFIC_QUESTION_URL = "/surveys/Survey1/Questions/Question1";
 
-
   @Test
   public void TestGetQuestionFromSurvey_basic() {
-    ResponseEntity<String> responseEntity = template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+    String expectedResponse =
+        """
+    {"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
+    """;
+    assertEquals(expectedResponse.trim(), responseEntity.getBody());
     System.out.println(responseEntity.getBody());
     System.out.println(responseEntity.getHeaders());
   }
