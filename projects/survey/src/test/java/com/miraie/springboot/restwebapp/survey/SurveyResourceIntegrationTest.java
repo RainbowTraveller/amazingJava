@@ -1,5 +1,6 @@
 package com.miraie.springboot.restwebapp.survey;
 
+import com.miraie.springboot.restwebapp.survey.data.Question;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
@@ -8,7 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // Annotation creates an Integration Test
 // This enables launching entire Spring Application
@@ -16,23 +20,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class SurveyResourceIntegrationTest {
   // Testing URL : http://localhost:RANDOM_PORT/surveys/Survey1/Questions/Question1
-  String expectedReponse =
-      """
-    {
-    "id": "Question1",
-    "description": "Most Popular Cloud Platform Today",
-    "options": [
-    "AWS",
-    "Azure",
-    "Google Cloud",
-    "Oracle Cloud"
-    ],
-    "correctAnswer": "AWS"
-    }
-    """;
   @Autowired // makes template aware of RANDOM_PORT
   private TestRestTemplate template;
   private static final String SPECIFIC_QUESTION_URL = "/surveys/Survey1/Questions/Question1";
+  private static final String GENERIC_ALL_QUESTIONS_URL = "/surveys/Survey1/Questions";
+
+  String expectedReponse =
+      """
+        {
+        "id": "Question1",
+        "description": "Most Popular Cloud Platform Today",
+        "options": [
+        "AWS",
+        "Azure",
+        "Google Cloud",
+        "Oracle Cloud"
+        ],
+        "correctAnswer": "AWS"
+        }
+        """;
 
   @Test
   public void TestGetQuestionFromSurvey_basic() {
@@ -143,5 +149,49 @@ public class SurveyResourceIntegrationTest {
         """;
 
     JSONAssert.assertEquals(expectedResponse, actualResponse, false);
+  }
+
+  @Test
+  public void TestGetQuestionFromSurvey_basic_refined() throws JSONException {
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+    String expectedResponse =
+        """
+        {"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
+        """;
+
+    // Check the status code first
+    assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
+    // Check the content type
+    assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
+    // Check body content
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
+  }
+
+  @Test
+  public void TestGetAllQuestionsForSurveyBasic() throws JSONException {
+    ResponseEntity<String> responseEntity =
+        template.getForEntity(GENERIC_ALL_QUESTIONS_URL, String.class);
+    String expectedResponse =
+        """
+            [
+                {
+                  "id": "Question1"
+                },
+                {
+                  "id": "Question2"
+                },
+                {
+                  "id": "Question3"
+                }
+            ]
+            """;
+
+    // Check the status code first
+    assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
+    // Check the content type
+    assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
+    // Check body content
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
   }
 }
