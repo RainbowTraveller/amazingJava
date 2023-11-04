@@ -1,5 +1,5 @@
 /*
- * Given a list or array of words. The words inf the array are not unique, they may repeat.
+ * Given a list or array of words. The words in the array are not unique, they may repeat.
  * Now given input 2 words contained in the array, find the shortest distance between them
  */
 public class ShortestDistanceWords {
