@@ -46,7 +46,7 @@ public class CourseScheduling {
 
             //Add all edges as per the prerequisites
             //for [1, 0] ==> means 0 is prereq for 1, so 0 must be completed before 1
-            //so we consider 0 first and then process it's children
+            //so we consider 0 first and then process its children
             for(int i = 0; i < prerequisites.length ; ++i) {
                 g.addEdge(prerequisites[i][1], prerequisites[i][0]);
             }
