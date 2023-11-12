@@ -2,7 +2,7 @@ package com.miraie.practice.file;
 
 import java.util.List;
 
-public interface FileSystem {
+public interface IFileSystem {
 
   public List<String> ls(String path);
 
