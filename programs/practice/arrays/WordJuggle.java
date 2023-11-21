@@ -1,13 +1,16 @@
 /*
-After catching your classroom students cheating before, you realize your students are getting craftier and hiding words in 2D grids of letters. The word may start anywhere in the grid, and consecutive letters can be either immediately below or immediately to the right of the previous letter.
+After catching your classroom students cheating before, you realize your students are getting craftier and hiding words
+in 2D grids of letters. The word may start anywhere in the grid, and consecutive letters can be either immediately below
+or immediately to the right of the previous letter.
 
-Given a grid and a word, write a function that returns the location of the word in the grid as a list of coordinates. If there are multiple matches, return any one.
+Given a grid and a word, write a function that returns the location of the word in the grid as a list of coordinates.
+If there are multiple matches, return any one.
 
 grid1 = [
-	['c', 'c', 'c', 'a', 'r', 's'],
-	['c', 'c', 'i', 't', 'n', 'b'],
-	['a', 'c', 'n', 'n', 't', 'i'],
-	['t', 'c', 'i', 'i', 'p', 't']
+    ['c', 'c', 'c', 'a', 'r', 's'],
+    ['c', 'c', 'i', 't', 'n', 'b'],
+    ['a', 'c', 'n', 'n', 't', 'i'],
+    ['t', 'c', 'i', 'i', 'p', 't']
 ]
 
 word1_1 = "catnip"
@@ -63,71 +66,75 @@ import java.io.*;
 import java.util.*;
 
 public class WordJuggle {
-  public static void main(String[] argv) {
-    char[][] grid1 = {
-        {'c', 'c', 'c', 'a', 'r', 's'},
-        {'c', 'c', 'i', 't', 'n', 'b'},
-        {'a', 'c', 'n', 'n', 't', 'i'},
-        {'t', 'c', 'i', 'i', 'p', 't'}
-    };
-    String word1_1 = "catnip";
-    String word1_2 = "cccc";
+    public static void main (String[] argv) {
+        char[][] grid1 = {
+                {'c', 'c', 'c', 'a', 'r', 's'},
+                {'c', 'c', 'i', 't', 'n', 'b'},
+                {'a', 'c', 'n', 'n', 't', 'i'},
+                {'t', 'c', 'i', 'i', 'p', 't'}
+        };
+        String word1_1 = "catnip";
+        String word1_2 = "cccc";
 
-    char[][] grid2 = {
-        {'c', 'p', 'a', 'n', 't', 's'},
-        {'a', 'b', 'i', 't', 'a', 'b'},
-        {'t', 'f', 'n', 'n', 'c', 'i'},
-        {'x', 's', 'c', 'a', 't', 'n'},
-        {'x', 's', 'd', 'd', 'e', 'a'},
-        {'s', 'q', 'w', 'x', 's', 'p'}
-    };
-    String word2 = "catnap";
+        char[][] grid2 = {
+                {'c', 'p', 'a', 'n', 't', 's'},
+                {'a', 'b', 'i', 't', 'a', 'b'},
+                {'t', 'f', 'n', 'n', 'c', 'i'},
+                {'x', 's', 'c', 'a', 't', 'n'},
+                {'x', 's', 'd', 'd', 'e', 'a'},
+                {'s', 'q', 'w', 'x', 's', 'p'}
+        };
+        String word2 = "catnap";
 
-    char[][] grid3 = {
-        {'c','r','c','a','r','s'},
-        {'a','b','i','t','n','i'},
-        {'t','f','n','n','x','p'},
-        {'x','s','i','x','p','t'}
-    };
-    String word3 = "catnip";
+        char[][] grid3 = {
+                {'c', 'r', 'c', 'a', 'r', 's'},
+                {'a', 'b', 'i', 't', 'n', 'i'},
+                {'t', 'f', 'n', 'n', 'x', 'p'},
+                {'x', 's', 'i', 'x', 'p', 't'}
+        };
+        String word3 = "catnip";
 
-    char[][] grid4 = {
-        {'a','o','o','o','a','a'},
-        {'b','b','i','t','n','i'},
-        {'c','f','n','n','v','p'},
-        {'o','a','a','a','o','o'}
-    };
-    String word4_1 = "aaa";
-    String word4_2 = "ooo";
+        char[][] grid4 = {
+                {'a', 'o', 'o', 'o', 'a', 'a'},
+                {'b', 'b', 'i', 't', 'n', 'i'},
+                {'c', 'f', 'n', 'n', 'v', 'p'},
+                {'o', 'a', 'a', 'a', 'o', 'o'}
+        };
+        String word4_1 = "aaa";
+        String word4_2 = "ooo";
 
-    List<Position> result = findWordLocation(grid1, word1_1);
-    result.stream()
-        .forEach(System.out::println);
+        List<Position> result = findWordLocation(grid1, word1_1);
+        result.stream()
+                .forEach(System.out::println);
+        result = findWordLocation(grid1, word1_2);
+        System.out.println("------");
+        result.stream()
+                .forEach(System.out::println);
 
-  }
-
-  static class Position {
-    private int row;
-    private int col;
-
-    public Position(int row, int col) {
-      this.row = row;
-      this.col = col;
     }
 
-    public String toString() {
-        return "(" + row + ", " + col + ")";
+    static class Position {
+        private int row;
+        private int col;
+
+        public Position (int row, int col) {
+            this.row = row;
+            this.col = col;
+        }
+
+        public String toString () {
+            return "(" + row + ", " + col + ")";
+        }
+
     }
 
-  }
-
-    public static List<Position> findWordLocation(char[][] words, String ref) {
+    public static List<Position> findWordLocation (char[][] words, String ref) {
         for (int i = 0; i < words.length; ++i) {
             for (int j = 0; j < words[0].length; ++j) {
                 if (words[i][j] == ref.charAt(0)) {
                     List<Position> positions = new LinkedList<Position>();
                     getWordPositions(words, ref, i, j, positions, 0);
-                    if(positions.size() == ref.length()) {
+                    if (positions.size() == ref.length()) {
                         return positions;
                     }
                 }
@@ -136,8 +143,8 @@ public class WordJuggle {
         return null;
     }
 
-    private static List<Position> getWordPositions(char[][] words, String ref, int row, int col, List<Position> positions,
-            int tracker) {
+    private static List<Position> getWordPositions (char[][] words, String ref, int row, int col, List<Position> positions,
+                                                    int tracker) {
         //if out of bound return original positions found so far
         if (row < 0 || row >= words.length || col < 0 || col >= words[0].length) {
             return positions;
@@ -149,7 +156,7 @@ public class WordJuggle {
             return positions;
         }
 
-        if(words[row][col] == ref.charAt(tracker)) {
+        if (words[row][col] == ref.charAt(tracker)) {
             //char at row,col matching, so add the position
             Position curr = new Position(row, col);
             positions.add(curr);
@@ -158,7 +165,7 @@ public class WordJuggle {
             if (positions.size() == ref.length()) {
                 //Found so return
                 return positions;
-            } else if (positions.size() > 0) {
+            } else {
                 positions = getWordPositions(words, ref, row + 1, col, positions, tracker + 1);
                 if (positions.size() == ref.length()) {
                     //found, so return
@@ -168,7 +175,7 @@ public class WordJuggle {
             //Added row, col char which was matching, but did not get the result
             //even after going right and down, so better remove this char as well
             //and return to original list and return it
-            if(positions.size() > 0) {
+            if (positions.size() > 0) {
                 positions.remove(positions.size() - 1);
             }
         }
@@ -184,7 +191,7 @@ public class WordJuggle {
 
     // O(n * m) : running complexity / space complexity
 
-    public static String findEmbeddedWord(String[] words, String ref) {
+    public static String findEmbeddedWord (String[] words, String ref) {
         Map<Character, Integer> refMap = getCharMap(ref);
         // System.out.println(refMap);
 
@@ -207,7 +214,7 @@ public class WordJuggle {
         return "None";
     }
 
-    private static Map<Character, Integer> getCharMap(String ref) {
+    private static Map<Character, Integer> getCharMap (String ref) {
         Map<Character, Integer> refMap = new HashMap<>();
         for (int i = 0; i < ref.length(); i++) {
             char currChar = ref.charAt(i);
