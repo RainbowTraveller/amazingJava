@@ -26,10 +26,18 @@ import java.util.regex.*;
 
 public class GetFrequencies {
 
+    /**
+     * Acts as central point of processing and calls other methods to collect the processsed data
+     *
+     * @param inputStrings arrays of strings to be processed
+     */
     static void findMostFrequent (String[] inputStrings) {
+        //Get all unique chars
         Set<Character> uniqueCharacters = getUniqueKeys(inputStrings);
+        //Gets map of a char and it's related chars and their frequencies
         Map<Character, Map<Character, Integer>> frequencyTracker = getFrquencyMap(inputStrings, uniqueCharacters);
 //        System.out.println(frequencyTracker);
+        //List of char and top related chars in terms of occurrence
         Map<Character, List<Character>> result = processFrequencies(frequencyTracker);
         for (char c : result.keySet()) {
             System.out.println(c);
@@ -42,9 +50,13 @@ public class GetFrequencies {
         Map<Character, List<Character>> result = new HashMap<>();
         for (char c : frequencyTracker.keySet()) {
 //            System.out.println(c + " :::");
+            //Get the relate char frequency map
             Map<Character, Integer> currFreqMap = frequencyTracker.get(c);
+            //Create a list of Map.Entry
             List<Map.Entry<Character, Integer>> currFreqList = new LinkedList<>();
+            //Add all the entries to this list
             currFreqList.addAll(currFreqMap.entrySet());
+            //Sort the list based on the value and not key which is the frequcny of the char
             Collections.sort(currFreqList, (i1, i2) -> (i2.getValue() - i1.getValue()));
 //            System.out.println(currFreqList);
             int max = Integer.MIN_VALUE;
@@ -53,12 +65,12 @@ public class GetFrequencies {
             for (Map.Entry<Character, Integer> currMapEntry : currFreqList) {
 //                System.out.println(currMapEntry.getKey() + " :: " + currMapEntry.getValue());
                 char currKey = currMapEntry.getKey();
-                if (max == Integer.MIN_VALUE) {
+                if (max == Integer.MIN_VALUE) { // first value as it is with greatest freq
                     finalList.add(currKey);
 //                    System.out.println("First : " + currKey);
-                    max = currMapEntry.getValue();
+                    max = currMapEntry.getValue();// note this frequency
                 } else {
-                    if (currMapEntry.getValue() == max) {
+                    if (currMapEntry.getValue() == max) { // when frequecy matches record the char
 //                        System.out.println("Next : " + currKey);
                         finalList.add(currKey);
                     }
@@ -71,20 +83,32 @@ public class GetFrequencies {
         return result;
     }
 
+    /**
+     * Creats a map where each unique char acts as a key.
+     * The value is again a map where a related char is key and its value is frequncy of those chars
+     *
+     * @param inputStrings     array of strings to be processed
+     * @param uniqueCharacters set of all chars observed across all strings
+     * @return mappping of each char to related chars with their frequencies
+     */
     public static Map<Character, Map<Character, Integer>> getFrquencyMap (String[] inputStrings, Set<Character> uniqueCharacters) {
         Map<Character, Map<Character, Integer>> frequencyTracker = new HashMap<>();
         for (Character c : uniqueCharacters) {
 //            System.out.println("MAIN : " + c);
+            //Ignore the string if the current char is not present in a string
             for (String currString : inputStrings) {
                 if (currString.indexOf(c) >= 0) {
 //                    System.out.println(currString);
                     Map<Character, Integer> currTracker = null;
                     for (int i = 0; i < currString.length(); i++) {
                         char currChar = currString.charAt(i);
-                        if (currChar != c) {
+                        if (currChar != c) {// only char not matching current char for which map is being prepared
 //                            System.out.println(":::::::: CURR : " + currChar);
+                            //Get the map corr. to the char
                             currTracker = frequencyTracker.getOrDefault(c, new HashMap<Character, Integer>());
+                            //Adjust the frequency of the related char
                             currTracker.put(currChar, currTracker.getOrDefault(currChar, 0) + 1);
+                            // restore map into the tracker
                             frequencyTracker.put(c, currTracker);
                         }
                     }
@@ -95,6 +119,12 @@ public class GetFrequencies {
         return frequencyTracker;
     }
 
+    /**
+     * Returns a set of chars occurring across all strings
+     *
+     * @param inputStrings array of string to be processed
+     * @return a collection of unique chars accurrins across all strings
+     */
     public static Set<Character> getUniqueKeys (String[] inputStrings) {
         Set<Character> uniqueCharacters = new HashSet<>();
         for (String input : inputStrings) {
