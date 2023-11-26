@@ -20,14 +20,17 @@
  *
  */
 
+import java.util.List;
+import java.util.Deque;
+import java.util.LinkedList;
 
-public class MaxStackSimple(){
+public class MaxStackSimple {
     //Stores all the elements
     private Deque<Integer> mainStack;
     //stored max element so far in repeated manner
     private Deque<Integer> maxStack;
 
-    public MaxStack() {
+    public MaxStackSimple() {
         mainStack = new LinkedList<Integer>();
         maxStack = new LinkedList<Integer>();
     }
@@ -80,5 +83,15 @@ public class MaxStackSimple(){
 
     public static void main(String[] args) {
         //Test code here
+        MaxStackSimple maxStack = new MaxStackSimple();
+        maxStack.push(5);
+        maxStack.push(1);
+        maxStack.push(5);
+        System.out.println(maxStack.top());
+        System.out.println(maxStack.popMax());
+        System.out.println(maxStack.top());
+        System.out.println(maxStack.peekMax());
+        System.out.println(maxStack.pop());
+        System.out.println(maxStack.top());
     }
 }
