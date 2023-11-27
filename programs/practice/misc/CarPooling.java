@@ -29,24 +29,69 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.PriorityQueue;
+import java.util.TreeMap;
+import java.util.Map;
 
-public class ValidVehicleTrips {
+public class CarPooling {
 
     public static void main(String[] args) {
         int[][] trips = new int[][] { { 2, 1, 5 }, { 3, 3, 7 } };
         int capacity = 4;
-
-        /*
-         * int[][] trips = new int[][] {{2,1,5},{3,3,7}}; int capacity = 5;
-         *
-         * int[][] trips = new int[][] {{2,1,5},{3,3,7}}; int capacity = 3;
-         *
-         * int[][] trips = new int[][] {{2,1,5},{3,3,7}}; int capacity = 11;
-         */
-
         System.out.println("Is trip possible : " + carPooling(trips, capacity));
+        System.out.println("Is trip possible Simple : " + carPoolingSimple(trips, capacity));
+        trips = new int[][] {{2,1,5},{3,3,7}};
+        capacity = 5;
+        System.out.println("Is trip possible : " + carPooling(trips, capacity));
+        System.out.println("Is trip possible Simple : " + carPoolingSimple(trips, capacity));
+        trips = new int[][] {{2,1,5},{3,3,7}};
+        capacity = 3;
+        System.out.println("Is trip possible : " + carPooling(trips, capacity));
+        System.out.println("Is trip possible Simple : " + carPoolingSimple(trips, capacity));
+        trips = new int[][] {{2,1,5},{3,3,7}};
+        capacity = 11;
+        System.out.println("Is trip possible : " + carPooling(trips, capacity));
+        System.out.println("Is trip possible Simple : " + carPoolingSimple(trips, capacity));
     }
 
+
+    public static boolean carPoolingSimple(int[][] trips, int capacity) {
+        //Create a map : using tree map to sort values by key
+        Map<Integer, Integer> passengerTracker = new TreeMap<>();
+        //Consider each trip
+        for(int[] trip : trips) {
+
+            //For starting time of the trip how much capacity is consumed
+            int startPassengers = passengerTracker.getOrDefault(trip[1], 0) + trip[0];
+            // Track agianst the start time of the trip
+            passengerTracker.put(trip[1], startPassengers);
+
+            //Similarly for end time of a trip store a negative value of capacity, indicating that is
+            //restored
+            int endPassengers = passengerTracker.getOrDefault(trip[2], 0) - trip[0];
+            //Track this resored capacity as well against the end time in the map
+            passengerTracker.put(trip[2], endPassengers);
+
+        }
+
+        // Now we take a look at the capacity demand at each time
+        // This is irrespective of start of end time
+        // This works because, we have sotred the values with sign indicating whether the capacity is
+        // being added or demanded.
+        // The overlapping start times will demand capacity and it one end time restores back capacity next starttime
+        // can benefit from it as we have sorted the values in ascneding order based on ts encountered
+        // We need to check at any point of time the cumulative capacity should not exceed the given total capacity constraint
+        for(int key : passengerTracker.keySet()) {
+            System.out.println("TS : " + key + " Capacity: " + passengerTracker.get(key));
+        }
+        int runnningCapacity = 0;
+        for(int currCapacity : passengerTracker.values()) {
+            runnningCapacity += currCapacity;
+            if (runnningCapacity > capacity) {
+                return false;
+            }
+        }
+        return true;
+    }
     public static boolean carPooling(int[][] trips, int capacity) {
 
         // List of trips
