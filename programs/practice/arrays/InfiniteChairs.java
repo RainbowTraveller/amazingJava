@@ -56,15 +56,19 @@ import java.util.Arrays;
 
 public class InfiniteChairs {
 
+  /*Tracks the next available chair number*/
   PriorityQueue<Integer> chairNo;
+  /*Maintains active sitting intervals ( currenly valid ) sorted in increasing order of leaving time*/
   PriorityQueue<int[]> duration;
+  /*Original Index to chair no. map*/
   Map<Integer, Integer> tracker;
+  /*Original index of the friend interval*/
   Map<int[], Integer> index;
   int chairIndex;
 
   public InfiniteChairs() {
     chairNo = new PriorityQueue<>();
-    duration = new PriorityQueue<>((i1, i2) -> (i1[1] - i2[1]));
+    duration = new PriorityQueue<>((i1, i2) -> (i1[1] - i2[1]));// Sorted on leaving time
     tracker = new HashMap<>();
     index = new HashMap<>();
     chairIndex = 0;
@@ -81,34 +85,45 @@ public class InfiniteChairs {
 
   public int getChair(int[][] intervals, int no) {
     processIntervals(intervals);
-    for (int i : tracker.keySet()) {
+//    for (int i : tracker.keySet()) {
       //      System.out.println("Key : " + i + " : " + tracker.get(i));
-    }
+//    }
     return tracker.get(no);
   }
 
   public void processIntervals(int[][] intervals) {
 
+    // Store the original index of the interval
+    // Answer is based on this original index
     for (int i = 0; i < intervals.length; i++) {
       int[] currInterval = intervals[i];
-      System.out.println(currInterval[0] + " :: " + currInterval[1]);
+//      System.out.println(currInterval[0] + " :: " + currInterval[1]);
       index.put(currInterval, i);
     }
 
+    // Sort the orignal interval array based on arrival time
     Arrays.sort(intervals, (j1, j2) -> (j1[0] == j2[0] ? j1[1] - j2[1] : j1[0] - j2[0]));
 
     for (int i = 0; i < intervals.length; i++) {
       int[] currInterval = intervals[i];
-      System.out.println(currInterval[0] + " :: " + currInterval[1]);
-      if (!duration.isEmpty()) {
+//      System.out.println(currInterval[0] + " :: " + currInterval[1]);
+      if (!duration.isEmpty()) {// initially queue is empty
         while (!duration.isEmpty() && duration.peek()[1] <= currInterval[0]) {
+          //Check for current arrival time are there any intervals in
+          // the duration queue which have end time before or at this arrival
+          // if so they are over so remove them and also add their chairs into
+          // chair no queue marking them available
           int[] polled = duration.poll();
           int polledChairNo = tracker.get(index.get(polled));
           chairNo.add(polledChairNo);
         }
       }
+      // Monotonically increasing chair no., in case no intervals has expired
+      // meaning all chairs are occupied so we may need a new chair
       chairNo.add(++chairIndex);
-      System.out.println("Next Chair no : " + chairNo.peek());
+//      System.out.println("Next Chair no : " + chairNo.peek());
+      // Now we have all the chairs possible to take in the queue
+      // We need to pick the smallest indexed one
       tracker.put(index.get(currInterval), Integer.valueOf(chairNo.poll()));
       duration.add(currInterval);
     }
