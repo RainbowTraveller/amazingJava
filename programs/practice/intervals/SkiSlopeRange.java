@@ -68,27 +68,12 @@ public class SkiSlopeRange {
         offset = 1;
         i++;
       }
-      if(offset == 0) {
+      if (offset == 0) {
         i++;
       }
       cnt += offset;
       desired = end + 1;
     }
-    //    while (i < ranges.length) {
-    //      while (i < ranges.length && ranges[i][0] >= desired && desired <= ranges[i][1]) {
-    //        if (end == Integer.MAX_VALUE) {
-    //          cnt++;
-    //          end = ranges[i][1];
-    //        } else if (end < ranges[i][1]) {
-    //          end = ranges[i][1];
-    //          if (end == n) {
-    //            return cnt + 1;
-    //          }
-    //        }
-    //        i++;
-    //      }
-    //      desired = end + 1;
-    //    }
     return desired == n ? -1 : cnt + 1;
   }
 
