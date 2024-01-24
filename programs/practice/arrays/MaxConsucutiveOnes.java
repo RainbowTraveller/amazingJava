@@ -12,6 +12,10 @@ public class MaxConsucutiveOnes {
     System.out.println("Zero Flip : " + maxConsucutiveOnes.findMaxConsecutiveOnesOneZeroFlip(nums));
     System.out.println(
         "Zero Flip Window : " + maxConsucutiveOnes.findMaxConsecutiveOnesOneZeroFlipWindow(nums));
+    int[] numsLonger = {0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1};
+    System.out.println(
+        "K Zero Flip Window : "
+            + maxConsucutiveOnes.findMaxConsecutiveOnesOneZeroFlipWindowNZeros(numsLonger, 3));
   }
 
   /*
@@ -124,6 +128,53 @@ public class MaxConsucutiveOnes {
       }
       // Opps 2 zeros already
       while (noOfZeros == 2) {
+
+        if (nums[left] == 0) {
+          // un account for previous zero
+          noOfZeros--;
+        }
+        // Shrink the window
+        left++;
+      }
+      // Window will contain maximum 1 zero
+      // Count the window size as all consecutive ones
+      cons = Math.max(cons, right - left + 1);
+      // Increase the window scope
+      right++;
+    }
+    return cons;
+  }
+
+  /*
+  Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
+
+  Example 1:
+
+  Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+  Output: 6
+  Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+  Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+  Example 2:
+
+  Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+  Output: 10
+  Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+  Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+  */
+
+  public int findMaxConsecutiveOnesOneZeroFlipWindowNZeros(int[] nums, int n) {
+    int noOfZeros = 0;
+    int left = 0, right = 0;
+    int cons = 0;
+    // right index tracks the array
+    while (right < nums.length) {
+      // Zero enconutered
+      if (nums[right] == 0) {
+        // Account for it
+        noOfZeros++;
+      }
+      // Opps 2 zeros already
+      while (noOfZeros == n + 1) {
 
         if (nums[left] == 0) {
           // un account for previous zero

@@ -54,7 +54,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Arrays;
 
-public class InfiniteChairs {
+public class SmallestUnoccupiedChair {
 
   /*Tracks the next available chair number*/
   PriorityQueue<Integer> chairNo;
@@ -66,7 +66,7 @@ public class InfiniteChairs {
   Map<int[], Integer> index;
   int chairIndex;
 
-  public InfiniteChairs() {
+  public SmallestUnoccupiedChair() {
     chairNo = new PriorityQueue<>();
     duration = new PriorityQueue<>((i1, i2) -> (i1[1] - i2[1]));// Sorted on leaving time
     tracker = new HashMap<>();
@@ -76,7 +76,7 @@ public class InfiniteChairs {
   }
 
   public static void main(String[] args) {
-    InfiniteChairs sol = new InfiniteChairs();
+    SmallestUnoccupiedChair sol = new SmallestUnoccupiedChair();
     //    int[][] intervals = {{1, 4}, {2, 3}, {4, 6}};
     int[][] intervals = {{3, 10}, {1, 5}, {2, 6}};
     //    System.out.println(sol.getChair(intervals, 1));
