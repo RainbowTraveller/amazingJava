@@ -4,6 +4,7 @@ import java.util.LinkedHashSet;
 class ValidKPalindrome {
   public static void main(String[] args) {
     ValidKPalindrome validKPalindrome = new ValidKPalindrome();
+    /*
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 2));
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 3));
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 1));
@@ -12,11 +13,30 @@ class ValidKPalindrome {
     System.out.println(validKPalindrome.isValidPalindrome("abcdfghjdecba", 3));
     System.out.println(validKPalindrome.isValidPalindrome("dfghjde", 4));
     System.out.println(validKPalindrome.isValidPalindrome("dfghjde", 3));
+    // This time outs
+    //    System.out.println(
+    //        validKPalindrome.isValidPalindrome(
+    //            "baaccaacbdcadbcdacbbdabbdddabdddadcabbdbbcaadbbdcbddcbdcdbaadaab", 9));
+    System.out.println("DP Outputs");
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 2));
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 3));
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 1));
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 1));
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 4));
+    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 3));
+    System.out.println(validKPalindrome.isValidPalindromeDP("dfghjde", 4));
+    System.out.println(validKPalindrome.isValidPalindromeDP("dfghjde", 3));
+
+     */
+    System.out.println(
+        validKPalindrome.isValidPalindromeDP(
+            "baaccaacbdcadbcdacbbdabbdddabdddadcabbdbbcaadbbdcbddcbdcdbaadaab", 9));
   }
 
   /**
-   * Check if a string contains a palindrome when at most K chars are removed
-   * This first removes the palidrom part if any present in the string
+   * Check if a string contains a palindrome when at most K chars are removed This first removes the
+   * palidrom part if any present in the string
+   *
    * @param s input string
    * @param k at most these many chars can be deleted from the input string
    * @return true or false depending on whether the string contains a palidrome
@@ -146,5 +166,54 @@ class ValidKPalindrome {
       end--;
     }
     return true;
+  }
+
+  // ==================================================================================================
+  // DP implementation
+
+  /*
+  The logic is simple. The comparison takes place only between 2 extreme chars
+  1. It they match start + 1 and end - 1
+  2. If the do not match we go both ways (start + 1, end ) and ( start, end - 1)
+  3. We also keep track of already found values using an array ( memoization )
+   */
+
+  public boolean isValidPalindromeDP(String s, int k) {
+
+    if (s != null && !s.isEmpty()) {
+      int len = s.length();
+      int start = 0;
+      int end = len - 1;
+      // We set value of i, j  to minimum no. of chars that need to be deleted to make
+      // string from i to j palindrome
+      Integer[][] values = new Integer[len][len];
+      return k >= dpProcessing(s, start, end, values);
+    }
+    return false;
+  }
+
+  public int dpProcessing(String input, int start, int end, Integer[][] values) {
+    // Base case : single letter it is palindrome
+    if (start == end) {
+      return 0;
+    }
+    // Base case : 2 adjacent letters : check if they are equal
+    if (Math.abs(start - end) == 2) {
+      return input.charAt(start) == input.charAt(end) ? 0 : 1;
+    }
+
+    if (values[start][end] != null) {
+      return values[start][end];
+    }
+
+    if (input.charAt(start) == input.charAt(end)) {
+      return values[start][end] = dpProcessing(input, start + 1, end - 1, values);
+    }
+
+    return values[start][end] =
+        1
+            + Math.min(
+                start + 1 <= end ? dpProcessing(input, start + 1, end, values) : 0,
+                start <= end - 1 ? dpProcessing(input, start, end - 1, values) : 0);
   }
 }
