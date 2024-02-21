@@ -7,6 +7,9 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
@@ -26,21 +29,6 @@ public class SurveyResourceIntegrationTest {
   private static final String GENERIC_ALL_QUESTIONS_URL = "/surveys/Survey1/Questions";
   private static final String SPECIFIC_SURVEY_URL = "/surveys/Survey1";
   private static final String GENERIC_ALL_SURVEYS_URL = "/surveys";
-
-  String expectedReponse =
-      """
-        {
-        "id": "Question1",
-        "description": "Most Popular Cloud Platform Today",
-        "options": [
-        "AWS",
-        "Azure",
-        "Google Cloud",
-        "Oracle Cloud"
-        ],
-        "correctAnswer": "AWS"
-        }
-        """;
 
   @Test
   public void TestGetQuestionFromSurvey_basic() {
@@ -102,7 +90,7 @@ public class SurveyResourceIntegrationTest {
   }
 
   /**
-   * Gives specific message when test fails
+   * Gives specific message when test fails : This is failed on purpose to test this functionality
    *
    * <p>java.lang.AssertionError: Expected: options but none found
    *
@@ -309,5 +297,40 @@ public class SurveyResourceIntegrationTest {
     assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
     // Check body content
     JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
+  }
+
+  /**
+   * Testing the POST method by adding a new question
+   */
+  @Test
+  public void addNewSurveyQuestion_BasicScenario() {
+    String requestBody =
+        """
+                  {
+                    "description": "Adding a new Questions using integration tests",
+                    "options": [
+                      "Java",
+                      "Golang",
+                      "Python",
+                      "Rust"
+                    ],
+                    "correctAnswer": "Jave"
+                  }
+""";
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "application/json");
+    HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
+    ResponseEntity<String> responseEntity =
+        template.exchange(GENERIC_ALL_QUESTIONS_URL, HttpMethod.POST, httpEntity, String.class);
+    assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
+    String locationHeader = responseEntity.getHeaders().get("Location").get(0);
+    assertTrue(
+        locationHeader.contains("surveys/Survey1/Questions/"));
+
+    // To remove any side effects after adding the new event, we need to delete this event
+    // Some test cases which check the no. of events may fail if this test case
+    // is executed before the other one. Now that was written earlier, it should not fail
+
+    template.delete(locationHeader);
   }
 }
