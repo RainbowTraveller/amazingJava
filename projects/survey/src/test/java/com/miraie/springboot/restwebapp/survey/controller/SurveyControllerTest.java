@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -28,6 +29,9 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @WebMvcTest(controllers = SurveyController.class)
+@AutoConfigureMockMvc(
+    addFilters =
+        false) // disables all filters and security related changes won't affect the unit testing
 class SurveyControllerTest {
 
   @MockBean SurveyService mockSurveyService;
@@ -280,7 +284,8 @@ class SurveyControllerTest {
     MvcResult mvcResult = mockMvc.perform(requestBuilder).andReturn();
     assertEquals(200, mvcResult.getResponse().getStatus());
     String locationHeader = mvcResult.getResponse().getHeader("Location");
-//    assert locationHeader != null;
-//    assertTrue(locationHeader.contains("http://localhost:8080/surveys/Survey1/Questions/Question1"));
+    //    assert locationHeader != null;
+    //
+    // assertTrue(locationHeader.contains("http://localhost:8080/surveys/Survey1/Questions/Question1"));
   }
 }

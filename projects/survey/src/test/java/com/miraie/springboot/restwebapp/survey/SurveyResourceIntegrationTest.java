@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,8 +34,10 @@ public class SurveyResourceIntegrationTest {
 
   @Test
   public void TestGetQuestionFromSurvey_basic() {
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+        template.exchange(SPECIFIC_QUESTION_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
     {"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
@@ -53,8 +57,10 @@ public class SurveyResourceIntegrationTest {
   @Test
   public void TestGetQuestionFromSurvey_basic_json() throws JSONException {
 
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+            template.exchange(SPECIFIC_QUESTION_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
                   {"id":"Question1",
@@ -74,8 +80,10 @@ public class SurveyResourceIntegrationTest {
   @Test
   public void TestGetQuestionFromSurvey_basic_json_spaces() throws JSONException {
 
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+            template.exchange(SPECIFIC_QUESTION_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
                   {"id":"Question1",
@@ -143,8 +151,10 @@ public class SurveyResourceIntegrationTest {
 
   @Test
   public void TestGetQuestionFromSurvey_basic_refined() throws JSONException {
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(SPECIFIC_QUESTION_URL, String.class);
+        template.exchange(SPECIFIC_QUESTION_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
         {"id":"Question1","description":"Most Popular Cloud Platform Today","options":["AWS","Azure","Google Cloud","Oracle Cloud"],"correctAnswer":"AWS"}
@@ -160,8 +170,10 @@ public class SurveyResourceIntegrationTest {
 
   @Test
   public void TestGetAllQuestionsForSurveyBasic() throws JSONException {
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(GENERIC_ALL_QUESTIONS_URL, String.class);
+        template.exchange(GENERIC_ALL_QUESTIONS_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
             [
@@ -187,8 +199,10 @@ public class SurveyResourceIntegrationTest {
 
   @Test
   public void TestGetSurvey() throws JSONException {
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(SPECIFIC_SURVEY_URL, String.class);
+        template.exchange(SPECIFIC_SURVEY_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
         {
@@ -243,8 +257,11 @@ public class SurveyResourceIntegrationTest {
 
   @Test
   public void TestGetAllSurveys() throws JSONException {
+
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
+    HttpEntity<String> httpEntity = new HttpEntity<String>(null, headers);
     ResponseEntity<String> responseEntity =
-        template.getForEntity(GENERIC_ALL_SURVEYS_URL, String.class);
+            template.exchange(GENERIC_ALL_SURVEYS_URL, HttpMethod.GET, httpEntity, String.class);
     String expectedResponse =
         """
             [
@@ -296,12 +313,10 @@ public class SurveyResourceIntegrationTest {
     // Check the content type
     assertEquals("application/json", responseEntity.getHeaders().get("Content-Type").get(0));
     // Check body content
-    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody(), false);
+    JSONAssert.assertEquals(expectedResponse, responseEntity.getBody().trim(), false);
   }
 
-  /**
-   * Testing the POST method by adding a new question
-   */
+  /** Testing the POST method by adding a new question */
   @Test
   public void addNewSurveyQuestion_BasicScenario() {
     String requestBody =
@@ -317,20 +332,34 @@ public class SurveyResourceIntegrationTest {
                     "correctAnswer": "Jave"
                   }
 """;
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Content-Type", "application/json");
+    HttpHeaders headers = createContentTypeAndAuthorizationHeader();
     HttpEntity<String> httpEntity = new HttpEntity<String>(requestBody, headers);
     ResponseEntity<String> responseEntity =
         template.exchange(GENERIC_ALL_QUESTIONS_URL, HttpMethod.POST, httpEntity, String.class);
     assertTrue(responseEntity.getStatusCode().is2xxSuccessful());
     String locationHeader = responseEntity.getHeaders().get("Location").get(0);
-    assertTrue(
-        locationHeader.contains("surveys/Survey1/Questions/"));
+    assertTrue(locationHeader.contains("surveys/Survey1/Questions/"));
 
     // To remove any side effects after adding the new event, we need to delete this event
     // Some test cases which check the no. of events may fail if this test case
     // is executed before the other one. Now that was written earlier, it should not fail
 
-    template.delete(locationHeader);
+    ResponseEntity<String> responseEntityDelete =
+            template.exchange(GENERIC_ALL_QUESTIONS_URL, HttpMethod.DELETE, httpEntity, String.class);
+    assertTrue(responseEntityDelete.getStatusCode().is2xxSuccessful());
+    System.out.println(responseEntityDelete.getStatusCode());
+  }
+
+  private HttpHeaders createContentTypeAndAuthorizationHeader() {
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Content-Type", "application/json");
+    headers.add("Authorization", "Basic " + performBasicEncoding("milo", "kukkut"));
+    return headers;
+  }
+
+  private String performBasicEncoding(String user, String password) {
+    String combined = user + ":" + password;
+    byte[] encode = Base64.getEncoder().encode(combined.getBytes(StandardCharsets.UTF_8));
+    return new String(encode);
   }
 }
