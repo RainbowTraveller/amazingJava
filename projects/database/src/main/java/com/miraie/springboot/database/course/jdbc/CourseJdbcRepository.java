@@ -1,12 +1,13 @@
 package com.miraie.springboot.database.course.jdbc;
 
+import com.miraie.springboot.database.course.Course;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CourseRepository {
+public class CourseJdbcRepository {
     @Autowired
     private JdbcTemplate template;
 

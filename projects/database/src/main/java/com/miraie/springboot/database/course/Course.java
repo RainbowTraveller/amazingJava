@@ -1,8 +1,16 @@
-package com.miraie.springboot.database.course.jdbc;
+package com.miraie.springboot.database.course;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+
+@Entity(name = "Course")
 public class Course {
+    @Id
     int id;
+    @Column(name = "name")
     String name;
+    @Column(name = "author")
     String author;
 
     public Course () {
