@@ -13,14 +13,17 @@ import java.util.*;
     coneY
     Money
 
-   Word ladders were invented by Lewis Carroll in 1878, the author of Alice in Wonderland. A ladder is a sequence of words that has a starting and ending word
-   In a word ladder puzzle you have to change one word into another by altering a single letter at each step. Each word in the ladder must be a valid English word, and must have the
-   same length. For example, to turn stone into money, one possible ladder is given on the left. Many ladder puzzles have more than one possible solutions. Your program must determine
-   a shortest word ladder. Another path from stone to money is
+   Word ladders were invented by Lewis Carroll in 1878, the author of Alice in 
+   Wonderland. A ladder is a sequence of words that has a starting and ending 
+   word. In a word ladder puzzle you have to change one word into another by 
+   altering a single letter at each step. Each word in the ladder must be a 
+   valid English word, and must have the same length. For example, to turn stone into money,
+   one possible ladder is given on the left. Many ladder puzzles have more than one possible solutions. 
+   Your program must determine a shortest word ladder. Another path from stone to money is
 
    stone  store  shore  chore  choke  choky  cooky  cooey  coney  money
 
-   https://www.cs.cmu.edu/~adamchik/15-121/labs/HW-4%20Word%20Ladder/lab.html : explaination and further testing
+   https://www.cs.cmu.edu/~adamchik/15-121/labs/HW-4%20Word%20Ladder/lab.html : explanation and further testing
 
  */
 public class WordLadder {
@@ -28,7 +31,7 @@ public class WordLadder {
     private Set<String>                 dictionary;
     //Queue of stack of word ladders. Each stack contains a ladder from starting
     //word to an intermediate word in the dictionary
-    private Deque<LinkedList<String>>   wordLadder;
+//    private Deque<LinkedList<String>>   wordLadder;
     private Deque<String>               simpleWordLadder;
     private String                      start;
     private String                      end;
@@ -41,9 +44,6 @@ public class WordLadder {
         System.out.println("Enter the last word");
         String end = sc.nextLine();
         WordLadder wl = new WordLadder( start, end );
-        //Get the words in the dictionary
-        //wl.getInput(sc);
-        //wl.findShortestLadder();
         wl.findShortestSimpleLadder();
     }
 
@@ -67,13 +67,11 @@ public class WordLadder {
         dictionary.add( "log");
         dictionary.add( "cog");
         */
-        wordLadder = new LinkedList<LinkedList<String>>();
         simpleWordLadder = new LinkedList<String>();
         //Create initial stack with only start word
         //and add that stack to the queue
         LinkedList<String> startList = new LinkedList<String>();
         startList.addFirst( this.start );
-        wordLadder.add(startList);
         simpleWordLadder.add(this.start);
     }
 
@@ -88,20 +86,6 @@ public class WordLadder {
             String word = sc.nextLine();
             dictionary.add( word );
         }
-    }
-
-    /*
-     * Checks if 2 words differ only by 1 character
-     */
-    private boolean isNextWord(String current, String next) {
-        int len = current.length();
-        int count = 0;
-        for(int i = 0; i < len; ++i) {
-            if(current.charAt(i) != next.charAt(i)) {
-                count++;
-            }
-        }
-        return count == 1;
     }
 
     private List<String>  collectNextWords(String word, Set<String> dictionary, Deque<String> wordLadder) {
@@ -123,72 +107,44 @@ public class WordLadder {
         return collectedNeighbours;
     }
 
-    public void setDictionary( Set<String> modifiedDictionary ){
-        this.dictionary = modifiedDictionary;
-    }
 
-    public void findShortestLadder() {
-        int length = Integer.MAX_VALUE;
-        while(!wordLadder.isEmpty()) {
-            //Remove first stack of string from the word ladder queue
-            LinkedList<String> currentStackOfStrings = wordLadder.pollFirst();
-            System.out.println("Current Stack : " + currentStackOfStrings);
-            //Get the string at the stack top
-            String candidate = currentStackOfStrings.getLast();
-            System.out.println("Candidate : " + candidate);
-            if(!dictionary.isEmpty() && !this.end.equals(candidate)) {
-                Set<String> newDictionary = new LinkedHashSet<String>();
-                for(String word : dictionary) {
-                    System.out.println("Word : " + word);
-                    if(isNextWord(candidate, word)) {
-                        //Copy the original stack, then add on top if more string are found
-                        //Correction : need to create new object and not just a reference
-                        //LinkedList<String> newStack = currentStackOfStrings; // This will fail
-                        LinkedList<String> newStack = new LinkedList<String>(currentStackOfStrings);
-                        newStack.addLast(word);
-                        System.out.println("Adding Word : " + word);
-                        System.out.println("New Stack : " + newStack);
-                        wordLadder.addLast(newStack);
-                    } else {
-                        newDictionary.add( word );
-                    }
-                }
-                dictionary = newDictionary;
-            }
-            length = currentStackOfStrings.size();
-            if(this.end.equals(candidate)) {
-                while(!wordLadder.isEmpty()) {
-                    currentStackOfStrings = wordLadder.pollFirst();
-                    System.out.println("Current Stack 2 : " + currentStackOfStrings);
-                    if(currentStackOfStrings.size() < length) {
-                        length = currentStackOfStrings.size();
-                    }
-                }
-            } else {
-                length = 0;
-            }
-        }
-        System.out.println("Shortest length : " + length);
-    }
-
+    /*
+     *  Uses BFS.
+     *   Add Start word in the queue and level = 1
+     *   Perform until queue is empty
+     *
+     *  1. queueSize = size Of the queue
+     *  2. for all words indicated by queueSize
+     *  2. currentWord = first word in queue
+     *  3. Neighbours of the current word are found
+     *  4. if end word is among the neighbours then level is shorted distance 
+     *  5. else add them in the queue
+     *  6. size --
+     *  7. When size  = 0 then level++
+     *  8 follow step 1
+     *
+     *
+     *  Classis BFS. In this case we look at neighboring words for each word
+     *  at a given depth. If we find the end word then that level is the 
+     *  shortest ladder
+     */
     public void findShortestSimpleLadder() {
         int level = 1;
         while(!simpleWordLadder.isEmpty()) {
-            //System.out.println("Current Ladder" + simpleWordLadder);
+            System.out.println("Current Ladder" + simpleWordLadder);
             int size = simpleWordLadder.size();
             for(int i = 0; i < size ; ++i) {
                 String candidate = simpleWordLadder.removeFirst();
-                //System.out.println("Current Word : " + candidate);
+                System.out.println("Current Word : " + candidate);
                 if(candidate.equals(this.end)) {
-                    //System.out.println("Shortest length : " + level);
-                    System.out.println("Shortest length : " + level);
+                    System.out.println("Shortest length Found : " + level);
                     return;
                 }
                 List<String> neighbours = collectNextWords(candidate, dictionary, simpleWordLadder);
-                //System.out.println("Current dict" + newDictionary);
                 for(String neighbour : neighbours) {
                     simpleWordLadder.add(neighbour);
                 }
+                //System.out.println(" Current Queue : " + simpleWordLadder);
             }
             level++;
         }
