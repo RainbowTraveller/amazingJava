@@ -51,7 +51,8 @@ public class SubStringIndex {
 				if( source.charAt( i ) == pattern.charAt( 0 )) {
 					int ptrack = 1;
 					int strack = i + 1;
-					while( ptrack < pattern.length() && strack < source.length() && source.charAt( strack ) == pattern.charAt( ptrack ) ) {
+					while( ptrack < pattern.length() && strack < source.length()
+                            && source.charAt( strack ) == pattern.charAt( ptrack ) ) {
 						ptrack++;
 						strack++;
 					}
@@ -103,12 +104,14 @@ public class SubStringIndex {
 	 * a b c d a b e a b f
 	 * 0 0 0 0 1 2 0 1 2 0
 	 *
-	 * Track first repeated occurance of the first character
+	 * Track first repeated occurrence of the first character
 	 * continue increasing the prefix values if the subsequent characters match
 	 * at the mismatch following conditions need to be checked
-	 *			if j > 0 : meaning we have found at least one repeated character then start from its previous occurance
+	 *			if j > 0 : meaning we have found at least one repeated character
+     *			then start from its previous occurrence
 	 *
-	 *			otherwise no match found so far keep on looking with next character in the input pattern string
+	 *			otherwise no match found so far keep on looking with next character
+     *			in the input pattern string
 	 */
 	private int [] prefixTable( String candidate ) {
 		 int[] prefix = new int[candidate.length()];
