@@ -2,6 +2,9 @@ import java.lang.String;
 import java.lang.Exception;
 import java.util.Scanner;
 
+/*
+ * Program to reverse each word of a string
+ */
 public class StrWordRev {
     private String str;
 
@@ -9,6 +12,29 @@ public class StrWordRev {
         this.str = str;
     }
 
+    public String getStr() {
+        return this.str;
+    }
+
+    public static void main(String[] args){
+        String str = "";
+        System.out.println("Please Enter a String: ");
+        Scanner sc = new Scanner(System.in);
+        try{
+            str = sc.nextLine();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        StrWordRev sr = new StrWordRev(str);
+        sr.reverseWords();
+        System.out.println("Reversing words in place : " + sr);
+        sr.reverseStringAndWords();
+        System.out.print("Reversed word string : " + sr);
+    }
+
+    /*
+     * Just reverses the words from a string
+     */
     public void reverseWords() {
         int length = this.str.length();
         int begin = length - 1;
@@ -23,13 +49,16 @@ public class StrWordRev {
             }
         }
         reverseIndividualWord(strArr, begin, end);
-        this.str = String.valueOf(strArr);
+        this.str = new String(strArr);
     }
 
     public String toString() {
         return  this.str;
     }
 
+    /*
+     *  Simple reverse of String
+     */
     private void reverseIndividualWord(char[] strArr, int begin, int end){
        while(begin < end) {
             char temp = strArr[begin];
@@ -40,18 +69,34 @@ public class StrWordRev {
        }
     }
 
-    public static void main(String[] args){
-        String str = "";
-        System.out.println("Please Enter a String: ");
-        Scanner sc = new Scanner(System.in);
-        try{
-            str = sc.nextLine();
-        } catch(Exception e) {
-            e.printStackTrace();
+    /* Reverses String and then each word as well
+     */
+	public void reverseStringAndWords() {
+        /*if(input != null) {
+            char[] arr = input.toCharArray();
+            int start = 0;
+            int end = input.length();
+            int tracker = 0;
+            reverseIndividualWord(arr, start, end - 1);
+            for(int i = 0; i < end; ++i) {
+                if(arr[i] == ' ') {
+                    tracker = i - 1;
+                    reverseIndividualWord(arr, start, tracker);
+                    start = i + 1;
+                }
+            }
+            tracker = end - 1;
+            reverseIndividualWord(arr, start, tracker);
+            System.out.print("Reversed word string : ");
+            for(int i = 0; i < end; ++i) {
+                System.out.print(arr[i]);
+            }
+            System.out.println();
         }
-        StrWordRev sr = new StrWordRev(str);
-        System.out.println(sr);
-        sr.reverseWords();
-        System.out.println(sr);
+        */
+        char[] strArr = this.str.toCharArray();
+        reverseIndividualWord(strArr, 0, str.length() - 1);
+        this.str = new String(strArr);
+        reverseWords();
     }
 }
