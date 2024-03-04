@@ -37,8 +37,7 @@ public class RepeatedDNASequence {
                     //of the current string
                     System.out.println(current);
                 }
-                int frequency = tracker.getOrDefault(current, 0);
-                tracker.put(current, frequency + 1);
+                tracker.put(current, tracker.getOrDefault(current, 0) + 1);
             }
         }
         for(String str : tracker.keySet()) {
