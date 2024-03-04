@@ -35,11 +35,11 @@ class ValidKPalindrome {
 
   /**
    * Check if a string contains a palindrome when at most K chars are removed This first removes the
-   * palidrom part if any present in the string
+   * palindrome part if any present in the string
    *
    * @param s input string
    * @param k at most these many chars can be deleted from the input string
-   * @return true or false depending on whether the string contains a palidrome
+   * @return true or false depending on whether the string contains a palindrome
    */
   public boolean isValidPalindrome(String s, int k) {
     if (s != null && !s.isEmpty()) {
@@ -72,7 +72,7 @@ class ValidKPalindrome {
   }
 
   /**
-   * Checks if a given string is a palidrome if atmost K chars are allowed to be deleted ( 0 to K)
+   * Checks if a given string is a palindrome if atmost K chars are allowed to be deleted ( 0 to K)
    * It considers all the possible strings that can be obtained by dropping chars starting from 0 to
    * K if any of the string is palindrome it returns true
    *
@@ -81,7 +81,7 @@ class ValidKPalindrome {
    *     palindrome
    * @param start index at which we need to start checking the chars to be removed
    * @param k max no of chars allowed to be deleted
-   * @return true if input string contains a palidrome false otherwise
+   * @return true if input string contains a palindrome false otherwise
    */
   public boolean isKPalindrome(String input, Set<Integer> indexes, int start, int k) {
     StringBuffer buffer = getDesiredBuffer(input, indexes);
@@ -102,7 +102,7 @@ class ValidKPalindrome {
            3
           */
           // add this index indicating that next iteration will have char at this index
-          // removed : remember the parameter has index set and immidiately after entering
+          // removed : remember the parameter has index set and immediately after entering
           // the function we get the desired buffer and check for palindrome
           indexes.add(i);
           // Call recursively by indicating char at next index can be dropped
