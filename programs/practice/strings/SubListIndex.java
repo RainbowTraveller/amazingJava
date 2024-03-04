@@ -71,7 +71,8 @@ public class SubListIndex {
 	private boolean findHelper(int startIndex) {
 		int list2Tracker = 1;
 		boolean result = false;
-		while(startIndex < list1.size() && list2Tracker < list2.size() && list1.get(startIndex) == list2.get(list2Tracker)) {
+		while(startIndex < list1.size() && list2Tracker < list2.size()
+                && list1.get(startIndex) == list2.get(list2Tracker)) {
 			startIndex++;
 			list2Tracker++;
 		}
