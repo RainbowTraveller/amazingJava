@@ -46,27 +46,27 @@ public class RemovePalindromePrefix {
 
     if (s != null && s.length() > 1) {
       int len = s.length();
-      int i = 0;
-      int j = 1;
-      int lastIndex = 0;
+      int i = 0; // from index for prefix
+      int j = 1; // to index for prefix
+      int lastIndex = 0;// index or length of the palindrome prefix found so far
       StringBuffer buffer = new StringBuffer(s);
 
       // i will always be 0 which is start index
       while (j < len) {
         // Actions to be taken when a prefix is not palindrome
         if (!isPalindrome(buffer, i, j)) {
-          // here first 2 chars do not for a palidrome string
+          // here first 2 chars do not form a palindrome string
           // Check if first char is extra and remaining string is palindrome
           if (j - i == 1 && i == 0 && isPalindrome(buffer, j, len - 1)) {
             // System.out.println(buffer.substring(i, j));
             buffer.delete(0, buffer.length());
             len = 0;
-          } else if (lastIndex > 0) { // indicates there we some palidrome prefix found
+          } else if (lastIndex > 0) { // indicates that there was some palindrome prefix found
 
             // System.out.println(buffer.substring(i, j));
             // So current prefix is not palindrome and we have already found a palindrome prefix
-            // Delete till the last palidrome prefix found
-            buffer.delete(i, j);
+            // Delete till the last palindrome prefix found
+            buffer.delete(i, j); // This deletes from i to j - 1, in this case j - 1 = last
             i = 0;
             j = 0;
             lastIndex = 0;
@@ -75,15 +75,15 @@ public class RemovePalindromePrefix {
           }
 
         } else {
-          // Just keep gathering the last index of the palidrome prefix
-          lastIndex = j;
+          // Just keep gathering the last index of the palindrome prefix
+          lastIndex = j;// Prefix is palindrome
         }
         j++;
       }
 
       // indicates that there was some palindrome found
       if (lastIndex > 0) {
-        // Here here is a remaining palidrome string so remove it
+        // Here here is a remaining palindrome string so remove it
         // System.out.println(buffer.toString() + " " + lastIndex);
         buffer.delete(i, j);
       }
