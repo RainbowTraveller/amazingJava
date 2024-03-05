@@ -5,6 +5,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 
+/**
+ * A pangram is a sentence where every letter of the English alphabet appears at least once.
+ *
+ */
 public class PanagramChecker {
 
     private TreeSet<Character> alphabets;//Required Set of alphabets
@@ -51,6 +55,21 @@ public class PanagramChecker {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    public boolean checkIfPangram(String sentence) {
+        boolean[] track = new boolean[26];
+        int cnt = 0;
+        for(char c : sentence.toCharArray()) {
+            int index = (int) c - 'a';
+            if(index >= 0 && index < 26 && track[index] == false) {
+                //System.out.print(c + " ");
+                track[index] = true;
+                cnt++;
+            }
+        }
+        //System.out.print("Count " + cnt);
+        return cnt == 26;
     }
 
     public static void main(String[] args) {
