@@ -33,8 +33,8 @@ public class ReorderLogFiles {
 
 	public static void reorderLogFiles(String[] logs) {
 		Arrays.sort(logs,(log1, log2) -> {
-			String[] log1Details = log1.split(" ", 2);
-			String[] log2Details = log2.split(" ", 2);
+			String[] log1Details = log1.split("\s+", 2);
+			String[] log2Details = log2.split("\s+", 2);
 			String key1 = log1Details[0];
 			String key2 = log2Details[0];
 			String value1 = log1Details[1];
