@@ -2,6 +2,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Given 2 arrays of timeslots. Find common timeslots between two which are equal
+ * to the given time duration
+ * Note : a time slot can be bigger enough to accommodate mutiple ts
+ * from other interval array
+ *
+ * Return only first such possible slot with start and end time
+ */
 public class FreeTimeDuration {
     public static void main(String[] args) {
 
