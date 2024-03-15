@@ -50,8 +50,8 @@ public class PalindromicSubSeqCounter {
 
             //Let's consider now strings of length from 2 character long
             //to length of entire string
-            for(int i = 2; i <= length; ++i) {
-                for(int j = 0; j < length; ++j) {
+            for(int i = 2; i <= length; ++i) {//length
+                for(int j = 0; j < length; ++j) {//Start
                     // start + length - 1 = 0 + 2 - 1 = (0,1)
                     int index = i + j - 1;
                     if(index < length) {
