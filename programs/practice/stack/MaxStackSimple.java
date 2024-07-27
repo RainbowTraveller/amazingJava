@@ -20,78 +20,78 @@
  *
  */
 
-import java.util.List;
 import java.util.Deque;
 import java.util.LinkedList;
 
 public class MaxStackSimple {
-    //Stores all the elements
-    private Deque<Integer> mainStack;
-    //stored max element so far in repeated manner
-    private Deque<Integer> maxStack;
+  // Stores all the elements
+  private Deque<Integer> mainStack;
+  // stored max element so far in repeated manner
+  private Deque<Integer> maxStack;
 
-    public MaxStackSimple() {
-        mainStack = new LinkedList<Integer>();
-        maxStack = new LinkedList<Integer>();
+  public MaxStackSimple() {
+    mainStack = new LinkedList<Integer>();
+    maxStack = new LinkedList<Integer>();
+  }
+
+  public void push(int x) {
+    // e.g. after pushing -2, -45, -82, 29
+    // max Stack : -2, -2, -2, 29
+    // maxStack and mainStack contain same no, of elements
+    // a maxStack elements at i is max element found so far in main stack till index
+    // i
+    int max = maxStack.isEmpty() ? x : maxStack.getLast();
+    maxStack.add(max > x ? max : x);
+    mainStack.add(x);
+  }
+
+  public int pop() {
+    // Remove elements from both stack in tandom
+    maxStack.removeLast();
+    return mainStack.removeLast();
+  }
+
+  public int top() {
+    // get don't remove
+    return mainStack.getLast();
+  }
+
+  public int peekMax() {
+    // get don't remove
+    return maxStack.getLast();
+  }
+
+  public int popMax() {
+    Deque<Integer> tempStack = new LinkedList<Integer>();
+    int max = maxStack.getLast();
+    // Copy all the elements from main stack till max element
+    // to another temporary stack
+    while (top() != max) {
+      // Remember : pop() is removing elements from both stacks
+      tempStack.add(pop());
     }
-
-    public void push(int x) {
-        //e.g. after pushing -2, -45, -82, 29
-        //max Stack : -2, -2, -2, 29
-        //maxStack and mainStack contain same no, of elements
-        //a maxStack elements at i is max element found so far in main stack till index i
-        int max = maxStack.isEmpty() ? x : maxStack.getLast();
-        maxStack.add(max > x ? max : x);
-        mainStack.add(x);
+    // remove actual max element from main stack
+    pop();
+    // Restore all the removed elements
+    while (!tempStack.isEmpty()) {
+      // Remember : Push will create the maxStack in proper form again with new max
+      // element
+      push(tempStack.removeLast());
     }
+    return max;
+  }
 
-    public int pop() {
-        //Remove elements from both stack in tandom
-        maxStack.removeLast();
-        return mainStack.removeLast();
-    }
-
-    public int top() {
-        //get don't remove
-        return mainStack.getLast();
-    }
-
-    public int peekMax() {
-        //get don't remove
-        return maxStack.getLast();
-    }
-
-    public int popMax() {
-        Deque<Integer> tempStack = new LinkedList<Integer>();
-        int max = maxStack.getLast();
-        //Copy all the elements from main stack till max element
-        //to another temporary stack
-        while(top() != max) {
-            //Remember : pop() is removing elements from both stacks
-            tempStack.add(pop());
-        }
-        //remove actual max element from main stack
-        pop();
-        //Restore all the removed elements
-        while(!tempStack.isEmpty()) {
-            //Remember : Push will create the maxStack in proper form again with new max element
-            push(tempStack.removeLast());
-        }
-        return max;
-    }
-
-
-    public static void main(String[] args) {
-        //Test code here
-        MaxStackSimple maxStack = new MaxStackSimple();
-        maxStack.push(5);
-        maxStack.push(1);
-        maxStack.push(5);
-        System.out.println(maxStack.top());
-        System.out.println(maxStack.popMax());
-        System.out.println(maxStack.top());
-        System.out.println(maxStack.peekMax());
-        System.out.println(maxStack.pop());
-        System.out.println(maxStack.top());
-    }
+  public static void main(String[] args) {
+    // Test code here
+    MaxStackSimple maxStack = new MaxStackSimple();
+    maxStack.push(5);
+    maxStack.push(1);
+    maxStack.push(5);
+    System.out.println(maxStack.top());
+    System.out.println(maxStack.popMax());
+    System.out.println(maxStack.top());
+    System.out.println(maxStack.peekMax());
+    System.out.println(maxStack.pop());
+    System.out.println(maxStack.top());
+  }
 }

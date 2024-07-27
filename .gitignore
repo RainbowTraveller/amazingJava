@@ -8,6 +8,8 @@
 **/target
 **/.settings
 **/.idea
+./.metadata
+./.metals
 # Package Files #
 *.jar
 *.war
