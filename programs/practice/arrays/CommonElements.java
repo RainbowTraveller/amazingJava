@@ -26,6 +26,13 @@ public class CommonElements {
     }
   }
 
+  /**
+   * Method to find common elements between two ordered lists
+   *
+   * @param list1 - first ordered list
+   * @param list2 - second ordered list
+   * @return - ordered list with common elements between the 2 lists
+   */
   public static int[] findCommonElements(int[] list1, int[] list2) {
 
     int len1 = list1.length;
@@ -39,12 +46,10 @@ public class CommonElements {
 
     while (i < len1 && j < len2) {
       if (list1[i] == list2[j]) {
-          temp[size] = list1[i];
-          while(i < len1 && list1[i] == temp[size])
-            i++;
-          while(j < len2 && list2[j] == temp[size])
-            j++;
-          size++;
+        temp[size] = list1[i];
+        while (i < len1 && list1[i] == temp[size]) i++;
+        while (j < len2 && list2[j] == temp[size]) j++;
+        size++;
       } else if (list1[i] > list2[j]) {
         j++;
       } else {
