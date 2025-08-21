@@ -23,4 +23,14 @@ int storedSum = sum % 10; // Store the last digit of the sum
 carry = sum / 10; // Calculate the carry for the next iteration
 ```
 
+#### Fill the array with a specific value
+```java
+// Single dimensional array
+Arrays.fill(array, value);
+// Multi-dimensional array
+for (int i = 0; i < grid.length; ++i) {
+    Arrays.fill(distanceTracker[i], 0);
+}
+```
+
 

@@ -58,6 +58,7 @@ public class FindCampSite {
     System.out.println("Camp Site Location : " + findBaseCamp(grid));
   }
 
+  /** Helper class to store point */
   private static class Point {
     int x;
     int y;
@@ -92,8 +93,8 @@ public class FindCampSite {
    * day. So we need a point such that this distance is minimum. To simplify, we traverse from each
    * POI to other empty points and gather the data for distance
    *
-   * @param grid
-   * @return
+   * @param grid `2D` character array representing the landscape
+   * @return Point representing the coordinates of the base camp
    */
   public static Point findBaseCamp(char[][] grid) {
     // Min distance
@@ -107,7 +108,7 @@ public class FindCampSite {
     for (int i = 0; i < grid.length; i++) {
       for (int j = 0; j < grid[0].length; j++) {
         if (grid[i][j] == 'P') {
-          findDistance(i, j, grid, distanceTracker);
+          calculateDistaceFromPOI(i, j, grid, distanceTracker, 0);
         }
       }
     }
@@ -131,16 +132,27 @@ public class FindCampSite {
     return baseCamp;
   }
 
-  public static void findDistance(int row, int col, char[][] grid, int[][] tracker) {
-    calculateDistaceFromPOI(row + 1, col, grid, tracker, 1);
-    calculateDistaceFromPOI(row - 1, col, grid, tracker, 1);
-    calculateDistaceFromPOI(row, col + 1, grid, tracker, 1);
-    calculateDistaceFromPOI(row, col - 1, grid, tracker, 1);
-  }
-
+  /**
+   * Calculate distance from a given point of interest to all possible empty locations
+   *
+   * @param row Grid row location
+   * @param col Grid column location
+   * @param grid Grid indicating terrain
+   * @param tracker Distance tracker
+   * @param distance Current distance
+   */
   public static void calculateDistaceFromPOI(
       int row, int col, char[][] grid, int[][] tracker, int distance) {
+    if (row < 0
+        || col < 0
+        || row >= grid.length
+        || col >= grid[0].length
+        || grid[row][col] == '#') {
+      return;
+    }
+
     if (grid[row][col] == ' ') {
+      // Mark as visited in the form of mountain
       grid[row][col] = '#';
       tracker[row][col] += distance;
       calculateDistaceFromPOI(row + 1, col, grid, tracker, distance + 1);

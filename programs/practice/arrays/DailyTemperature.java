@@ -148,17 +148,26 @@ public class DailyTemperature {
     return range;
   }
 
-  public static int[] largestWaite(int[] temperatures) {
+  /**
+   * Method with efficient approach towards the finding range. This uses previously computed range
+   * for next days and then uses it to determine the current ones
+   *
+   * <p>Complexity : O( N )
+   *
+   * @param temperatures
+   * @return
+   */
+  public static int[] largestWait(int[] temperatures) {
     int[] range = null;
     if (temperatures != null || temperatures.length > 0) {
       int len = temperatures.length;
       range = new int[len];
       Arrays.fill(range, 0);
       int max = 0;
-      //Scan array backwards
+      // Scan array backwards
       for (int currDay = len - 1; currDay >= 0; currDay--) {
         int currTemp = temperatures[currDay];
-        //If temperature is greater than max, just records it
+        // If temperature is greater than max, just records it
         // This means the past temperature is greater so no need to modify its range
         // as there is no warmer day after this day as we are moving bacakwards
         if (currTemp >= max) {

@@ -44,6 +44,12 @@ public class EvidenceCollection {
     EvidenceCollection.printResult(EvidenceCollection.patrickTravels(input));
   }
 
+  /**
+   * Calculates the lowest cost distance from Patrick to each piece of evidence in the crime scene.
+   *
+   * @param input 2D grid representing the crime scene
+   * @return Map of evidence characters to their lowest cost distance from Patrick
+   */
   public static Map<Character, Integer> patrickTravels(char[][] input) {
 
     Map<Character, Integer> costs = new HashMap<>();
@@ -65,6 +71,11 @@ public class EvidenceCollection {
     return costs;
   }
 
+  /**
+   * Prints the evidence and their corresponding costs.
+   *
+   * @param input Map of evidence characters to their costs
+   */
   public static void printResult(Map<Character, Integer> input) {
 
     for (Character key : input.keySet()) {
@@ -72,6 +83,17 @@ public class EvidenceCollection {
     }
   }
 
+  /**
+   * Recursively processes the crime scene to find the lowest cost distance to each piece of
+   * evidence.
+   *
+   * @param input 2D grid representing the crime scene
+   * @param x Current x-coordinate
+   * @param y Current y-coordinate
+   * @param costs Map of evidence characters to their lowest cost distance from Patrick
+   * @param possibleEvidences Set of characters representing possible evidence
+   * @param currCost Current accumulated cost
+   */
   public static void processCrimeScene(
       char[][] input,
       int x,
