@@ -1,6 +1,11 @@
 /*
-program is step by step explaination of how to approach a problem from brute force to optimized solution
+Program is step by step explanation of how to approach a problem from brute force to optimized solution
 JumpGame is good program to study and understand the method
+
+You are given an integer array nums. You are initially positioned at the array's first index, and each
+element in the array represents your maximum jump length at that position.
+
+Return true if you can reach the last index, or false otherwise.
 
  */
 public class JumpGame {
@@ -24,6 +29,12 @@ public class JumpGame {
     System.out.println(jumpGame.canJumpLinear(new int[] {3, 2, 1, 0, 4}));
   }
 
+  /**
+   * Main function which calls the brute force or memoised function
+   *
+   * @param nums input array of integers
+   * @return returns true if last index is reachable from first index false otherwise
+   */
   public boolean canJump(int[] nums) {
     //    return canJumpBrute(0, nums);
     tracker = new State[nums.length];
@@ -37,7 +48,7 @@ public class JumpGame {
   /**
    * Brute force solution for a position i --> a b c ( say ) are possible reachable positions so
    * start with a --> p q r p --> s so for each of the position calculate the reachable and so and
-   * so forth check if any of these reachables is a final one Running complexity : O(2^n)
+   * so forth check if any of these reachable position is a final one Running complexity : O(2^n)
    *
    * @param position current index in the array to be considered
    * @param nums given input array of integers
