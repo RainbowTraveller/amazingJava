@@ -115,6 +115,14 @@ public class MaxConsucutiveOnes {
     return cons;
   }
 
+  /**
+   * This is sliding window approach for the above problem. The way it works is that we keep
+   * expanding the window by moving right pointer and when we encounter more than 1 zero we shrink
+   * the window from left until we have only 1 zero in the window This way we always have a window
+   * with maximum 1 zero and we keep track of the maximum size of such window This is more efficient
+   * than the previous approach <br>
+   * Time Complexity : O(n) Space Complexity : O(1)
+   */
   public int findMaxConsecutiveOnesOneZeroFlipWindow(int[] nums) {
     int noOfZeros = 0;
     int left = 0, right = 0;
@@ -126,11 +134,14 @@ public class MaxConsucutiveOnes {
         // Account for it
         noOfZeros++;
       }
-      // Opps 2 zeros already
+      // 2 zeros already
+      // Shrink the window from left until we are back to 1 zero
       while (noOfZeros == 2) {
 
         if (nums[left] == 0) {
           // un account for previous zero
+          // Now this will lead to breaking the while loop
+          // as we will have only 1 zero in the window
           noOfZeros--;
         }
         // Shrink the window
@@ -168,12 +179,13 @@ public class MaxConsucutiveOnes {
     int cons = 0;
     // right index tracks the array
     while (right < nums.length) {
-      // Zero enconutered
+      // Zero encountered
       if (nums[right] == 0) {
         // Account for it
         noOfZeros++;
       }
-      // Opps 2 zeros already
+      // Crossed the limit of n zeros
+      // Shrink the window from left until we are back to n zeros
       while (noOfZeros == n + 1) {
 
         if (nums[left] == 0) {
