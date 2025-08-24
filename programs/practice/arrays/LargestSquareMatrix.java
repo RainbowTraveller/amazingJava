@@ -115,7 +115,9 @@ class MatrixSizer {
    * @param row current row
    * @param column current column
    * @param arr input matrix
-   * @param level current level
+   * @param level current level <br>
+   *     Note: DO NOT USE THIS APPROACH FOR LARGE MATRIX AS IT IS RECURSIVE AND CAN CAUSE STACK
+   *     OVERFLOW
    */
   private static int getMetrixSize(int row, int column, List<List<Integer>> arr, int level) {
     int currLevel = 0;
