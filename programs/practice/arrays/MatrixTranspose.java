@@ -1,9 +1,7 @@
-import java.util.List;
 import java.util.ArrayList;
-import java.lang.Thread;
-import java.lang.Runnable;
-import java.util.concurrent.Executors;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class MatrixTranspose {
