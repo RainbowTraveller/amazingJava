@@ -6,11 +6,16 @@ import java.util.regex.*;
 
 public class MergeKSortedArray {
 
+  /** Class to represent a tracker for each element in the k sorted arrays */
   static class Tracker {
+    // index of the array from which the element is taken
     int arrayIndex;
+    // index of the element in the array
     int index;
+    // the element value
     int element;
 
+    /** Constructor */
     public Tracker(int arrIndex, int index, int num) {
       this.arrayIndex = arrIndex;
       this.index = index;
