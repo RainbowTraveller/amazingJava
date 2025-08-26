@@ -22,9 +22,9 @@
 
 public class MergeSortedArray {
   /*
-   This can be solved in naive expensive ways
-   1. Add all elements form num2 to num1 as it has enough capacity and sort using Arrays.sort
-   */
+  This can be solved in naive expensive ways
+  1. Add all elements form num2 to num1 as it has enough capacity and sort using Arrays.sort
+  */
 
   public static void main(String[] args) {
 
@@ -33,7 +33,13 @@ public class MergeSortedArray {
   }
 
   public void merge(int[] nums1, int m, int[] nums2, int n) {
+    // Two pointer approach
+    // Start from the end of both arrays and compare the elements and place the larger element at
+    // the end of nums1
+    // This way we don't need extra space and we can avoid overwriting elements in nums1
+    // Pointer for nums1
     int p1 = m - 1;
+    // Pointer for nums2
     int p2 = n - 1;
 
     for (int i = m + n - 1; i >= 0; --i) {
