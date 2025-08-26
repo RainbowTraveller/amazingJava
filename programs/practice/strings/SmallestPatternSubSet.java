@@ -11,179 +11,200 @@
  *   If there is no such window in S that covers all characters in T, return the empty string "".
  *   If there is such window, you are guaranteed that there will always be only one unique minimum window in S.
  */
-import java.util.Scanner;
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 public class SmallestPatternSubSet {
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        String pattern = sc.nextLine();
-        /*
-         * String input = "asdbsdcsdleavbfc"; String input = "asdbsdcsdleavbfca"; String
-         * pattern = "abc";
-         */
-
-        // Exhaustive, considering all windows
-        getMinWindowSubstring(input, pattern);
-
-        // Smarter
-        String smallestSubSet = findSmallestContainerSubStringSimpler(input, pattern);
-        System.out.println("Smallest Container Found : " + smallestSubSet);
-    }
-
-    /**
-     * Start from the beginning and consider all windows of length 1,2...upto end of
-     * the string. Perform this for every index in the string. Check for each window
-     * if the characters from pattern string appear and also the frequency matches
-     * Find minimum such window
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    String input = sc.nextLine();
+    String pattern = sc.nextLine();
+    /*
+     * String input = "asdbsdcsdleavbfc"; String input = "asdbsdcsdleavbfca"; String
+     * pattern = "abc";
      */
-    public static void getMinWindowSubstring(String candidate, String pattern) {
 
-        int minWindowLen = Integer.MAX_VALUE;
-        String minWindow = null;
-        if (candidate != null && pattern != null) {
-            int cLen = candidate.length();
-            int pLen = pattern.length();
+    // Exhaustive, considering all windows
+    getMinWindowSubstring(input, pattern);
 
-            // Map to track character and its frequency as
-            // appearing in pattern string. This will be used
-            // as a reference
-            Map<Character, Integer> tracker = new HashMap<>();
-            for (int i = 0; i < pLen; i++) {
-                int frequency = tracker.getOrDefault(pattern.charAt(i), 0);
-                tracker.put(pattern.charAt(i), frequency + 1);
-            }
+    // Smarter
+    String smallestSubSet = findSmallestContainerSubStringOptimal(input, pattern);
+    System.out.println("Smallest Container Found : " + smallestSubSet);
+  }
 
-            // Start from each character in the String
-            for (int i = 0; i < cLen; ++i) {
-                // Window size 1, 2 ...till the end of String
-                for (int j = i; j + i < cLen; ++j) {
+  /**
+   * Start from the beginning and consider all windows of length 1,2...upto end of the string.
+   * Perform this for every index in the string. Check for each window if the characters from
+   * pattern string appear and also the frequency matches Find minimum such window <br>
+   * Time complexity : O(N^3) <br>
+   * Space complexity : O(N) for the map
+   *
+   * @param candidate String in which we are searching for the pattern
+   * @param pattern Pattern string whose characters need to be found in the candidate string
+   */
+  public static void getMinWindowSubstring(String candidate, String pattern) {
 
-                    // Fetch the current substring window
-                    String window = candidate.substring(i, j + 1);
-                    // Check if window contains all the characters along with the
-                    // frequency
-                    boolean isValidWindow = isWindowContainingAllChars(window, tracker);
-                    if (isValidWindow) {
-                        minWindowLen = Math.min(minWindowLen, window.length());
-                        minWindow = window;
-                    }
-                }
-            }
+    int minWindowLen = Integer.MAX_VALUE;
+    String minWindow = null;
+    if (candidate != null && pattern != null) {
+      int cLen = candidate.length();
+      int pLen = pattern.length();
+
+      // Map to track character and its frequency as
+      // appearing in pattern string. This will be used
+      // as a reference
+      Map<Character, Integer> tracker = new HashMap<>();
+      for (int i = 0; i < pLen; i++) {
+        int frequency = tracker.getOrDefault(pattern.charAt(i), 0);
+        tracker.put(pattern.charAt(i), frequency + 1);
+      }
+
+      // Start from each character in the String
+      for (int i = 0; i < cLen; ++i) {
+        // Window size 1, 2 ...till the end of String
+        for (int j = i; j + i < cLen; ++j) {
+
+          // Fetch the current substring window
+          String window = candidate.substring(i, j + 1);
+          // Check if window contains all the characters along with the
+          // frequency
+          boolean isValidWindow = isWindowContainingAllChars(window, tracker);
+          if (isValidWindow) {
+            minWindowLen = Math.min(minWindowLen, window.length());
+            minWindow = window;
+          }
         }
-
-        System.out.println("Min Window length : " + minWindowLen + " Window : " + minWindow);
+      }
     }
 
-    /**
-     * Helper function to check if the character and frequency matches with the
-     * pattern
-     *
-     */
-    public static boolean isWindowContainingAllChars(String window, Map<Character, Integer> tracker) {
-        Map<Character, Integer> currWindowStatus = new HashMap<>();
+    System.out.println("Min Window length : " + minWindowLen + " Window : " + minWindow);
+  }
 
-        for (int i = 0; i < window.length(); i++) {
-            int frequency = currWindowStatus.getOrDefault(window.charAt(i), 0);
-            currWindowStatus.put(window.charAt(i), frequency + 1);
-        }
+  /** Helper function to check if the character and frequency matches with the pattern */
+  public static boolean isWindowContainingAllChars(String window, Map<Character, Integer> tracker) {
+    Map<Character, Integer> currWindowStatus = new HashMap<>();
 
-        for (char k : tracker.keySet()) {
-            int frequency = currWindowStatus.getOrDefault(k, 0);
-            if (frequency == 1) {
-                currWindowStatus.remove(k);
-            } else {
-                currWindowStatus.put(k, frequency - 1);
-            }
-        }
-
-        return currWindowStatus.size() == 0;
+    for (int i = 0; i < window.length(); i++) {
+      int frequency = currWindowStatus.getOrDefault(window.charAt(i), 0);
+      currWindowStatus.put(window.charAt(i), frequency + 1);
     }
 
-    public static String findSmallestContainerSubStringSimpler(String candidate, String pattern) {
-        // Basic corner cases
-        if (candidate == null || pattern == null || pattern.length() > candidate.length()) {
-            return "";
-        }
-
-        // Create map of the character and frequency from patten string
-        Map<Character, Integer> patternMap = new HashMap<Character, Integer>();
-        for (int i = 0; i < pattern.length(); ++i) {
-            char currentChar = pattern.charAt(i);
-            int frequency = patternMap.getOrDefault(currentChar, 0);
-            patternMap.put(currentChar, frequency + 1);
-        }
-
-        // Count of required unique characters
-        int requiredCharCount = patternMap.size();
-        // Keep track of matched elements to compare with requiredCharCount
-        // But only increment this one when frequency of char also matches with
-        // that in the patternMap
-        int candidateCount = 0;
-        // Sliding window limits
-        int left = 0, right = 0;
-        // Details of the output string
-        int length = -1, starting = 0, ending = 0;
-        // Keep track of all characters which are not part of pattern when the scanning
-        // of
-        // candidate begins. No point in including any extra character initially when
-        // left = 0
-        // if it is not in the pattern
-        int initialCount = 0;
-
-        // In the very beginning move left to a position where first char
-        // from the pattern is encountered
-        while (!patternMap.containsKey(candidate.charAt(left))) {
-            left++;
-            right++;
-        }
-
-        // Map for candidate characters
-        Map<Character, Integer> candidateMap = new HashMap<Character, Integer>();
-        // Check until right hits the end of candidate string
-        while (right < candidate.length()) {
-            char currentChar = candidate.charAt(right);
-
-            // Process only when char match is found
-            if (patternMap.containsKey(currentChar)) {
-                // Start creating the map of the characters from the Candidate string
-                int frequency = candidateMap.getOrDefault(currentChar, 0);
-                candidateMap.put(currentChar, frequency + 1);
-                // Check if a character from the candidate string is present in the pattern and
-                // the frequency matches too. Increment the count for matched candidates
-                if (candidateMap.get(currentChar) == patternMap.get(currentChar)) {
-                    candidateCount++;
-                }
-            }
-
-            while (left <= right && requiredCharCount == candidateCount) {
-                if (length == -1 || right - left + 1 < length) {
-                    length = right - left + 1;
-                    starting = left;
-                    ending = right;
-                }
-
-                // Start decreasing the window from left side
-                char currentLeftMostChar = candidate.charAt(left);
-                if (patternMap.containsKey(currentLeftMostChar)) {
-                    // Reduce the frequency count from the candidate map for this particular
-                    // character obtained
-                    candidateMap.put(currentLeftMostChar, candidateMap.get(currentLeftMostChar) - 1);
-                    // if this does not match with the frequency from the pattern map, then reduce
-                    // candidate match count
-                    if (candidateMap.get(currentLeftMostChar) < patternMap.get(currentLeftMostChar)) {
-                        candidateCount--;
-                    }
-                }
-                left++;
-            }
-            // Keep expanding the right side of the window
-            right++;
-        }
-        return length == -1 ? "" : candidate.substring(starting, ending + 1);
+    for (char k : tracker.keySet()) {
+      int frequency = currWindowStatus.getOrDefault(k, 0);
+      if (frequency == 1) {
+        currWindowStatus.remove(k);
+      } else {
+        currWindowStatus.put(k, frequency - 1);
+      }
     }
 
+    return currWindowStatus.size() == 0;
+  }
+
+  /**
+   * Smarter approach using sliding window technique Time complexity : O(N) <br>
+   * Space complexity : O(N) for the map
+   *
+   * @param candidate String in which we are searching for the pattern
+   * @param pattern Pattern string whose characters need to be found in the candidate string
+   * @return Smallest substring containing all characters from the pattern
+   */
+  public static String findSmallestContainerSubStringOptimal(String s, String t) {
+    // Pair class to hold the index and character
+    class Pair<U, V> {
+      public U first;
+      public V second;
+
+      public Pair(U first, V second) {
+        this.first = first;
+        this.second = second;
+      }
+
+      public U getKey() {
+        return first;
+      }
+
+      public V getValue() {
+        return second;
+      }
+    }
+
+    // Edge cases
+    if (s.length() == 0 || t.length() == 0) {
+      return "";
+    }
+
+    // Dictionary which keeps a count of all the unique characters in t.
+    Map<Character, Integer> dictT = new HashMap<Character, Integer>();
+
+    // Build the frequency map for the pattern string
+    for (int i = 0; i < t.length(); i++) {
+      int count = dictT.getOrDefault(t.charAt(i), 0);
+      dictT.put(t.charAt(i), count + 1);
+    }
+
+    // Number of unique characters in t, which need to be present in the desired window.
+    int required = dictT.size();
+
+    // Filter all the characters from s into a new list along with their index.
+    // The filtering criteria is that the character should be present in t.
+    List<Pair<Integer, Character>> filteredS = new ArrayList<Pair<Integer, Character>>();
+    for (int i = 0; i < s.length(); i++) {
+      char c = s.charAt(i);
+      if (dictT.containsKey(c)) {
+        filteredS.add(new Pair<Integer, Character>(i, c));
+      }
+    }
+
+    int l = 0, r = 0, formed = 0;
+    // Dictionary which keeps a count of all the unique characters in the current window.
+    Map<Character, Integer> windowCounts = new HashMap<Character, Integer>();
+    // ans list of the form (window length, left, right)
+    int[] ans = {-1, 0, 0};
+
+    // Look for the first character from t in s to initialize the left pointer
+    while (l < s.length() && !tFrequency.containsKey(s.charAt(l))) {
+      l++;
+      r++;
+    }
+    // Look for the characters only in the filtered list instead of entire s.
+    // This helps to reduce our search.
+    // Hence, we follow the sliding window approach on as small list.
+
+    while (r < filteredS.size()) {
+      char c = filteredS.get(r).getValue();
+      int count = windowCounts.getOrDefault(c, 0);
+      windowCounts.put(c, count + 1);
+
+      if (dictT.containsKey(c) && windowCounts.get(c).intValue() == dictT.get(c).intValue()) {
+        formed++;
+      }
+
+      // Try and contract the window till the point where it ceases to be 'desirable'.
+      while (l <= r && formed == required) {
+        c = filteredS.get(l).getValue();
+
+        // Save the smallest window until now.
+        int end = filteredS.get(r).getKey();
+        int start = filteredS.get(l).getKey();
+        if (ans[0] == -1 || end - start + 1 < ans[0]) {
+          ans[0] = end - start + 1;
+          ans[1] = start;
+          ans[2] = end;
+        }
+
+        windowCounts.put(c, windowCounts.get(c) - 1);
+        if (dictT.containsKey(c) && windowCounts.get(c).intValue() < dictT.get(c).intValue()) {
+          formed--;
+        }
+        l++;
+      }
+      r++;
+    }
+    return ans[0] == -1 ? "" : s.substring(ans[1], ans[2] + 1);
+  }
 }
