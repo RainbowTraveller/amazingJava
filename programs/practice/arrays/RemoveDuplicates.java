@@ -38,6 +38,13 @@ public class RemoveDuplicates {
     System.out.println(removeDuplicates.removeElementSwap(new int[] {1, 0, 2, 2, 3, 0, 4, 2}, 2));
     System.out.println(removeDuplicates.removeElementSwap(new int[] {1, 0, 2, 2, 2, 0, 4, 2}, 2));
     System.out.println(removeDuplicates.removeElementSwap(new int[] {3, 3}, 3));
+
+    System.out.println(removeDuplicates.removeElementSimpler(new int[] {3, 2, 2, 3}, 3));
+    System.out.println(
+        removeDuplicates.removeElementSimpler(new int[] {1, 0, 2, 2, 3, 0, 4, 2}, 2));
+    System.out.println(
+        removeDuplicates.removeElementSimpler(new int[] {1, 0, 2, 2, 2, 0, 4, 2}, 2));
+    System.out.println(removeDuplicates.removeElementSimpler(new int[] {3, 3}, 3));
   }
 
   /**
@@ -104,5 +111,35 @@ public class RemoveDuplicates {
       }
     }
     return i;
+  }
+
+  /**
+   * Two pointers
+   *
+   * <p>one to iterate through the array, the other to keep track of the position to insert the next
+   * valid element.
+   *
+   * <p>When we find an element that is not equal to val, we copy it to the position indicated by
+   * the second pointer and increment the second pointer.
+   *
+   * <p>This way, all elements not equal to val are moved to the front of the array.
+   *
+   * <p>Finally, we return the position of the second pointer, which represents the new length of
+   * the array without the val elements.
+   *
+   * <p>Time complexity: O(n) Space complexity: O(1)
+   */
+  public static int removeElementSimpler(int[] nums, int val) {
+    int replacing = 0;
+    int curr = 0;
+
+    while (curr < nums.length) {
+      if (nums[curr] != val) {
+        nums[replacing] = nums[curr];
+        replacing++;
+      }
+      curr++;
+    }
+    return replacing;
   }
 }
