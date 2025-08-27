@@ -16,15 +16,20 @@ import java.util.Arrays;
  *
  * <p>Example 1:
  *
- * <p>Input: nums = [1,5,2] Output: false Explanation: Initially, player 1 can choose between 1 and
- * 2. If he chooses 2 (or 1), then player 2 can choose from 1 (or 2) and 5. If player 2 chooses 5,
- * then player 1 will be left with 1 (or 2). So, final score of player 1 is 1 + 2 = 3, and player 2
- * is 5. Hence, player 1 will never be the winner and you need to return false. Example 2:
+ * <p>Input: nums = [1,5,2] Output: false
  *
- * <p>Input: nums = [1,5,233,7] Output: true Explanation: Player 1 first chooses 1. Then player 2
- * has to choose between 5 and 7. No matter which number player 2 choose, player 1 can choose 233.
- * Finally, player 1 has more score (234) than player 2 (12), so you need to return True
- * representing player1 can win.
+ * <p>Explanation: Initially, player 1 can choose between 1 and 2. If he chooses 2 (or 1), then
+ * player 2 can choose from 1 (or 2) and 5. If player 2 chooses 5, then player 1 will be left with 1
+ * (or 2). So, final score of player 1 is 1 + 2 = 3, and player 2 is 5. Hence, player 1 will never
+ * be the winner and you need to return false.
+ *
+ * <p>Example 2:
+ *
+ * <p>Input: nums = [1,5,233,7] Output: true
+ *
+ * <p>Explanation: Player 1 first chooses 1. Then player 2 has to choose between 5 and 7. No matter
+ * which number player 2 choose, player 1 can choose 233. Finally, player 1 has more score (234)
+ * than player 2 (12), so you need to return True representing player1 can win.
  */
 public class PredictTheWinner {
   public static void main(String[] main) {
@@ -58,14 +63,14 @@ public class PredictTheWinner {
    * choices at next level 2.b : Value at right and call next with ( left and right - 1) which are
    * choices at next level
    *
-   * <p>3. LeftValue and RightValue indicate the differece between current left / right value and
+   * <p>3. LeftValue and RightValue indicate the difference between current left / right value and
    * subsequent greater value that player 2 may select. We can choose the value which is greater of
    * the two and return
    *
-   * @param nums
-   * @param left
-   * @param right
-   * @return
+   * @param nums array of possible moves or points to be obtained
+   * @param left left index
+   * @param right right index
+   * @return the maximum value that can be obtained between left and right
    */
   public static int play(int[] nums, int left, int right) {
     if (left == right) {

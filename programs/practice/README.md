@@ -33,4 +33,8 @@ for (int i = 0; i < grid.length; ++i) {
 }
 ```
 
-
+#### Convert char to int
+```java
+int digit = ch - '0'; // where ch is a character representing a digit
+// Example: char ch = '5'; int digit = ch - '0'; // digit will be 5
+```

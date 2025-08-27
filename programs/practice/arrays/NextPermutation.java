@@ -16,47 +16,50 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class NextPermutation {
-    public static void main(String [] args) {
+  public static void main(String[] args) {
 
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Enter the current permutation (, separated)");
-        String input = sc.nextLine();
-        String[] values = input.split(",");
-        int [] nums = Arrays.stream(values)
-                        .mapToInt(Integer::parseInt)
-                        .toArray();
-        System.out.println("Next nextPermutation : " + nextPermutation(nums));
-    }
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter the current permutation (, separated)");
+    String input = sc.nextLine();
+    String[] values = input.split(",");
+    int[] nums = Arrays.stream(values).mapToInt(Integer::parseInt).toArray();
+    System.out.println("Next nextPermutation : " + nextPermutation(nums));
+  }
 
-    public static String nextPermutation(int[] nums) {
-        //Start from the end and find first element less then previous element
-        //i.e. smallest element so far from right
-        if(nums != null) {
-            int end = nums.length - 1;
-            while(end > 0 && nums[end - 1] >= nums[end]) {
-                end--;
-            }
+  /**
+   * Find next permutation of given array of numbers
+   *
+   * @param numbers array of numbers
+   */
+  public static String nextPermutation(int[] nums) {
+    // Start from the end and find first element less then previous element
+    // i.e. smallest element so far from right
+    if (nums != null) {
+      int end = nums.length - 1;
+      while (end > 0 && nums[end - 1] >= nums[end]) {
+        end--;
+      }
 
-            int small = end - 1;
-            //Now find smallest element greater then above found element in the same area
-            //start from end and find one.
-            //This is to get next element in lexicographic order
-            if( small >= 0) {
-                int index = nums.length - 1;
-                while(index >=0 && nums[index] <= nums[small]) {
-                    index--;
-                }
-                //System.out.println(Arrays.toString(nums));
-                //Swap these 2 elements
-                int temp = nums[small];
-                nums[small] = nums[index];
-                nums[index] = temp;
-            }
-            //Sort array after this element
-            //this makes sure that smallest arrangement of all right side elements is done
-            //maintaining lexicographical ordering
-            Arrays.sort(nums, small + 1, nums.length);
+      int small = end - 1;
+      // Now find smallest element greater then above found element in the same area
+      // start from end and find one.
+      // This is to get next element in lexicographic order
+      if (small >= 0) {
+        int index = nums.length - 1;
+        while (index >= 0 && nums[index] <= nums[small]) {
+          index--;
         }
-        return Arrays.toString(nums);
+        // System.out.println(Arrays.toString(nums));
+        // Swap these 2 elements
+        int temp = nums[small];
+        nums[small] = nums[index];
+        nums[index] = temp;
+      }
+      // Sort array after this element
+      // this makes sure that smallest arrangement of all right side elements is done
+      // maintaining lexicographical ordering
+      Arrays.sort(nums, small + 1, nums.length);
     }
+    return Arrays.toString(nums);
+  }
 }
