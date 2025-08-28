@@ -1,13 +1,12 @@
-import java.util.List;
-import java.util.LinkedList;
 import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
 
 /*
-You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right.
+You can only see the k numbers in the window. Each time the sliding window moves right by one position.
 
-Return the max sliding window.
-
-
+Return the max num in sliding window.
 
 Example 1:
 
@@ -44,55 +43,66 @@ we maintain the monotonic property by removing all elements less than x before a
 */
 
 public class SlidingWindowMax {
-    public static void main (String[] args) {
-        int[] input = {1, 3, -1, -3, 5, 3, 6, 7};
-        java.util.Arrays.stream(getMaxFromSlidingWindow(input, 3)).forEach(System.out::println);
-    }
+  public static void main(String[] args) {
+    int[] input = {1, 3, -1, -3, 5, 3, 6, 7};
+    java.util.Arrays.stream(getMaxFromSlidingWindow(input, 3)).forEach(System.out::println);
+  }
 
-    public static int[] getMaxFromSlidingWindow (int[] nums, int windowSize) {
-        Deque<Integer> tracker = new LinkedList<>();
-        List<Integer> result = new LinkedList<>();
-        if (nums != null && nums.length > windowSize) {
-            int len = nums.length;
+  /**
+   * Function to get max from sliding window of size k
+   *
+   * <p>Time Complexity : O(n)
+   *
+   * <p>Space Complexity : O(k)
+   *
+   * @param nums input array
+   * @param windowSize size of the sliding windowSize
+   * @return array of max elements from each sliding window
+   */
+  public static int[] getMaxFromSlidingWindow(int[] nums, int windowSize) {
+    Deque<Integer> tracker = new LinkedList<>();
+    List<Integer> result = new LinkedList<>();
+    if (nums != null && nums.length > windowSize) {
+      int len = nums.length;
 
-            // focus on the first k elements where k = windowSize
-            // Find the greatest element from that window and then add its index in
-            // the tracking queue
-            for (int i = 0; i < windowSize; ++i) {
-                while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekFirst()]) {
-                    tracker.pollFirst();
-                }
-                tracker.offerLast(i);
-            }
-//            System.out.println(nums[tracker.peekFirst()]);
-            result.add(nums[tracker.peekFirst()]);
-            // For subsequent elements do the following
-            // 1. Remove index equal to i - k as it is out of the sliding window
-            // 2. This will keep next valid and greatest index in the queue
-            // 3. Push all indexes such that their value is greater than the
-
-            for (int i = windowSize; i < len; i++) {
-
-                // Remove element index which is outside the current window
-                if (!tracker.isEmpty() && tracker.peekFirst() == i - windowSize) {
-                    tracker.pollFirst();
-                }
-
-                // Check from the behind and not from front
-                // Remove all indexes from the queue which have and element which is less than
-                // current element
-                // This will maintain monotonic queue : it should have indexes of in decreasing order, so
-                // remove all the indexes corresponding to smaller values than current one from the queue
-                // Once that is done then add the current index
-                while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekLast()]) {
-                    tracker.pollLast();
-                }
-                tracker.offerLast(i);
-//                System.out.println(nums[tracker.peekFirst()]);
-                result.add(nums[tracker.peekFirst()]);
-            }
-            return result.stream().mapToInt(i -> i).toArray();
+      // focus on the first k elements where k = windowSize
+      // Find the greatest element from that window and then add its index in
+      // the tracking queue
+      for (int i = 0; i < windowSize; ++i) {
+        while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekFirst()]) {
+          tracker.pollFirst();
         }
-        return null;
+        tracker.offerLast(i);
+      }
+      //            System.out.println(nums[tracker.peekFirst()]);
+      result.add(nums[tracker.peekFirst()]);
+      // For subsequent elements do the following
+      // 1. Remove index equal to i - k as it is out of the sliding window
+      // 2. This will keep next valid and greatest index in the queue
+      // 3. Push all indexes such that their value is greater than the
+
+      for (int i = windowSize; i < len; i++) {
+
+        // Remove element index which is outside the current window
+        if (!tracker.isEmpty() && tracker.peekFirst() == i - windowSize) {
+          tracker.pollFirst();
+        }
+
+        // Check from the behind and not from front
+        // Remove all indexes from the queue which have and element which is less than
+        // current element
+        // This will maintain monotonic queue : it should have indexes of in decreasing order, so
+        // remove all the indexes corresponding to smaller values than current one from the queue
+        // Once that is done then add the current index
+        while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekLast()]) {
+          tracker.pollLast();
+        }
+        tracker.offerLast(i);
+        //                System.out.println(nums[tracker.peekFirst()]);
+        result.add(nums[tracker.peekFirst()]);
+      }
+      return result.stream().mapToInt(i -> i).toArray();
     }
+    return null;
+  }
 }
