@@ -18,8 +18,9 @@ public class SingleElementInSortedArray {
 
   public static void main(String[] args) {
     int[] input = {1, 1, 2, 3, 3, 4, 4, 8, 8};
-    System.out.println(singleNonDuplicate(input));
-    System.out.println(singleNonDuplicateWithBS(input));
+    System.out.println("Binary Search Loop : Complex " + singleNonDuplicate(input));
+    System.out.println(
+        "Binary Search Loop : Compact and efficient : " + singleNonDuplicateWithBS(input));
   }
 
   /**
@@ -49,30 +50,87 @@ public class SingleElementInSortedArray {
     return -1;
   }
 
+  /**
+   * Typical binary search implementation with some additional checks for uniqueness of the element
+   * at mid position.
+   *
+   * <p>The code snippet if (mid % 2 == 1) { mid--; } is a clever optimization in the binary search
+   * algorithm for this specific problem. It ensures that the mid index you're comparing is always
+   * at the start of a potential pair.
+   *
+   * <p>The logic works because the single element breaks the predictable pattern of pairs.
+   *
+   * <p>In a correctly paired array (like [1,1,2,2,3,3]), the first element of any pair is always at
+   * an even index (0, 2, 4, ...).
+   *
+   * <p>If the single element is at an odd index, like [1,1,2,3,3,4,4], then 2 is the unique
+   * element, and all pairs after it are shifted to the left, and start on odd indexes. (3,3) is at
+   * indices 3,4 and (4,4) is at 5,6.
+   *
+   * <p>To keep the binary search consistent and simple, we always want to compare a number with its
+   * partner. By forcing mid to be an even number, we guarantee we are checking nums[mid] against
+   * nums[mid + 1].
+   *
+   * <p>So, the line if (mid % 2 == 1) { mid--; } ensures we're always at the first element of a
+   * potential pair, which simplifies the logic for deciding which half of the array to search next.
+   * We can then confidently check nums[mid] == nums[mid + 1] to determine if the single element is
+   * to the left or right.
+   *
+   * <p>The Core Logic Explained The algorithm works on a simple principle: if an element is part of
+   * a pair, its partner will always be at the very next index (nums[i+1]) if and only if all the
+   * elements before it also appear in pairs.
+   *
+   * <p>Force mid to be Even: The line if (mid % 2 == 1) { mid--; } ensures that our mid pointer
+   * always lands on an even index. This makes the next check predictable. We are essentially
+   * forcing our binary search to only look at elements that would be the first in a normal pair.
+   *
+   * <p>Check for a Match: We then check nums[mid] == nums[mid + 1]. There are two possibilities:
+   *
+   * <p>Case A: nums[mid] == nums[mid + 1] (The elements match). This means we have found a regular
+   * pair at indices mid and mid + 1. This proves that all elements to the left of mid must also be
+   * in pairs (since the array is sorted and the single element would have broken the pattern).
+   * Therefore, the unique element must be in the right half of the array, starting from mid + 2.
+   *
+   * <p>We can discard the left half of the search space: left = mid + 2.
+   *
+   * <p>Case B: nums[mid] != nums[mid + 1] (The elements do not match). This is the crucial part.
+   * Since we know nums[mid] is at an even index, this mismatch can only mean one thing: either
+   * nums[mid] is the single unique element itself, or the single element is somewhere to the left
+   * of it, which has shifted the pairs so that nums[mid] is now the second element of a pair. In
+   * both scenarios, the unique element must be in the left half of the array.
+   *
+   * <p>We can discard the right half of the search space: right = mid.
+   *
+   * <p>By forcing mid to be at an even index, we simplify the decision-making process into a
+   * single, reliable check. We don't have to worry about the complexities of shifted pairs; the
+   * logic handles it automatically.
+   *
+   * @param nums array of integers
+   * @param min minimum index
+   * @param max maximum index
+   * @return unique element or -1 if not found
+   */
   public static int usingTypicalBinarySearch(int[] nums, int min, int max) {
-    if (min <= max) {
-      // Calculate the middle index
-      int mid = (max + min) / 2;
-      if (mid >= 1
-          && mid < nums.length - 1
-          && nums[mid - 1] != nums[mid]
-          && nums[mid] != nums[mid + 1]) {
-        // This is a non extreme position in the middle and not at the start or end of the array
-        // Check for uniqueness of the element
-        return nums[mid];
-      } else if ((mid == 0 && nums[0] != nums[1])
-          || (mid == nums.length - 1 && nums[mid] != nums[mid - 1])) {
-        //Check for extreme positions and uniqueness as well
-        return nums[mid];
+    int left = 0;
+    int right = nums.length - 1;
+    while (left < right) {
+      int mid = left + (right - left) / 2;
+      // Ensure mid is even. If odd, move it back one index
+      if (mid % 2 == 1) {
+        mid--;
+      }
+      // Check the pair starting at mid
+      if (nums[mid] == nums[mid + 1]) {
+        // The unique element must be in the right half
+        // It hasn't appeared yet
+        left = mid + 2;
       } else {
-        //if not found then call recursively for left and right halves
-        int numLeft = usingTypicalBinarySearch(nums, min, mid - 1);
-        int numRight = usingTypicalBinarySearch(nums, mid + 1, max);
-        //try to return non nogative one.
-        return numLeft == -1 ? numRight : numLeft;
+        // The unique element must be in the left half
+        // It could be at mid
+        right = mid;
       }
     }
-    return -1;
+    return nums[left];
   }
 
   /**
