@@ -45,7 +45,10 @@ we maintain the monotonic property by removing all elements less than x before a
 public class SlidingWindowMax {
   public static void main(String[] args) {
     int[] input = {1, 3, -1, -3, 5, 3, 6, 7};
+    System.out.println("Optimized Solution");
     java.util.Arrays.stream(getMaxFromSlidingWindow(input, 3)).forEach(System.out::println);
+    System.out.println("Simple Solution");
+    java.util.Arrays.stream(findMaxSlidingWindowSimple(input, 3)).forEach(System.out::println);
   }
 
   /**
@@ -69,12 +72,12 @@ public class SlidingWindowMax {
       // Find the greatest element from that window and then add its index in
       // the tracking queue
       for (int i = 0; i < windowSize; ++i) {
-        while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekFirst()]) {
-          tracker.pollFirst();
+        while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekLast()]) {
+          tracker.pollLast();
         }
         tracker.offerLast(i);
       }
-      //            System.out.println(nums[tracker.peekFirst()]);
+      // System.out.println(nums[tracker.peekFirst()]);
       result.add(nums[tracker.peekFirst()]);
       // For subsequent elements do the following
       // 1. Remove index equal to i - k as it is out of the sliding window
@@ -84,6 +87,16 @@ public class SlidingWindowMax {
       for (int i = windowSize; i < len; i++) {
 
         // Remove element index which is outside the current window
+        // Why the First Element (Index) is Checked for the Window
+        // The first element in the deque (tracker.peekFirst()) is the one that was added earliest
+        // and corresponds to the largest value so far in the window.
+        // When the window slides, the element at the beginning of the previous window is now
+        // outside the current window.
+        // The condition tracker.peekFirst() == i - windowSize checks precisely this. The index i -
+        // windowSize represents the index that is just a step before
+        // the current window. If the index at the front of the deque is this "outdated" index, it
+        // must be removed. By doing this, we ensure that the deque only
+        // contains indices that are within the bounds of the current sliding window.
         if (!tracker.isEmpty() && tracker.peekFirst() == i - windowSize) {
           tracker.pollFirst();
         }
@@ -94,15 +107,55 @@ public class SlidingWindowMax {
         // This will maintain monotonic queue : it should have indexes of in decreasing order, so
         // remove all the indexes corresponding to smaller values than current one from the queue
         // Once that is done then add the current index
+        //
+        // Explanation for Removing from the Rear End
+        // Removing elements from the rear of the deque is crucial for maintaining the monotonic
+        // decreasing property. When a new element nums[i] is about to be added, we compare it with
+        // the element at the end of the deque, nums[tracker.peekLast()].
+        //
+        // If nums[i] is greater than or equal to nums[tracker.peekLast()], then the element at the
+        // back of the deque and any elements before it are no longer relevant.
+        //
+        // The newly added element nums[i] is a better candidate for the maximum. All previous
+        // elements in the deque that are smaller than nums[i] are now obsolete. Their indices can
+        // be safely removed because they will never be the maximum in a future window as long as
+        // nums[i] is present. As the window slides, nums[i] will eventually move out, but the
+        // elements we are removing would have moved out even sooner, so they are not needed.
+
         while (!tracker.isEmpty() && nums[i] >= nums[tracker.peekLast()]) {
           tracker.pollLast();
         }
         tracker.offerLast(i);
-        //                System.out.println(nums[tracker.peekFirst()]);
+        // System.out.println(nums[tracker.peekFirst()]);
         result.add(nums[tracker.peekFirst()]);
       }
       return result.stream().mapToInt(i -> i).toArray();
     }
     return null;
+  }
+
+  /**
+   * Function to get max from sliding window of size k
+   *
+   * <p>Time Complexity : O(n*k)
+   *
+   * <p>Space Complexity : O(1)
+   *
+   * @param nums input array
+   * @param k size of the sliding window
+   * @return array of max elements from each sliding window
+   */
+  public static int[] findMaxSlidingWindowSimple(int[] nums, int k) {
+    List<Integer> maxList = new LinkedList<>();
+    for (int i = 0; i <= nums.length - k; i++) {
+      int max = nums[i];
+      for (int j = 1; j < k; j++) {
+        if (nums[i + j] > max) {
+          max = nums[i + j];
+        }
+      }
+      maxList.add(max);
+    }
+    return maxList.stream().mapToInt(i -> i).toArray();
   }
 }
