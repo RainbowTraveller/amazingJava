@@ -109,7 +109,7 @@ public class EmployeeFreeTime {
         free.add(new Interval(end, curr.start));
         // end = curr.end;
       } else {
-        // The intervals are sorted based on start and then time.
+        // The intervals are sorted based on start and then end time.
         // so either 2 starts are equal or curr.start > previous start
         // here an interval may start later than previous end but also end after previous end...so
         // we need to
