@@ -38,3 +38,19 @@ for (int i = 0; i < grid.length; ++i) {
 int digit = ch - '0'; // where ch is a character representing a digit
 // Example: char ch = '5'; int digit = ch - '0'; // digit will be 5
 ```
+
+#### Convert List to Array
+```java
+List<Integer> list = new ArrayList<>();
+int[] array = list.stream().mapToInt(i -> i).toArray();
+```
+
+#### Print an array
+```java
+- System.out.println(Arrays.toString(array));
+- java.util.Arrays.stream(getMaxFromSlidingWindow(input, 3)).forEach(System.out::println);
+ ```
+#### Array Sum
+```java
+int sum = Arrays.stream(array).sum();
+```
