@@ -1,7 +1,7 @@
 import java.io.*;
-import java.util.*;
-import java.text.*;
 import java.math.*;
+import java.text.*;
+import java.util.*;
 import java.util.regex.*;
 
 /*
@@ -33,83 +33,93 @@ import java.util.regex.*;
 */
 public class SkiSlopeRange {
 
-  public static int findMinMachines(int n, int[][] pairs) {
-    // Get Ranges based on the input data : slope and range pairs
-    int[][] ranges = getRanges(pairs);
-    //  Range are sorted based on the slope number
-    // it should start with the 0 as it should start covering from 0 if not it's error
-    if (ranges[0][0] != 0) {
-      return -1;
-    }
-    int i = 1; // index
-    int cnt = 0; // Initialize to 1
-    int end = ranges[0][1]; // end of the first range
-    // Get maxmum range for the starting 0
-    while (i < ranges.length && ranges[i][0] == 0 && ranges[i][1] >= end) {
-      end = ranges[i][1];
-      i++;
-    }
-    // did we already find the range
-    if (end == n) {
-      return cnt + 1;
-    }
-    // We already have convered till the end, next target is next slope
-    int desired = end + 1;
-    end = Integer.MAX_VALUE;
-    while (i < ranges.length) {
-      int offset = 0;
-      while (i < ranges.length && ranges[i][0] >= desired && desired <= ranges[i][1]) {
-        if (end < ranges[i][1]) {
-          end = ranges[i][1];
-          if (end == n) {
-            return cnt + 1;
-          }
-        }
-        offset = 1;
-        i++;
-      }
-      if (offset == 0) {
-        i++;
-      }
-      cnt += offset;
-      desired = end + 1;
-    }
-    return desired == n ? -1 : cnt + 1;
-  }
-
   /**
-   * Create ranges from the given data Pairs are in the form (slope Index , range) So the range will
-   * be slope Index - range and slope index + range It means a machine at slope index can clean this
-   * much range of slope indexes
+   * Logic Explanation The provided Java code solves the ski slope coverage problem using a greedy
+   * algorithm. The core idea is to always make the locally optimal choice in the hope that it will
+   * lead to a globally optimal solution. In this case, the greedy choice is to always select the
+   * snow machine that extends the coverage the farthest.
    *
-   * <p>Special case : for 0th slope the range will be same as the actual value present in the pair
+   * <p>Interval Transformation: The first step is to convert the machine data (index, range) into a
+   * set of coverage intervals [start, end]. A machine at index with range can cover the slope from
+   * max(0, index - range) to min(N, index + range). This transformation simplifies the problem into
+   * a classic interval-covering problem.
    *
-   * @param pairs
-   * @return
+   * <p>Sorting: The algorithm then sorts these intervals based on their start point in ascending
+   * order. This sorting is crucial because it allows us to process the slope from left to right
+   * (from index 0 to N).
+   *
+   * <p>Greedy Selection: We start with currentCoverage at 0. The goal is to extend this coverage to
+   * N in the fewest steps. In each step (representing one snow machine turned on), we look at all
+   * available machines that can cover the current currentCoverage point. From this subset of
+   * machines, we select the one that reaches the farthest.
+   *
+   * <p>Iteration: The process repeats:
+   *
+   * <p>Find the machine that starts at or before currentCoverage and has the maximum end point
+   * (maxReach).
+   *
+   * <p>If no such machine exists, it's impossible to extend coverage, so we return -1.
+   *
+   * <p>Otherwise, we increment our machinesNeeded count and update currentCoverage to maxReach,
+   * effectively "jumping" to the new farthest point reached.
+   *
+   * <p>The loop continues until currentCoverage is greater than or equal to N, meaning the entire
+   * slope is covered. The final machinesNeeded count is the minimum required.
+   *
+   * <p>Time Complexity: The algorithm runs in O(M log M) time, where M is the number of machines,
+   * due to the sorting step. The greedy selection process runs in O(M) time.
+   *
+   * <p>Space Complexity: The space complexity is O(M) for storing the intervals.
    */
-  public static int[][] getRanges(int[][] pairs) {
-
-    int len = pairs.length;
-    // Range array
-    int[][] ranges = new int[len][2];
-    for (int i = 0; i < len; ++i) {
-
-      if (pairs[i][0] == 0) { // No chamge for slope index 0
-        ranges[i][0] = pairs[i][0];
-        ranges[i][1] = pairs[i][1];
-      } else {
-        // Calculate the range
-        ranges[i][0] = pairs[i][0] - pairs[i][1];
-        ranges[i][1] = pairs[i][0] + pairs[i][1];
-      }
+  public static int findMinMachines(int n, int[][] pairs) {
+    // Transform (index, range) pairs into coverage intervals [start, end]
+    List<int[]> intervals = new ArrayList<>();
+    // Create intervals based on the machine's index and range
+    // Ensure the intervals do not exceed the slope boundaries [0, n]
+    // for example (0, 2) on a slope of length 3 would cover [0, 2]
+    // (1, 1) would cover [0, 2]
+    // (3, 1) would cover [2, 4]
+    // (4, 1) would cover [3, 5]
+    // Thus, the intervals would be [0, 2], [0, 2], [2, 4], [3, 5]
+    for (int[] pair : pairs) {
+      int index = pair[0];
+      int range = pair[1];
+      int start = Math.max(0, index - range); // Ensure start is not less than 0
+      int end = Math.min(n, index + range); // Ensure end does not exceed n
+      intervals.add(new int[] {start, end}); // Add the interval to this list
     }
-    // Sort range based on start index of the range, if equal consider the to range value
-    Arrays.sort(ranges, (int[] r1, int[] r2) -> (r1[0] == r2[0] ? r1[1] - r2[1] : r1[0] - r2[0]));
 
-    //    Arrays.stream(ranges).map(a -> new String(a[0] + " : " +
-    // a[1])).forEach(System.out::println);
+    // Sort intervals by their start point
+    intervals.sort(Comparator.comparingInt(a -> a[0]));
 
-    return ranges;
+    int machinesNeeded = 0;
+    // This is starting point of the slope we need to cover
+    // In the range, we need to check with this currentCoverage point
+    // how far we can cover the slope
+    int currentCoverage = 0; // Current point we need to cover
+    int i = 0;
+
+    while (currentCoverage < n) {
+      int maxReach = -1; // The farthest point we can reach in this iteration
+      boolean foundCoverage = false; // Flag to check if we found any machine to extend coverage
+
+      // Find the machine that can cover the current point and reaches the farthest
+      while (i < intervals.size() && intervals.get(i)[0] <= currentCoverage) {
+        if (intervals.get(i)[1] > maxReach) {
+          maxReach = intervals.get(i)[1];
+        }
+        i++;
+      }
+
+      // If we couldn't extend our coverage, it's impossible to cover the slope
+      if (maxReach < currentCoverage) {
+        return -1;
+      }
+      // Select this machine and update our coverage
+      machinesNeeded++;
+      currentCoverage = maxReach;
+    }
+    return machinesNeeded;
   }
 
   public static void main(String[] args) {
