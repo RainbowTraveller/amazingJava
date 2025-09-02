@@ -72,7 +72,6 @@ public class SkiSlopeRange {
    * <p>Space Complexity: The space complexity is O(M) for storing the intervals.
    */
   public static int findMinMachines(int n, int[][] pairs) {
-    // Transform (index, range) pairs into coverage intervals [start, end]
     List<int[]> intervals = new ArrayList<>();
     // Create intervals based on the machine's index and range
     // Ensure the intervals do not exceed the slope boundaries [0, n]
@@ -84,41 +83,44 @@ public class SkiSlopeRange {
     for (int[] pair : pairs) {
       int index = pair[0];
       int range = pair[1];
-      int start = Math.max(0, index - range); // Ensure start is not less than 0
-      int end = Math.min(n, index + range); // Ensure end does not exceed n
-      intervals.add(new int[] {start, end}); // Add the interval to this list
+      int start = Math.max(0, index - range);
+      int end = Math.min(n, index + range);
+      intervals.add(new int[] {start, end});
     }
-
     // Sort intervals by their start point
     intervals.sort(Comparator.comparingInt(a -> a[0]));
 
     int machinesNeeded = 0;
-    // This is starting point of the slope we need to cover
-    // In the range, we need to check with this currentCoverage point
-    // how far we can cover the slope
-    int currentCoverage = 0; // Current point we need to cover
+    int currentCoverage = 0;
     int i = 0;
 
     while (currentCoverage < n) {
-      int maxReach = -1; // The farthest point we can reach in this iteration
-      boolean foundCoverage = false; // Flag to check if we found any machine to extend coverage
+      int maxReach = currentCoverage;
+      boolean foundCoverage = false;
 
-      // Find the machine that can cover the current point and reaches the farthest
+      // Find the interval that extends the coverage the farthest
       while (i < intervals.size() && intervals.get(i)[0] <= currentCoverage) {
+        // Update maxReach if this interval extends our coverage
         if (intervals.get(i)[1] > maxReach) {
           maxReach = intervals.get(i)[1];
+          // We found at least one interval that can extend our coverage
+          foundCoverage = true;
         }
+        // Move to the next interval
         i++;
       }
 
-      // If we couldn't extend our coverage, it's impossible to cover the slope
-      if (maxReach < currentCoverage) {
+      // If no progress was made, it's impossible to cover the slope
+      if (maxReach == currentCoverage) {
         return -1;
       }
-      // Select this machine and update our coverage
+
+      // We have selected a machine, so increment the count
       machinesNeeded++;
+      // Update currentCoverage to the farthest point we can reach
       currentCoverage = maxReach;
     }
+
     return machinesNeeded;
   }
 

@@ -54,3 +54,45 @@ int[] array = list.stream().mapToInt(i -> i).toArray();
 ```java
 int sum = Arrays.stream(array).sum();
 ```
+
+#### Priority Queue with custom comparator
+```java
+
+private static class Interval {
+    int start;
+    int end;
+
+    Interval() {
+        start = 0;
+        end = 0;
+    }
+
+    public Interval(int start, int end) {
+        if (start < end) {
+            this.start = start;
+            this.end = end;
+        }
+    }
+
+    public String toString() {
+        return new String(" { start : " + start + " end : " + end + " }\n");
+    }
+}
+
+PriorityQueue<Interval> sorted =
+new PriorityQueue<Interval>(
+            (i1, i2) -> i1.start == i2.start ? i1.end - i2.end : i1.start - i2.start);
+```
+
+#### Sort any collection
+```java
+Collections.sort(list, (a, b) -> a - b); // Ascending order
+Collections.sort(list, (a, b) -> b - a); // Descending order
+// Sort intervals based on start time. If start time is same, sort based on end time.
+// Refer Interval class defined above
+Collections.sort(
+  intervals, (i1, i2) -> (i1.start == i2.start ? i1.end - i2.end : i1.start - i2.start));
+// Sorting 2D array based on second column
+Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));
+```
+
