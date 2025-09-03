@@ -32,16 +32,21 @@ public class SortedListBalancedBST {
 
   /** Definition for singly-linked list. */
   public TreeNode sortedListToBST(ListNode head) {
+    // Base case
     if (head == null) {
       return null;
     }
 
+    // Find the middle element of the list
     ListNode middle = findMiddle(head);
+    // The middle element becomes the root
     TreeNode node = new TreeNode(middle.val);
 
+    // Base case when there is just one element in the linked list
     if (head == middle) {
       return node;
     }
+    // Recursively form balanced BSTs using the left and right halves of the original list
     node.left = sortedListToBST(head);
     node.right = sortedListToBST(middle.next);
 
@@ -50,10 +55,14 @@ public class SortedListBalancedBST {
 
   /** Method uses fast and slow pointers to find out the middle of the list. */
   public ListNode findMiddle(ListNode head) {
+    // The pointer used to disconnect the left half from the mid node.
     ListNode prev = null;
+    // The slow pointer moves one step at a time while the fast pointer moves two steps.
     ListNode slow = head;
+    // The fast pointer
     ListNode fast = head;
 
+    // Iterate until fast pointer reaches the end of the list
     while (fast != null && fast.next != null) {
       prev = slow;
       slow = slow.next;
@@ -65,6 +74,7 @@ public class SortedListBalancedBST {
       prev.next = null;
     }
 
+    // Return the middle node
     return slow;
   }
 }

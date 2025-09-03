@@ -1,22 +1,20 @@
 package com.trees;
 
-/**
- * This is a single node in the tree!
- *
- */
+/** This is a single node in the tree! */
 public class Node {
 
-    public int data;
-    public Node left;
-    public Node right;
+  // data, left child, right child
+  public int data;
+  public Node left;
+  public Node right;
 
-    public Node(int data) {
-        this.data = data;
-        left = null;
-        right = null;
-    }
+  public Node(int data) {
+    this.data = data;
+    left = null;
+    right = null;
+  }
 
-    public String toString() {
-        return new String(" " + data + " ");
-    }
+  public String toString() {
+    return new String(" " + data + " ");
+  }
 }
