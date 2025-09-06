@@ -41,6 +41,7 @@ class ValidParenthesis {
     System.out.println(vp.removeInvalidParentheses("()())()"));
     System.out.println(vp.removeInvalidParentheses("(a)())()"));
     System.out.println(vp.removeInvalidParentheses(")("));
+    System.out.println(vp.removeInvalidParentheses("()()"));
 
     // Optimal approach
     System.out.println("Optimal approach :");
@@ -161,6 +162,34 @@ class ValidParenthesis {
    *
    * <p>7. Return the list of valid strings.
    *
+   * <p>The algorithm ensures the minimum number of parentheses are removed by using a Breadth-First
+   * Search (BFS) approach.
+   *
+   * <p>How BFS Guarantees a Minimal Solution A BFS algorithm explores all the nodes at the current
+   * depth level before moving on to the next depth level. In the context of this problem:
+   *
+   * <p>Levels represent removals: Each level in the BFS tree corresponds to the number of
+   * parentheses that have been removed from the original string. The initial string is at level 0
+   * (zero removals). Strings with one parenthesis removed are at level 1, strings with two removed
+   * are at level 2, and so on.
+   *
+   * <p>First valid string found is the answer: The BFS explores level by level, starting from the
+   * original string (0 removals). The first time it encounters a valid string, you know it's a
+   * string that required the fewest removals possible. Why? Because the BFS algorithm guarantees
+   * that all strings with fewer removals (i.e., from shallower levels) have already been checked
+   * and were found to be invalid.
+   *
+   * <p>Stopping the search: Once a valid string is found at a certain level, the algorithm adds it
+   * to the results. It then continues to process all other strings at that same level to find any
+   * other valid strings that also required the same minimum number of removals. After the entire
+   * level is processed, the algorithm stops. It doesn't need to explore deeper levels because any
+   * valid string found there would have required more removals, which is not what the problem asks
+   * for.
+   *
+   * <p>This level-by-level exploration is the key to guaranteeing a solution with the minimum
+   * number of removals. It's similar to finding the shortest path in an unweighted graph, where the
+   * first path you find using BFS is always the shortest one.
+   *
    * @param s the input string containing parentheses and possibly other characters
    * @return a list of all possible valid strings after removing the minimum number of invalid
    *     parentheses
@@ -198,6 +227,9 @@ class ValidParenthesis {
       if (found) {
         // If a solution is found, we continue to process the rest of the queue at the current level
         // but we don't explore deeper levels.
+        // This ensures we only get the minimum removal solutions.
+        // That is if the original string is valid, we won't generate any new strings, because we
+        // required to remove 0 parentheses.
         continue;
       }
       // Generate all possible states by removing one parenthesis at a time
@@ -206,6 +238,8 @@ class ValidParenthesis {
         char c = current.charAt(i);
         if (c == '(' || c == ')') {
           // Create a new string by removing the character at index i
+          // These are all substrings with one less parenthesis and corresponds to the next level in
+          // BFS
           String next = current.substring(0, i) + current.substring(i + 1);
           if (!visited.contains(next)) {
             // If we haven't visited this string before, add it to the queue and mark as visited
@@ -324,6 +358,7 @@ class ValidParenthesis {
 
     // Case 1: Try to remove the current character.
     // This path is only explored if we still need to remove this type of parenthesis.
+    // Here we skip the current character.
     if (c == '(' && leftRem > 0) {
       dfs(s, index + 1, openCount, closeCount, leftRem - 1, rightRem, currentString, result);
     }
@@ -338,6 +373,7 @@ class ValidParenthesis {
     }
 
     // We only keep a parenthesis if it maintains a valid balance.
+    // Here we include the current character.
     if (c == '(') {
       dfs(s, index + 1, openCount + 1, closeCount, leftRem, rightRem, currentString + c, result);
     } else if (c == ')') {

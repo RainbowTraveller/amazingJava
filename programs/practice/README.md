@@ -96,3 +96,16 @@ Collections.sort(
 Arrays.sort(intervals, Comparator.comparingInt(a -> a[1]));
 ```
 
+#### Sorting HashMap by value
+```java
+Map<String, Integer> voteTracker = new HashMap<String, Integer>();
+// Make Set of Map.Entry
+Set<Map.Entry<String, Integer>> votingSet = voteTracker.entrySet();
+// Make List of Map.Entry
+List<Map.Entry<String, Integer>> listOfVoting =
+    new ArrayList<Map.Entry<String, Integer>>(votingSet);
+Collections.sort(listOfVoting, (e1, e2) -> (e2.getValue() - e1.getValue()));
+
+// ONE LINER
+Collections.max(tracker.entrySet(), Map.Entry.comparingByValue()).getKey();
+```
