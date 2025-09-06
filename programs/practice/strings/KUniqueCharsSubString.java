@@ -131,8 +131,8 @@ public class KUniqueCharsSubString {
      * This principle is based on the Principle of Inclusion-Exclusion.
      * Let's define two sets of substrings for a given string:
      * <p> Set A: The set of all substrings with at most k distinct characters.
-     * <p>Set B: The set of all substrings with at most k-1 distinct characters.
-     * The problem asks for the number of substrings with exactly k distinct characters. Let's call this Set C.
+     * <p> Set B: The set of all substrings with at most k-1 distinct characters.
+     * <p> The problem asks for the number of substrings with exactly k distinct characters. Let's call this Set C.
      * A substring with exactly k distinct characters is included in Set A (since k is at most k) but is not included in Set B (since k is not at most k-1).
      * Therefore, the number of substrings in Set C is the number of substrings in Set A minus the number of substrings that are in both Set A and Set B.
      */
@@ -166,7 +166,47 @@ public class KUniqueCharsSubString {
         left++;
       }
       // All substrings ending at 'right' with at most k distinct characters are counted
+      // Cossider current window as [ a, b, c, d, e] with k = 5
+      // substrings ending at e are : e, de, cde, bcde, abcde
+      // The key insight is that the calculation count += (right - left + 1) correctly and
+      // efficiently counts all new valid substrings that are formed with the addition of the new
+      // character at the right pointer.
+      // The previously counted substrings (like a, ab, abc) were already accounted for in earlier
+      // iterations when the right pointer was at a previous position.
+
+      // Here's a breakdown of why this works:
+      //
+      // When the right pointer is at 'e', the algorithm is only concerned with the substrings that
+      // end at 'e'. All substrings that ended before 'e' (like a, ab, abc, abcd, etc.) have already
+      // been counted in previous loops.
+      //
+      // The current window is [a, b, c, d, e]. The algorithm guarantees that the number of distinct
+      // characters in this window is <= k because of the while loop that adjusts the left pointer.
+      // Since the entire window is valid, any substring that ends at the current right ('e') and
+      // starts anywhere within the valid window [left, right] will also be valid.
+      //
+      // Let's revisit your example [a, b, c, d, e], k=5, with right at 'e'. The left pointer is at
+      // 'a'.
+      //
+      // The length of the window is (4 - 0 + 1) = 5.
+      //
+      // This 5 represents the number of new valid substrings ending at 'e':
+      //
+      // [e] (starts at right, ends at right)
+      //
+      // [d, e] (starts at right-1, ends at right)
+      //
+      // [c, d, e] (starts at right-2, ends at right)
+      //
+      // [b, c, d, e] (starts at right-3, ends at right)
+      //
+      // [a, b, c, d, e] (starts at left, ends at right)
+      //
+      // This is the power of the sliding window technique: it avoids re-evaluating every substring
+      // and instead leverages the fact that a valid window contains many valid smaller substrings,
+      // which can be counted with a simple arithmetic operation.
       count += (right - left + 1);
+      // In short this is counted for each window as it expands
     }
     return count;
   }
