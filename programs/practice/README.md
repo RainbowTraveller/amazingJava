@@ -105,6 +105,8 @@ Set<Map.Entry<String, Integer>> votingSet = voteTracker.entrySet();
 List<Map.Entry<String, Integer>> listOfVoting =
     new ArrayList<Map.Entry<String, Integer>>(votingSet);
 Collections.sort(listOfVoting, (e1, e2) -> (e2.getValue() - e1.getValue()));
+// OR
+listOfVoting.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 
 // ONE LINER
 Collections.max(tracker.entrySet(), Map.Entry.comparingByValue()).getKey();

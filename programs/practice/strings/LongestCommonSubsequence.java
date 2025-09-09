@@ -22,6 +22,10 @@ public class LongestCommonSubsequence {
   /**
    * Recursive and expensive At each level 2 decisions are made so 2 power n running time Also
    * involves repeated calculations of values
+   *
+   * <p>Time complexity : O(2^(m+n)) where m and n are lengths of the input strings
+   *
+   * <p>Space complexity : O(m+n) for the recursion stack
    */
   public static int LCSRecursive(String s1, String s2) {
     if (s1 != null && s2 != null) {
@@ -58,6 +62,10 @@ public class LongestCommonSubsequence {
    * uses Memoization to store intermediate results this avoid recalculation of already calculated
    * ones Running time : m * n where m and n are lengths of the input strings. We need to populate
    * only m * n values
+   *
+   * <p>Time complexity : O(m*n)
+   *
+   * <p>Space complexity : O(m*n) for the mem array + O(m+n) for the recursion stack
    */
   public static int LCSRecursiveMem(String s1, String s2) {
     if (s1 != null && s2 != null) {

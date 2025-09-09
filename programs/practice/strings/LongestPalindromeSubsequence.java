@@ -153,8 +153,11 @@ public class LongestPalindromeSubsequence {
   }
 
   /**
-   * Counts all palindromic subsequences in a string using dynamic programming. Time Complexity:
-   * O(N^2), Space Complexity: O(N^2)
+   * Counts all palindromic subsequences in a string using dynamic programming.
+   *
+   * <p>Time Complexity: O(N^2),
+   *
+   * <p>Space Complexity: O(N^2)
    */
   public static int palindromicSubsequenceCounterDyn(String input) {
     if (input == null || input.isEmpty()) {

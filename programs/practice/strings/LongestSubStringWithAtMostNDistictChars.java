@@ -19,6 +19,9 @@ public class LongestSubStringWithAtMostNDistictChars {
 
     System.out.println(
         "Input : " + "eceba" + " :: " + lengthOfLongestSubstringTwoDistinct("eceba"));
+
+    System.out.println(
+        "Input : " + "eceba" + " :: " + lengthOfLongestSubstringTwoDistinct("ccaabbb"));
   }
 
   /**
