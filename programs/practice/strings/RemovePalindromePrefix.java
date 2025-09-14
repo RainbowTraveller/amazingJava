@@ -1,4 +1,8 @@
 /*
+ *   Leetcode Problem No 1750 : Remove Palindrome Subsequences
+ *   https://leetcode.com/problems/remove-palindrome-subsequences/
+ *   Difficulty : Easy
+ *
  *   You are given a string s. Consider the following algorithm applied to this string:
  *
  *   Take all the prefixes of the string, and choose the longest palindrome between them.
@@ -48,7 +52,7 @@ public class RemovePalindromePrefix {
       int len = s.length();
       int i = 0; // from index for prefix
       int j = 1; // to index for prefix
-      int lastIndex = 0;// index or length of the palindrome prefix found so far
+      int lastIndex = 0; // index or length of the palindrome prefix found so far
       StringBuffer buffer = new StringBuffer(s);
 
       // i will always be 0 which is start index
@@ -76,7 +80,7 @@ public class RemovePalindromePrefix {
 
         } else {
           // Just keep gathering the last index of the palindrome prefix
-          lastIndex = j;// Prefix is palindrome
+          lastIndex = j; // Prefix is palindrome
         }
         j++;
       }
