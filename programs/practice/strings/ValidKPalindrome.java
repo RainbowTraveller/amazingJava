@@ -1,10 +1,29 @@
-import java.util.Set;
-import java.util.LinkedHashSet;
-
+/**
+ * LeetCode: 1216. Valid Palindrome III https://leetcode.com/problems/valid-palindrome-iii/ Hard
+ *
+ * <ul>
+ *   <li>Given a string s and an integer k, return true if s is a k-palindrome.
+ *   <li>A k-palindrome is a string that can be transformed into a palindrome by removing at most k
+ *       characters from it.
+ *   <li>Example 1:
+ *   <li>Input: s = "abcdeca", k = 2
+ *   <li>Output: true
+ *   <li>Explanation: Remove 'b' and 'e' characters.
+ *   <li>Example 2:
+ *   <li>Input: s = "abbababa", k = 1
+ *   <li>Output: true
+ *   <li>Constraints:
+ *   <li>1 <= s.length <= 1000
+ *   <li>s consists of lowercase English letters.
+ *   <li>0 <= k <= s.length
+ * </ul>
+ */
 class ValidKPalindrome {
   public static void main(String[] args) {
     ValidKPalindrome validKPalindrome = new ValidKPalindrome();
-    /*
+
+    System.out.println(
+        "Recursive Outputs : Calculates Largest Palindromic Subsequence(LPS) length");
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 2));
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 3));
     System.out.println(validKPalindrome.isValidPalindrome("abcdfdecba", 1));
@@ -14,171 +33,85 @@ class ValidKPalindrome {
     System.out.println(validKPalindrome.isValidPalindrome("dfghjde", 4));
     System.out.println(validKPalindrome.isValidPalindrome("dfghjde", 3));
     // This time outs
-    //    System.out.println(
-    //        validKPalindrome.isValidPalindrome(
-    //            "baaccaacbdcadbcdacbbdabbdddabdddadcabbdbbcaadbbdcbddcbdcdbaadaab", 9));
-    System.out.println("DP Outputs");
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 2));
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 3));
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfdecba", 1));
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 1));
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 4));
-    System.out.println(validKPalindrome.isValidPalindromeDP("abcdfghjdecba", 3));
-    System.out.println(validKPalindrome.isValidPalindromeDP("dfghjde", 4));
-    System.out.println(validKPalindrome.isValidPalindromeDP("dfghjde", 3));
+    // System.out.println(
+    //     validKPalindrome.isValidPalindrome(
+    //         "baaccaacbdcadbcdacbbdabbdddabdddadcabbdbbcaadbbdcbddcbdcdbaadaab", 9));
+    System.out.println("DP Outputs : memoization approach");
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfdecba", 2));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfdecba", 3));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfdecba", 1));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfghjdecba", 1));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfghjdecba", 4));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("abcdfghjdecba", 3));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("dfghjde", 4));
+    System.out.println(validKPalindrome.isValidKPalindromeDP("dfghjde", 3));
 
-     */
     System.out.println(
-        validKPalindrome.isValidPalindromeDP(
+        validKPalindrome.isValidKPalindromeDP(
             "baaccaacbdcadbcdacbbdabbdddabdddadcabbdbbcaadbbdcbddcbdcdbaadaab", 9));
   }
 
   /**
-   * Check if a string contains a palindrome when at most K chars are removed This first removes the
-   * palindrome part if any present in the string
+   * Recursive approach
+   *
+   * <p>The idea is to find the length of the longest palindromic subsequence (LPS) in the string.
+   * The minimum number of deletions required to make the string a palindrome is equal to the
+   * difference between the length of the string and the length of the LPS. If this difference is
+   * less than or equal to k, then the string is a k-palindrome.
+   *
+   * <p>Time complexity: O(2^n) in worst case, where n is the length of the string. This is because
+   * each character can either be included in or excluded from the subsequence.
+   *
+   * <p>Space complexity: O(n) for the recursion stack.
    *
    * @param s input string
-   * @param k at most these many chars can be deleted from the input string
-   * @return true or false depending on whether the string contains a palindrome
+   * @param k maximum number of deletions allowed
+   * @return true if s is a k-palindrome, false otherwise
    */
   public boolean isValidPalindrome(String s, int k) {
-    if (s != null && !s.isEmpty()) {
-      int start = 0, end = s.length() - 1;
-
-      while (start < end) {
-        // Identify first pair which is not matching
-        if (s.charAt(start) != s.charAt(end)) {
-          // check if by removing each unmatching char, remaining string is palindrome or not
-          // First get the substring to check
-          String sub = s.substring(start, end + 1);
-          System.out.println("String to process : " + sub + " Value of K : " + k);
-          // The substring  length equals max char to remove
-          // then yes we already know that remaining string is palindrome
-          // so yes and return true
-          if (sub.length() == k) {
-            return true;
-          } // else if (sub.length() > k) {
-          return isKPalindrome(sub, new LinkedHashSet<Integer>(), 0, k);
-          /* } else {
-            // it length is less then the K then not possible
-            return false;
-          }*/
-        }
-        start++;
-        end--;
-      }
-    }
-    return false;
+    int lpsLength = findLPSLength(s, 0, s.length() - 1);
+    return s.length() - lpsLength <= k;
   }
 
   /**
-   * Checks if a given string is a palindrome if atmost K chars are allowed to be deleted ( 0 to K)
-   * It considers all the possible strings that can be obtained by dropping chars starting from 0 to
-   * K if any of the string is palindrome it returns true
+   * Helper method to find the length of the longest palindromic subsequence (LPS) in a string
    *
-   * @param input string that needs to be considered
-   * @param indexes set of indexes for char to be removed from the input string to check for
-   *     palindrome
-   * @param start index at which we need to start checking the chars to be removed
-   * @param k max no of chars allowed to be deleted
-   * @return true if input string contains a palindrome false otherwise
+   * @param s input string
+   * @param i starting index
+   * @param j ending index
+   * @return length of the longest palindromic subsequence in s[i..j]
    */
-  public boolean isKPalindrome(String input, Set<Integer> indexes, int start, int k) {
-    StringBuffer buffer = getDesiredBuffer(input, indexes);
-    //    System.out.println("Curr Buff " + buffer);
-    if (k == 0) {
-      // We have removed max no. of characters
-      // hence this is final check. if this is a palidrome we found one
-      return isPalindrome(buffer);
-    } else { // we have removed < k characters
+  private int findLPSLength(String s, int i, int j) {
+    // Base case: If the indices cross, the subsequence has length 0.
+    if (i > j) {
+      return 0;
+    }
+    // Base case: A single character is an LPS of length 1.
+    if (i == j) {
+      return 1;
+    }
 
-      if (!isPalindrome(buffer)) { // is given buffer palindrome
-        for (int i = start; i < input.length(); ++i) {
-          /*
-           if k = 2, this will consider following set of indexes
-           0-1, 0-2, 0-3
-           1-2, 1-3
-           2-3
-           3
-          */
-          // add this index indicating that next iteration will have char at this index
-          // removed : remember the parameter has index set and immediately after entering
-          // the function we get the desired buffer and check for palindrome
-          indexes.add(i);
-          // Call recursively by indicating char at next index can be dropped
-          // also indicate how many chars upto k are dropped
-          if (!isKPalindrome(input, indexes, i + 1, k - 1)) {
-            removeLastElement(indexes);
-          } else {
-            // if palindrome found return true
-            return true;
-          }
-        }
-      } else {
-        // if palidrome found return true
-        return true;
-      }
-      return false;
+    // Recursive case: If the characters at the ends match, they are part of the LPS.
+    if (s.charAt(i) == s.charAt(j)) {
+      return 2 + findLPSLength(s, i + 1, j - 1);
+    } else {
+      // If they don't match, we try removing one character from either end
+      // and take the maximum length.
+      return Math.max(findLPSLength(s, i + 1, j), findLPSLength(s, i, j - 1));
     }
   }
 
-  /*
-  Remove the last index in the linked hash set
+  /**
+   * Dynamic Programming approach
+   *
+   * <p>The logic is simple. The comparison takes place only between 2 extreme chars 1.
+   *
+   * <p>If they match start + 1 and end - 1 2. If the do not match we go both ways (start + 1, end )
+   * and ( start, end - 1) 3.
+   *
+   * <p>We also keep track of already found values using an array ( memoization )
    */
-  public void removeLastElement(Set<Integer> indexes) {
-    int size = indexes.size();
-    for (int element : indexes) {
-      size--;
-      if (size == 0) {
-        indexes.remove(element);
-      }
-    }
-  }
-
-  /*
-  Returns a buffer by removing the chars at indexes contained in the set
-   */
-  public StringBuffer getDesiredBuffer(String input, Set<Integer> indexesToRemove) {
-    char[] charsFromString = input.toCharArray();
-    StringBuffer buffer = new StringBuffer();
-    for (int i = 0; i < input.length(); i++) {
-      if (!indexesToRemove.contains(i)) { // if index not in the set then add char to buffer
-        buffer.append(charsFromString[i]);
-      }
-    }
-    return buffer;
-  }
-
-  /*
-  Check if a string buffer contains palidrome string
-   */
-  public boolean isPalindrome(StringBuffer buffer) {
-    if (buffer.length() == 0) {
-      return false;
-    }
-    int start = 0;
-    int end = buffer.length() - 1;
-    while (start < end) {
-      if (buffer.charAt(start) != buffer.charAt(end)) {
-        return false;
-      }
-      start++;
-      end--;
-    }
-    return true;
-  }
-
-  // ==================================================================================================
-  // DP implementation
-
-  /*
-  The logic is simple. The comparison takes place only between 2 extreme chars
-  1. It they match start + 1 and end - 1
-  2. If the do not match we go both ways (start + 1, end ) and ( start, end - 1)
-  3. We also keep track of already found values using an array ( memoization )
-   */
-
-  public boolean isValidPalindromeDP(String s, int k) {
+  public boolean isValidKPalindromeDP(String s, int k) {
 
     if (s != null && !s.isEmpty()) {
       int len = s.length();
@@ -192,13 +125,39 @@ class ValidKPalindrome {
     return false;
   }
 
+  /**
+   * DP processing to find minimum no. of chars that need to be deleted to make string from start to
+   * end palindrome
+   *
+   * <p>time complexity O(n^2) : Each state (i, j) is computed only once and there are O(n^2) such
+   * states.
+   *
+   * <p>space complexity O(n^2) for memoization array : The memoization array values uses O(n^2)
+   * space to store the results of subproblems.
+   *
+   * @param input input string
+   * @param start starting index
+   * @param end ending index
+   * @param values memoization array to store already computed values
+   * @return minimum no. of chars that need to be deleted to make string from start to end
+   *     palindrome
+   */
   public int dpProcessing(String input, int start, int end, Integer[][] values) {
     // Base case : single letter it is palindrome
     if (start == end) {
       return 0;
     }
     // Base case : 2 adjacent letters : check if they are equal
+    // If the characters do not match, one of them must be removed. This adds 1 to the total removal
+    // count.
+    // You then recursively solve the two possible smaller subproblems: one where
+    // input.charAt(start) is removed,
+    // and one where input.charAt(end) is removed. Taking the minimum of these two results ensures
+    // you find the most optimal path.
     if (Math.abs(start - end) == 2) {
+      // It is 2 char string and check if both chars are equal
+      // if the are equal no need to remove any char
+      // if they are not equal we need to remove one char
       return input.charAt(start) == input.charAt(end) ? 0 : 1;
     }
 
@@ -207,9 +166,17 @@ class ValidKPalindrome {
     }
 
     if (input.charAt(start) == input.charAt(end)) {
+      // if both chars are equal move to next char
+      // no need to remove any char
       return values[start][end] = dpProcessing(input, start + 1, end - 1, values);
     }
 
+    // if both chars are not equal we need to remove one char
+    // hence add 1 to the result
+    // also we need to check both the possibilities
+    // 1. remove char at start
+    // 2. remove char at end
+    // and take the minimum of both
     return values[start][end] =
         1
             + Math.min(
