@@ -111,3 +111,17 @@ listOfVoting.sort(Map.Entry.comparingByValue(Comparator.reverseOrder()));
 // ONE LINER
 Collections.max(tracker.entrySet(), Map.Entry.comparingByValue()).getKey();
 ```
+
+#### Get the difference of two sets as a sorted list
+```java
+List<Character> result = this.alphabets.stream()
+                            .filter(x -> !this.inputSet.contains(x))
+                            .collect(Collectors.toList());
+Collections.sort(result);
+```
+#### Checking overflow when converting String to Integer
+```java
+if (num > (Integer.MAX_VALUE - currDigit) / 10) {
+    return isNegative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+}
+```
