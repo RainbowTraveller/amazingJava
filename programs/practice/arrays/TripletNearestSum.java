@@ -31,6 +31,7 @@ public class TripletNearestSum {
         // only check till third last elements, no triplet after that int start = i + 1;
         for (int i = 0; i < len - 2; ++i) {
           // start with next element
+          int start = i;
           int end = len - 1; // end with last element in the array
           while (start < end) {
             int sum = nums[start] + nums[end] + nums[i];
