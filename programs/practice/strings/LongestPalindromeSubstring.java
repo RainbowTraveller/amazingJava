@@ -157,9 +157,8 @@ public class LongestPalindromeSubstring {
       // i = 0, k = 4 then start = 0 end = 3
       // i = 3, k = 3 then start = 3 end = 5
       for (int k = 3; k <= length; ++k) { // all string with length 3 or more
-        for (int i = 0;
-            i + (k - 1) < length;
-            ++i) { // i = 0 to length governed by K e.g. if k = 3, i will be
+        // i = 0 to length governed by K e.g. if k = 3, i will be
+        for (int i = 0; i + (k - 1) < length; ++i) {
           // max (length - 3)
           int j = i + k - 1; // last character of string of length K
           // Consider line nested braces {{}}, both inner ones needed to be compared
