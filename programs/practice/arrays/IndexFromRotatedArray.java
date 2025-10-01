@@ -50,6 +50,7 @@ public class IndexFromRotatedArray {
     // int [] leftRotation =  {5, 5, 5, 7, 11, 5};
     int[] leftRotation = {5, 7, 11, 12, 19, 21, 1, 4};
     int[] rightRotation = {19, 21, 1, 4, 5, 7, 11, 12};
+    int[] small = {3, 1};
     // For This case it is still unknown why it fails to search no. 1
     // int [] rightRotation =  {10, 9, 8,7, 6, 5, 4, 3, 1};
     int min = 0;
@@ -66,5 +67,9 @@ public class IndexFromRotatedArray {
     System.out.println("Index of 21 :" + findIndex(rightRotation, min, max, 21));
     System.out.println("Index of 1 :" + findIndex(rightRotation, min, max, 1));
     System.out.println("Index of 11 :" + findIndex(rightRotation, min, max, 11));
+
+    min = 0;
+    max = small.length - 1;
+    System.out.println("Index of 1 :" + findIndex(small, min, max, 1));
   }
 }
