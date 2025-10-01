@@ -28,9 +28,7 @@
 Please also check : CombinationSum2.java
 */
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
@@ -44,21 +42,23 @@ public class CombinationSum {
 
   public static List<List<Integer>> combinationSum(int[] candidates, int target) {
     List<List<Integer>> list = new LinkedList<>();
+    List<Integer> current = new LinkedList<>();
     // To maintain unique list collection and avoid duplicates
-    Set<List<Integer>> ulist = new HashSet<>();
+    // Set<List<Integer>> ulist = new HashSet<>();
 
-    // Impoartant step to collect the elements in sysstematic order
-    Arrays.sort(candidates);
+    // Important step to collect the elements in systematic order
+    // Arrays.sort(candidates); // Not required for Optimized version
     // helperAdd(candidates, target, 0, ulist, new LinkedList<Integer>()); // starts from 0 and adds
     // numbers to reach sum
-    helperSub(
-        candidates,
-        new LinkedList<Integer>(),
-        target,
-        ulist); // This subtracts and checks if the sum is 0
-    for (List<Integer> valid : ulist) {
-      list.add(valid);
-    }
+    // helperSub(
+    //     candidates,
+    //     new LinkedList<Integer>(),
+    //     target,
+    //     ulist); // This subtracts and checks if the sum is 0
+    // for (List<Integer> valid : ulist) {
+    //   list.add(valid);
+    // }
+    helperOptimized(candidates, target, 0, current, list);
     return list;
   }
 
@@ -119,6 +119,28 @@ public class CombinationSum {
           sum += inputs[i];
         }
       }
+    }
+  }
+
+  /**
+   * Optimized version without using Set to maintain unique lists
+   *
+   * @param candidates array of input numbers
+   * @param target sum to be achieved k
+   */
+  public static void helperOptimized(
+      int[] candidates, int target, int start, List<Integer> current, List<List<Integer>> result) {
+    if (target == 0) {
+      result.add(new LinkedList<>(current));
+      return;
+    }
+    if (target < 0) {
+      return;
+    }
+    for (int i = start; i < candidates.length; i++) {
+      current.add(candidates[i]);
+      helperOptimized(candidates, target - candidates[i], i, current, result);
+      current.remove(current.size() - 1);
     }
   }
 }

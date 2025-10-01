@@ -24,11 +24,8 @@
  * <p>1 <= candidates.length <= 100 1 <= candidates[i] <= 50 1 <= target <= 30
  */
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 public class CombinationSum2 {
   public static void main(String args[]) {
@@ -40,14 +37,11 @@ public class CombinationSum2 {
   public static List<List<Integer>> combinationSum(int[] candidates, int target) {
     List<List<Integer>> result = new LinkedList<>();
     // Set maintains unique lists and avoids duplicates
-    Set<List<Integer>> tracker = new HashSet<>();
+    List<Integer> tracker = new LinkedList<>();
     if (candidates != null && candidates.length > 0) {
       // Sorting helps consider each number in a systematic manner and to avoid duplicates as well
       Arrays.sort(candidates);
-      helper(candidates, 0, tracker, new LinkedList<Integer>(), target);
-      for (List<Integer> curr : tracker) {
-        result.add(curr);
-      }
+      helper(candidates, 0, result, tracker, target);
     }
     return result;
   }
@@ -55,37 +49,36 @@ public class CombinationSum2 {
   /**
    * Goes through the candidates and captures lists of elements that add upto the given target
    *
-   * @param candidates
-   * @param index
-   * @param tracker
-   * @param currList
-   * @param sum
+   * @param candidates array of input numbers
+   * @param index current index in the candidates array
+   * @param tracker collects the valid lists
+   * @param currList current list of elements being considered
+   * @param sum remaining sum to be achieved
    */
   public static void helper(
-      int[] candidates, int index, Set<List<Integer>> tracker, List<Integer> currList, int sum) {
+      int[] candidates, int index, List<List<Integer>> tracker, List<Integer> currList, int sum) {
     if (sum == 0) {
-      List<Integer> valid = new LinkedList<>(currList);
-      Collections.sort(valid);
-      tracker.add(valid);
-    } else if (sum > 0) {
-      for (int i = index; i < candidates.length; ++i) {
-        // This is little tricky. It is not clear from the problem statement
-        // But when we consider a number as a particular index i, then there should not be same
-        // number in the same iteration
-        // in other words for the next nested call the index is incremented by 1. In that case if
-        // the number at that index is
-        // same as that of the one considered before the call is made that is ok.
-        // But in the same loop if we have say 2 at index then do not consider any 2's there after.
-        // As we have sorted the array it is easier to skip these.
-        if (i > index && candidates[i] == candidates[i - 1]) continue;
-        sum -= candidates[i];
-        // avoids unnecessary calls is sum is already negative
-        if (sum >= 0) {
-          currList.add(candidates[i]);
-          helper(candidates, i + 1, tracker, currList, sum);
-          sum += candidates[i];
-          currList.remove(currList.size() - 1);
-        }
+      tracker.add(new LinkedList<>(currList));
+      return;
+    }
+    if (sum < 0) {
+      return;
+    }
+    for (int i = index; i < candidates.length; ++i) {
+      // This is little tricky. It is not clear from the problem statement
+      // But when we consider a number as a particular index i, then there should not be same
+      // number in the same iteration
+      // in other words for the next nested call the index is incremented by 1. In that case if
+      // the number at that index is
+      // same as that of the one considered before the call is made that is ok.
+      // But in the same loop if we have say 2 at index then do not consider any 2's there after.
+      // As we have sorted the array it is easier to skip these.
+      if (i > index && candidates[i] == candidates[i - 1]) continue;
+      // avoids unnecessary calls is sum is already negative
+      if (sum >= 0) {
+        currList.add(candidates[i]);
+        helper(candidates, i + 1, tracker, currList, sum - candidates[i]);
+        currList.remove(currList.size() - 1);
       }
     }
   }
