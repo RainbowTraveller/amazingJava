@@ -1,5 +1,10 @@
 # Common Tricks and tips
 
+#### Run java file from jar command line
+```bash
+java -cp target/your-jar-file.jar package.name.ClassName
+e.g. java -cp target/Trees-1.0-SNAPSHOT.jar com.trees.Driver
+```
 #### Split a string into array of string based on space
 ```java
 String[] input =  str.split("\\s+");

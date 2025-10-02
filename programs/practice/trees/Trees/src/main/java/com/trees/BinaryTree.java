@@ -303,4 +303,42 @@ public class BinaryTree {
       return false;
     }
   }
+
+  /**
+   * Validate if the tree is a Binary Search Tree (BST) The logic is as follows:
+   *
+   * <p>- Use a helper function that takes the current node and the valid range (low, high) for its
+   * data.
+   *
+   * <p>- If the current node is null, return true (base case).
+   *
+   * <p>- Check if the current node's data is within the valid range. If not, return false.
+   *
+   * <p>- Recursively validate the left subtree with an updated high value (current node's data) and
+   * the right subtree with an updated low value (current node's data).
+   *
+   * <p>- Return true if both subtrees are valid.
+   *
+   * @param root the root of the binary tree
+   * @return true if the tree is a valid BST, false otherwise
+   */
+  public boolean isValidBST() {
+    return validate(root, null, null);
+  }
+
+  /**
+   * Validate Helper
+   *
+   * @param root the current node
+   * @param low the lower bound for the current node's data
+   * @param hight the upper bound for the current node's data
+   * @return true if the subtree rooted at the current node is a valid BST, false otherwise
+   */
+  private boolean validate(Node root, Integer low, Integer high) {
+    if (root == null) return true;
+    if ((low != null && root.data <= low) || (high != null && root.data >= high)) {
+      return false;
+    }
+    return validate(root.left, low, root.data) && validate(root.right, root.data, high);
+  }
 }
