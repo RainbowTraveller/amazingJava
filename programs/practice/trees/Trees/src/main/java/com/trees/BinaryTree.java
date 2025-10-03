@@ -341,4 +341,88 @@ public class BinaryTree {
     }
     return validate(root.left, low, root.data) && validate(root.right, root.data, high);
   }
+
+  /**
+   * Recover a BST where two nodes are swappped by mistake The logic is as follows:
+   *
+   * <p>Perform an in-order traversal of left subtree, add root and then right subtree and get
+   * values in a list
+   *
+   * <p>Find the two swapped values in the list where the order is violated. There will be maximum
+   * two such violations.
+   *
+   * <p>Correct the tree by swapping the two node back in the positions
+   *
+   * @param root of the binary serach tree
+   */
+  public void recoverTree(Node root) {
+    List<Integer> order = new LinkedList<>();
+    if (root != null) {
+      inorder(root.left, order);
+      order.add(root.data);
+      inorder(root.right, order);
+      int[] swapped = findSwapped(order);
+      correctTree(root, 2, swapped[0], swapped[1]);
+    }
+  }
+
+  /**
+   * Correct the tree by swapping the two nodes back
+   *
+   * @param root the current node
+   * @param count number of nodes to be swapped
+   * @param x first value to be swapped
+   * @param y second value to be swapped
+   */
+  public void correctTree(Node root, int count, int x, int y) {
+    if (root != null) {
+      if (root.data == x || root.data == y) {
+        int change = root.data == x ? y : x;
+        root.data = change;
+        if (--count == 0) return;
+      }
+      correctTree(root.left, count, x, y);
+      correctTree(root.right, count, x, y);
+    }
+  }
+
+  /**
+   * Find the two swapped values in the list where the order is violated. There will be maximum two
+   * such violations.
+   *
+   * @param nums the list of node values in in-order traversal
+   * @return an array containing the two swapped values
+   */
+  public int[] findSwapped(List<Integer> nums) {
+    int x = 0, y = 0;
+    boolean isFirstOccurrence = true;
+    for (int i = 0; i < nums.size() - 1; i++) {
+      if (nums.get(i + 1) < nums.get(i)) {
+        y = nums.get(i + 1);
+        if (isFirstOccurrence) {
+          x = nums.get(i);
+          isFirstOccurrence = false;
+        } else {
+          break;
+        }
+      }
+    }
+    return new int[] {x, y};
+  }
+
+  /**
+   * Inorder Traversal Helper to get the node values in a list
+   *
+   * @param root the current node
+   * @param nums the list to store the node values
+   */
+  public void inorder(Node root, List<Integer> nums) {
+    if (root == null) {
+      return;
+    } else {
+      inorder(root.left, nums);
+      nums.add(root.data);
+      inorder(root.right, nums);
+    }
+  }
 }
