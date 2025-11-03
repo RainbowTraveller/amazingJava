@@ -1,5 +1,5 @@
 /*
- *   Leetcode Problem No 1750 : Remove Palindrome Subsequences
+ *   Leetcode Problem No 1750 : Remove Palindrome Subsequence
  *   https://leetcode.com/problems/remove-palindrome-subsequences/
  *   Difficulty : Easy
  *
@@ -35,67 +35,25 @@ public class RemovePalindromePrefix {
     System.out.println(
         "Original String :aaacodedoc "
             + " Remaining String : "
-            + RemovePalindromePrefix.removePalindrombePrefix("aaacodedoc"));
+            + RemovePalindromePrefix.removePalindromeSubsequences("aaacodedoc"));
     System.out.println(
         "Original String :codeSignal "
             + " Remaining String : "
-            + RemovePalindromePrefix.removePalindrombePrefix("codeSignal"));
+            + RemovePalindromePrefix.removePalindromeSubsequences("codeSignal"));
     System.out.println(
         "Original String :aaaabbaaaabaabbbbb "
             + " Remaining String : "
-            + RemovePalindromePrefix.removePalindrombePrefix("aaaabbaaaabaabbbbb"));
+            + RemovePalindromePrefix.removePalindromeSubsequences("aaaabbaaaabaabbbbb"));
   }
 
-  public static String removePalindrombePrefix(String s) {
-
-    if (s != null && s.length() > 1) {
-      int len = s.length();
-      int i = 0; // from index for prefix
-      int j = 1; // to index for prefix
-      int lastIndex = 0; // index or length of the palindrome prefix found so far
-      StringBuffer buffer = new StringBuffer(s);
-
-      // i will always be 0 which is start index
-      while (j < len) {
-        // Actions to be taken when a prefix is not palindrome
-        if (!isPalindrome(buffer, i, j)) {
-          // here first 2 chars do not form a palindrome string
-          // Check if first char is extra and remaining string is palindrome
-          if (j - i == 1 && i == 0 && isPalindrome(buffer, j, len - 1)) {
-            // System.out.println(buffer.substring(i, j));
-            buffer.delete(0, buffer.length());
-            len = 0;
-          } else if (lastIndex > 0) { // indicates that there was some palindrome prefix found
-
-            // System.out.println(buffer.substring(i, j));
-            // So current prefix is not palindrome and we have already found a palindrome prefix
-            // Delete till the last palindrome prefix found
-            buffer.delete(i, j); // This deletes from i to j - 1, in this case j - 1 = last
-            i = 0;
-            j = 0;
-            lastIndex = 0;
-            len = buffer.length();
-            // System.out.println(buffer.toString() +  " " + len);
-          }
-
-        } else {
-          // Just keep gathering the last index of the palindrome prefix
-          lastIndex = j; // Prefix is palindrome
-        }
-        j++;
-      }
-
-      // indicates that there was some palindrome found
-      if (lastIndex > 0) {
-        // Here here is a remaining palindrome string so remove it
-        // System.out.println(buffer.toString() + " " + lastIndex);
-        buffer.delete(i, j);
-      }
-      return buffer.toString();
-    }
-    return s;
-  }
-
+  /**
+   * Checks if the substring of s from index i to j is a palindrome.
+   *
+   * @param s The StringBuffer to check.
+   * @param i The starting index of the substring.
+   * @param j The ending index of the substring.
+   * @return true if the substring is a palindrome, false otherwise.
+   */
   public static boolean isPalindrome(StringBuffer s, int i, int j) {
     while (i < j) {
       if (s.charAt(i) != s.charAt(j)) {
@@ -105,5 +63,41 @@ public class RemovePalindromePrefix {
       j--;
     }
     return true;
+  }
+
+  /**
+   * Implements the algorithm: repeatedly finds and removes the Longest Palindrome Prefix (LPP) of
+   * length >= 2 until no such prefix can be found. Returns the remaining string.
+   *
+   * @param s The initial input string.
+   * @return The final remaining string after the removal algorithm completes.
+   */
+  public static String removePalindromeSubsequences(String s) {
+    StringBuffer sb = new StringBuffer(s);
+    while (true) {
+      int lppEnd = findLongestPalindromePrefix(sb);
+      if (lppEnd < 2) {
+        break; // No valid LPP found, exit the loop
+      }
+      sb.delete(0, lppEnd); // Remove the LPP from the string
+    }
+    return sb.toString();
+  }
+
+  /**
+   * Finds the length of the longest palindrome prefix in the given StringBuilder.
+   *
+   * @param sb The StringBUffer to search for the longest palindrome prefix.
+   * @return The length of the longest palindrome prefix.
+   */
+  public static int findLongestPalindromePrefix(StringBuffer sb) {
+    int n = sb.length();
+    // Check prefixes from longest to shortest
+    for (int end = n - 1; end >= 0; end--) {
+      if (isPalindrome(sb, 0, end)) {
+        return end + 1; // Return length of the palindrome prefix
+      }
+    }
+    return 0; // No palindrome prefix found
   }
 }
