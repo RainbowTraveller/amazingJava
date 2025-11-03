@@ -38,9 +38,8 @@ import java.util.regex.*;
 
 public class SubListIndex {
   /*
-   * finds and returns index of list2 in list1
-   * if not found returns -1
-   * */
+   * finds and returns index of list2 in list1 if not found returns -1
+   */
   public ArrayList<Integer> list1 = null;
   public ArrayList<Integer> list2 = null;
 

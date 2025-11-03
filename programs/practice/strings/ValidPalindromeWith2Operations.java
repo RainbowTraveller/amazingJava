@@ -19,7 +19,7 @@
  * <p>Input: s = "abcdef" Output: false Explanation: It is not possible to make s a palindrome using
  * one or two operations so return false.
  */
-public class ValidPalindrome4 {
+public class ValidPalindromeWith2Operations {
   public static void main(String[] args) {
     ValidPalindrome4 vp = new ValidPalindrome4();
 

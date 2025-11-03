@@ -120,7 +120,7 @@ class ValidKPalindrome {
       // We set value of i, j  to minimum no. of chars that need to be deleted to make
       // string from i to j palindrome
       Integer[][] values = new Integer[len][len];
-      return k >= dpProcessing(s, start, end, values);
+      return k > dpProcessing(s, start, end, values);
     }
     return false;
   }
