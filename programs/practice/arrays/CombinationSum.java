@@ -123,22 +123,28 @@ public class CombinationSum {
   }
 
   /**
-   * Optimized version without using Set to maintain unique lists
+   * Optimized version that avoids duplicates by controlling the start index
    *
    * @param candidates array of input numbers
    * @param target sum to be achieved k
+   * @param start index to start from
+   * @param current current list being formed
+   * @param result final result list
    */
   public static void helperOptimized(
       int[] candidates, int target, int start, List<Integer> current, List<List<Integer>> result) {
+    // target reached
     if (target == 0) {
       result.add(new LinkedList<>(current));
       return;
     }
+    // The important check to avoid extra recursive calls
     if (target < 0) {
       return;
     }
     for (int i = start; i < candidates.length; i++) {
       current.add(candidates[i]);
+      // Not i + 1 because we can reuse same elements as there are unlimited occurrences
       helperOptimized(candidates, target - candidates[i], i, current, result);
       current.remove(current.size() - 1);
     }
