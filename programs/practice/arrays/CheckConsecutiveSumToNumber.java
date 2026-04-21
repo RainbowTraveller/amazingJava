@@ -65,7 +65,8 @@ public class CheckConsecutiveSumToNumber {
             // we have atleast 2 elements
             return true;
           } else if (sum
-              > k) { // non negative or 0 hence guarateed to increase monotonically hence break
+              > k) { // non negative or 0 hence it is guaranteed to increase monotonically hence
+            // break
             break;
           }
         }
